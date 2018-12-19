@@ -15,7 +15,7 @@ Game::Game()
 
     // Draw blocks
 
-    _TextureBlock.loadFromFile("Media/Textures/Block.png");
+    _TextureBlock.loadFromFile("../Media/Textures/Block.png");
     _sizeBlock = _TextureBlock.getSize();
 
     for (int i = 0; i < BLOCK_COUNT_X; i++)
@@ -36,7 +36,7 @@ Game::Game()
 
     // Draw Echelles
 
-    _TextureEchelle.loadFromFile("Media/Textures/Echelle.png");
+    _TextureEchelle.loadFromFile("../Media/Textures/Echelle.PNG");
 
     for (int i = 0; i < ECHELLE_COUNT; i++)
     {
@@ -53,7 +53,7 @@ Game::Game()
 
     // Draw Mario
 
-    mTexture.loadFromFile("Media/Textures/Mario_small_transparent.png"); // Mario_small.png");
+    mTexture.loadFromFile("../Media/Textures/Mario_small_transparent.png"); // Mario_small.png");
     _sizeMario = mTexture.getSize();
     mPlayer.setTexture(mTexture);
     sf::Vector2f posMario;
@@ -71,7 +71,7 @@ Game::Game()
 
     // Draw Statistic Font
 
-    mFont.loadFromFile("Media/Sansation.ttf");
+    mFont.loadFromFile("../Media/Sansation.ttf");
     mStatisticsText.setString("Welcome to Donkey Kong 1981");
     mStatisticsText.setFont(mFont);
     mStatisticsText.setPosition(5.f, 5.f);
