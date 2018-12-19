@@ -32,34 +32,7 @@ add_definitions(
         -D_UNICODE
 )
 
-############## Artefacts Output #################
-# Defines outputs , depending Debug or Release. #
-#################################################
 
-if (CMAKE_BUILD_TYPE STREQUAL "Debug")
-    set(CMAKE_LIBRARY_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}/${OUTPUT_DEBUG}")
-    set(CMAKE_ARCHIVE_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}/${OUTPUT_DEBUG}")
-    set(CMAKE_EXECUTABLE_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}/${OUTPUT_DEBUG}")
-else ()
-    set(CMAKE_LIBRARY_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}/${OUTPUT_REL}")
-    set(CMAKE_ARCHIVE_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}/${OUTPUT_REL}")
-    set(CMAKE_EXECUTABLE_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}/${OUTPUT_REL}")
-endif ()
-
-################# Flags ################
-# Defines Flags for Windows and Linux. #
-########################################
-
-if (MSVC)
-    set(CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG} /W3 /MD /Od /Zi /EHsc")
-    set(CMAKE_CXX_FLAGS_RELEASE "${CMAKE_CXX_FLAGS_RELEASE} /W3 /GL /Od /Oi /Gy /Zi /EHsc")
-endif (MSVC)
-if (NOT MSVC)
-    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++11")
-    if ("${CMAKE_CXX_COMPILER_ID}" STREQUAL "Clang")
-        set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -stdlib=libc++")
-    endif ()
-endif (NOT MSVC)
 
 ################ Files ################
 #   --   Add files to project.   --   #
@@ -68,7 +41,6 @@ endif (NOT MSVC)
 # Add index CMakeFiles.tkt from /src
 message("${CMAKE_CURRENT_SOURCE_DIR}/src/CMakeLists.txt")
 include(${CMAKE_CURRENT_SOURCE_DIR}/src/CMakeLists.txt)
-
 # Add executable to build.
 message("${HeadersFiles}")
 add_executable(${PROJECT_NAME}
