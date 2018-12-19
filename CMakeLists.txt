@@ -60,7 +60,7 @@ add_executable(${PROJECT_NAME}
         ${PROJECT_NAME_HEADERS}
         ${PROJECT_NAME_SOURCES})
 
-# Include directory
+# Include directory 
 target_include_directories(${PROJECT_NAME} PRIVATE ${CMAKE_SOURCE_DIR}/include)
 
 ################ SFML ##################
