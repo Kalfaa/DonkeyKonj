@@ -8,14 +8,9 @@ set(PROJECT_NAME DonkeyKong)
 # Output Variables
 set(OUTPUT_DEBUG Debug/bin)
 set(OUTPUT_RELEASE Release/bin)
-# Folders files
-set(CPP_DIR_1 ./)
-set(CPP_DIR_2 ./)
-set(CPP_DIR_3 ./)
-set(CPP_DIR_4 ./)
-set(CPP_DIR_5 ./)
-set(CPP_DIR_6 ./)
-set(HEADER_DIR_1)
+
+#library
+set(LIBRARY_PATH library)
 
 ############## CMake Project ################
 #        The main options of project        #
@@ -70,18 +65,27 @@ endif (NOT MSVC)
 #   --   Add files to project.   --   #
 #######################################
 
-file(GLOB SRC_FILES
-        ${CPP_DIR_1}/*.cpp
-        ${CPP_DIR_2}/*.cpp
-        ${CPP_DIR_3}/*.cpp
-        ${CPP_DIR_4}/*.cpp
-        ${CPP_DIR_5}/*.cpp
-        ${CPP_DIR_6}/*.cpp
-        ${HEADER_DIR_1}/*.h
-        )
+# Add index CMakeFiles.tkt from /src
+message("${CMAKE_CURRENT_SOURCE_DIR}/src/CMakeLists.txt")
+include(${CMAKE_CURRENT_SOURCE_DIR}/src/CMakeLists.txt)
 
 # Add executable to build.
+message("${HeadersFiles}")
 add_executable(${PROJECT_NAME}
-        ${SRC_FILES}
-        DonkeyKong.cpp pch.h)
+            ${HeadersFiles}
+            ${CppFiles})
 
+################ SFML ##################
+#   --   Add library to project.  --   #
+########################################
+set(SFML_ROOT ${LIBRARY_PATH}/SFML-2.5.1)
+
+set(CMAKE_MODULE_PATH "${CMAKE_CURRENT_LIST_DIR}/library/cmake_modules")
+#message("${CMAKE_MODULE_PATH}")
+set(SFML_BUILD_EXAMPLES false)
+find_package(SFML REQUIRED system window graphics network audio)
+if (SFML_FOUND)
+    include_directories(${SFML_INCLUDE_DIR})
+    target_link_libraries(${PROJECT_NAME} ${SFML_LIBRARIES})
+endif()
+message("${SFML_BUILD_EXAMPLES}")
