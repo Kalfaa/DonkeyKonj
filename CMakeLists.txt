@@ -89,3 +89,4 @@ if (SFML_FOUND)
     target_link_libraries(${PROJECT_NAME} ${SFML_LIBRARIES})
 endif()
 message("${SFML_BUILD_EXAMPLES}")
+
