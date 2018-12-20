@@ -5,9 +5,9 @@
 class EntityManager
 {
 public:
-    EntityManager();
+    EntityManager() = default;
 
-    ~EntityManager();
+    ~EntityManager() = default;
 
 public:
     static std::vector<std::shared_ptr<Entity>> m_Entities;

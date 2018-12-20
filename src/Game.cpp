@@ -25,7 +25,7 @@ Game::Game()
             _Block[i][j].setTexture(_TextureBlock);
             _Block[i][j].setPosition(100.f + 70.f * (i + 1), 0.f + BLOCK_SPACE * (j + 1));
 
-            std::shared_ptr <Entity> se = std::make_shared<Entity>();
+            std::shared_ptr<Entity> se = std::make_shared<Entity>();
             se->m_sprite = _Block[i][j];
             se->m_type = EntityType::block;
             se->m_size = _TextureBlock.getSize();
@@ -38,14 +38,14 @@ Game::Game()
 
     _TextureEchelle.loadFromFile("../Media/Textures/Echelle.PNG");
 
-    for (int i = 0; i < ECHELLE_COUNT; i++)
+    for (int i = 0; i < SCALE_COUNT; i++)
     {
         _Echelle[i].setTexture(_TextureEchelle);
         _Echelle[i].setPosition(100.f + 70.f * (i + 1), 0.f + BLOCK_SPACE * (i + 1) + _sizeBlock.y);
 
-        std::shared_ptr <Entity> se = std::make_shared<Entity>();
+        std::shared_ptr<Entity> se = std::make_shared<Entity>();
         se->m_sprite = _Echelle[i];
-        se->m_type = EntityType::echelle;
+        se->m_type = EntityType::scale;
         se->m_size = _TextureEchelle.getSize();
         se->m_position = _Echelle[i].getPosition();
         EntityManager::m_Entities.push_back(se);
@@ -62,7 +62,7 @@ Game::Game()
 
     mPlayer.setPosition(posMario);
 
-    std::shared_ptr <Entity> player = std::make_shared<Entity>();
+    std::shared_ptr<Entity> player = std::make_shared<Entity>();
     player->m_sprite = mPlayer;
     player->m_type = EntityType::player;
     player->m_size = mTexture.getSize();
@@ -101,7 +101,7 @@ void Game::run()
 
 void Game::processEvents()
 {
-    sf::Event event;
+    sf::Event event{};
     while (mWindow.pollEvent(event))
     {
         switch (event.type)
@@ -117,6 +117,8 @@ void Game::processEvents()
             case sf::Event::Closed:
                 mWindow.close();
                 break;
+
+            default: ;
         }
     }
 }
@@ -133,14 +135,9 @@ void Game::update(sf::Time elapsedTime)
     if (mIsMovingRight)
         movement.x += PlayerSpeed;
 
-    for (std::shared_ptr <Entity> entity : EntityManager::m_Entities)
+    for (const std::shared_ptr<Entity> &entity : EntityManager::m_Entities)
     {
-        if (entity->m_enabled == false)
-        {
-            continue;
-        }
-
-        if (entity->m_type != EntityType::player)
+        if (!entity->m_enabled || entity->m_type != EntityType::player)
         {
             continue;
         }
@@ -153,9 +150,9 @@ void Game::render()
 {
     mWindow.clear();
 
-    for (std::shared_ptr <Entity> entity : EntityManager::m_Entities)
+    for (const std::shared_ptr<Entity> &entity : EntityManager::m_Entities)
     {
-        if (entity->m_enabled == false)
+        if (!entity->m_enabled)
         {
             continue;
         }
@@ -194,16 +191,25 @@ void Game::updateStatistics(sf::Time elapsedTime)
 
 void Game::handlePlayerInput(sf::Keyboard::Key key, bool isPressed)
 {
-    if (key == sf::Keyboard::Up)
-        mIsMovingUp = isPressed;
-    else if (key == sf::Keyboard::Down)
-        mIsMovingDown = isPressed;
-    else if (key == sf::Keyboard::Left)
-        mIsMovingLeft = isPressed;
-    else if (key == sf::Keyboard::Right)
-        mIsMovingRight = isPressed;
-
-    if (key == sf::Keyboard::Space)
+    switch (key)
     {
+        case sf::Keyboard::Up:
+            mIsMovingUp = isPressed;
+            break;
+        case sf::Keyboard::Down:
+            mIsMovingDown = isPressed;
+            break;
+        case sf::Keyboard::Left:
+            mIsMovingLeft = isPressed;
+            break;
+        case sf::Keyboard::Right:
+            mIsMovingRight = isPressed;
+            break;
+
+        // TODO: Jump!!!
+        case sf::Keyboard::Space:
+            break;
+
+        default: ;
     }
 }

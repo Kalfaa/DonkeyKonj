@@ -1,6 +1,6 @@
 #pragma once
 
-#define ECHELLE_COUNT 4
+#define SCALE_COUNT 4
 #define BLOCK_COUNT_X 8
 #define BLOCK_COUNT_Y 5
 #define BLOCK_SPACE 110.f
@@ -10,8 +10,7 @@ class Game
 public:
     Game();
 
-    ~Game()
-    {};
+    ~Game() = default;;
 
     void run();
 
@@ -44,7 +43,7 @@ private:
     bool mIsMovingLeft;
 
     sf::Texture _TextureEchelle;
-    sf::Sprite _Echelle[ECHELLE_COUNT];
+    sf::Sprite _Echelle[SCALE_COUNT];
     sf::Texture _TextureBlock;
     sf::Sprite _Block[BLOCK_COUNT_X][BLOCK_COUNT_Y];
     sf::Texture _TextureWeapon;
