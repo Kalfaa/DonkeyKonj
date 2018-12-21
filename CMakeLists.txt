@@ -58,7 +58,7 @@ include(${CMAKE_CURRENT_SOURCE_DIR}/include/CMakeLists.txt)
 # Add executable to build.
 add_executable(${PROJECT_NAME}
         ${PROJECT_NAME_HEADERS}
-        ${PROJECT_NAME_SOURCES})
+        ${PROJECT_NAME_SOURCES} src/Mario.cpp src/Mario.h)
 
 # Include directory 
 target_include_directories(${PROJECT_NAME} PRIVATE ${CMAKE_SOURCE_DIR}/include)

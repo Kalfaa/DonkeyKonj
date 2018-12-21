@@ -2,10 +2,11 @@
 #include "StringHelpers.h"
 #include "Game.h"
 #include "EntityManager.h"
+#include "Mario.h"
 
-const float Game::PlayerSpeed = 100.f;
+
 const sf::Time Game::TimePerFrame = sf::seconds(1.f / 60.f);
-
+enum Direction { UP=1,DOWN= 2, LEFT = 3, RIGHT = 4 };
 Game::Game()
         : mWindow(sf::VideoMode(840, 600), "Donkey Kong 1981", sf::Style::Close), mTexture(), mPlayer(), mFont(),
           mStatisticsText(), mStatisticsUpdateTime(), mStatisticsNumFrames(0), mIsMovingUp(false), mIsMovingDown(false),
@@ -34,41 +35,42 @@ Game::Game()
         }
     }
 
-    // Draw Echelles
+    // Draw Ladder
 
-    _TextureEchelle.loadFromFile("../Media/Textures/Echelle.PNG");
+    _TextureLadder.loadFromFile("../Media/Textures/Echelle.PNG");
 
     for (int i = 0; i < SCALE_COUNT; i++)
     {
-        _Echelle[i].setTexture(_TextureEchelle);
+        _Echelle[i].setTexture(_TextureLadder);
         _Echelle[i].setPosition(100.f + 70.f * (i + 1), 0.f + BLOCK_SPACE * (i + 1) + _sizeBlock.y);
 
         std::shared_ptr<Entity> se = std::make_shared<Entity>();
         se->m_sprite = _Echelle[i];
         se->m_type = EntityType::scale;
-        se->m_size = _TextureEchelle.getSize();
+        se->m_size = _TextureLadder.getSize();
         se->m_position = _Echelle[i].getPosition();
         EntityManager::m_Entities.push_back(se);
     }
 
     // Draw Mario
+    sf::Vector2f posMario(0,0);
+    mTexture.loadFromFile("../Media/Textures/Mario_small_transparent.png");
+    _mario =  Mario(posMario, mTexture);
+     // Mario_small.png");
 
-    mTexture.loadFromFile("../Media/Textures/Mario_small_transparent.png"); // Mario_small.png");
-    _sizeMario = mTexture.getSize();
     mPlayer.setTexture(mTexture);
-    sf::Vector2f posMario;
     posMario.x = 100.f + 70.f;
     posMario.y = BLOCK_SPACE * 5 - _sizeMario.y;
 
-    mPlayer.setPosition(posMario);
 
-    std::shared_ptr<Entity> player = std::make_shared<Entity>();
-    player->m_sprite = mPlayer;
+
+  /*  std::shared_ptr<Entity> player = std::make_shared<Entity>();
+    player->m_sprite = sprite;
     player->m_type = EntityType::player;
     player->m_size = mTexture.getSize();
-    player->m_position = mPlayer.getPosition();
+    player->m_position = sprite.getPosition();
     EntityManager::m_Entities.push_back(player);
-
+*/
     // Draw Statistic Font
 
     mFont.loadFromFile("../Media/Sansation.ttf");
@@ -126,14 +128,7 @@ void Game::processEvents()
 void Game::update(sf::Time elapsedTime)
 {
     sf::Vector2f movement(0.f, 0.f);
-    if (mIsMovingUp)
-        movement.y -= PlayerSpeed;
-    if (mIsMovingDown)
-        movement.y += PlayerSpeed;
-    if (mIsMovingLeft)
-        movement.x -= PlayerSpeed;
-    if (mIsMovingRight)
-        movement.x += PlayerSpeed;
+    _mario.update(elapsedTime);
 
     for (const std::shared_ptr<Entity> &entity : EntityManager::m_Entities)
     {
@@ -159,7 +154,7 @@ void Game::render()
 
         mWindow.draw(entity->m_sprite);
     }
-
+    mWindow.draw(_mario.getMPlayer());
     mWindow.draw(mStatisticsText);
     mWindow.display();
 }
@@ -194,16 +189,16 @@ void Game::handlePlayerInput(sf::Keyboard::Key key, bool isPressed)
     switch (key)
     {
         case sf::Keyboard::Up:
-            mIsMovingUp = isPressed;
+            _mario.move(UP);
             break;
         case sf::Keyboard::Down:
-            mIsMovingDown = isPressed;
+            _mario.move(DOWN);
             break;
         case sf::Keyboard::Left:
-            mIsMovingLeft = isPressed;
+            _mario.move(LEFT);
             break;
         case sf::Keyboard::Right:
-            mIsMovingRight = isPressed;
+            _mario.move(RIGHT);
             break;
 
         // TODO: Jump!!!
