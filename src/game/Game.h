@@ -1,5 +1,7 @@
 #pragma once
 
+#include "../src/Mario.h"
+
 #define SCALE_COUNT 4
 #define BLOCK_COUNT_X 8
 #define BLOCK_COUNT_Y 5
@@ -41,8 +43,8 @@ private:
     bool mIsMovingDown;
     bool mIsMovingRight;
     bool mIsMovingLeft;
-
-    sf::Texture _TextureEchelle;
+    Mario _mario ;
+    sf::Texture _TextureLadder;
     sf::Sprite _Echelle[SCALE_COUNT];
     sf::Texture _TextureBlock;
     sf::Sprite _Block[BLOCK_COUNT_X][BLOCK_COUNT_Y];

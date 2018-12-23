@@ -53,12 +53,10 @@ project(${PROJECT_NAME} CXX)
 
 # Add index CMakeFiles.tkt from /src
 include(${CMAKE_CURRENT_SOURCE_DIR}/src/CMakeLists.txt)
-#include(${CMAKE_CURRENT_SOURCE_DIR}/include/CMakeLists.txt)
 
 # Add executable to build.
 add_executable(${PROJECT_NAME}
         ${SOURCES})
-#        ${PROJECT_NAME_SOURCES})
 
 # Include directory 
 target_include_directories(${PROJECT_NAME} PRIVATE ${INCLUDE_DIR})
@@ -70,7 +68,6 @@ target_include_directories(${PROJECT_NAME} PRIVATE ${INCLUDE_DIR})
 find_package(SFML REQUIRED system window graphics network audio)
 
 if (SFML_FOUND)
-    message("${SFML_INCLUDE_DIR}")
     include_directories(${SFML_INCLUDE_DIR})
     target_link_libraries(${PROJECT_NAME} ${SFML_LIBRARIES})
 endif ()
