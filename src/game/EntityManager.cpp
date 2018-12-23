@@ -1,19 +1,21 @@
 #include "pch.h"
 #include "EntityManager.h"
 
+const std::string EntityManager::MEDIA_PATH = "../Media";
+const std::string EntityManager::TEXTURES_PATH = "../Media/Textures";
 
-std::vector<std::shared_ptr<Entity>> EntityManager::m_Entities;
+std::vector<std::shared_ptr<Entity>> EntityManager::entities;
 
-std::shared_ptr<Entity> EntityManager::GetPlayer()
+std::shared_ptr<Entity> EntityManager::getPlayer()
 {
-    for (std::shared_ptr<Entity> entity : EntityManager::m_Entities)
+    for (std::shared_ptr<Entity> entity : EntityManager::entities)
     {
-        if (!entity->m_enabled)
+        if (!entity->enabled)
         {
             continue;
         }
 
-        if (entity->m_type == EntityType::player)
+        if (entity->type == EntityType::player)
         {
             return entity;
         }

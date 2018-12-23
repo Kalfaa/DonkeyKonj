@@ -17,14 +17,14 @@ public:
     ~Entity() = default;
 
 public:
-    sf::Sprite m_sprite;
-    sf::Vector2u m_size;
-    sf::Vector2f m_position;
-    EntityType m_type = EntityType::unknown;
-    bool m_enabled = true;
+    sf::Sprite sprite;
+    sf::Vector2u size;
+    sf::Vector2f position;
+    EntityType type = EntityType::unknown;
+    bool enabled = true;
 
     // Enemy only
-    bool m_bLeftToRight = true;
-    int m_times = 0;
+    bool bLeftToRight = true;
+    int times = 0;
 };
 

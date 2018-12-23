@@ -6,7 +6,14 @@
 
 
 const sf::Time Game::TimePerFrame = sf::seconds(1.f / 60.f);
-enum Direction { UP=1,DOWN= 2, LEFT = 3, RIGHT = 4 };
+enum Direction
+{
+    UP,
+    DOWN,
+    LEFT,
+    RIGHT
+};
+
 Game::Game()
         : mWindow(sf::VideoMode(840, 600), "Donkey Kong 1981", sf::Style::Close), mTexture(), mPlayer(), mFont(),
           mStatisticsText(), mStatisticsUpdateTime(), mStatisticsNumFrames(0), mIsMovingUp(false), mIsMovingDown(false),
@@ -16,47 +23,47 @@ Game::Game()
 
     // Draw blocks
 
-    _TextureBlock.loadFromFile("../Media/Textures/Block.png");
-    _sizeBlock = _TextureBlock.getSize();
+    textureBlock.loadFromFile(EntityManager::TEXTURES_PATH + "/Block.png");
+    sizeBlock = textureBlock.getSize();
 
     for (int i = 0; i < BLOCK_COUNT_X; i++)
     {
         for (int j = 0; j < BLOCK_COUNT_Y; j++)
         {
-            _Block[i][j].setTexture(_TextureBlock);
-            _Block[i][j].setPosition(100.f + 70.f * (i + 1), 0.f + BLOCK_SPACE * (j + 1));
+            block[i][j].setTexture(textureBlock);
+            block[i][j].setPosition(100.f + 70.f * (i + 1), 0.f + BLOCK_SPACE * (j + 1));
 
             std::shared_ptr<Entity> se = std::make_shared<Entity>();
-            se->m_sprite = _Block[i][j];
-            se->m_type = EntityType::block;
-            se->m_size = _TextureBlock.getSize();
-            se->m_position = _Block[i][j].getPosition();
-            EntityManager::m_Entities.push_back(se);
+            se->sprite = block[i][j];
+            se->type = EntityType::block;
+            se->size = textureBlock.getSize();
+            se->position = block[i][j].getPosition();
+            EntityManager::entities.push_back(se);
         }
     }
 
     // Draw Ladder
 
-    _TextureLadder.loadFromFile("../Media/Textures/Echelle.PNG");
+    textureLadder.loadFromFile(EntityManager::TEXTURES_PATH + "/Ladder.PNG");
 
     for (int i = 0; i < SCALE_COUNT; i++)
     {
-        _Echelle[i].setTexture(_TextureLadder);
-        _Echelle[i].setPosition(100.f + 70.f * (i + 1), 0.f + BLOCK_SPACE * (i + 1) + _sizeBlock.y);
+        ladder[i].setTexture(textureLadder);
+        ladder[i].setPosition(100.f + 70.f * (i + 1), 0.f + BLOCK_SPACE * (i + 1) + sizeBlock.y);
 
         std::shared_ptr<Entity> se = std::make_shared<Entity>();
-        se->m_sprite = _Echelle[i];
-        se->m_type = EntityType::scale;
-        se->m_size = _TextureLadder.getSize();
-        se->m_position = _Echelle[i].getPosition();
-        EntityManager::m_Entities.push_back(se);
+        se->sprite = ladder[i];
+        se->type = EntityType::scale;
+        se->size = textureLadder.getSize();
+        se->position = ladder[i].getPosition();
+        EntityManager::entities.push_back(se);
     }
 
     // Draw Mario
-    sf::Vector2f posMario(0,0);
-    mTexture.loadFromFile("../Media/Textures/Mario_small_transparent.png");
-    _mario =  Mario(posMario, mTexture);
-     // Mario_small.png");
+    sf::Vector2f posMario(0, 0);
+    mTexture.loadFromFile(EntityManager::TEXTURES_PATH + "/Mario_right_profile.png");
+    mario = Mario(posMario, mTexture);
+    // Mario_small.png");
 
     mPlayer.setTexture(mTexture);
     posMario.x = 100.f + 70.f;
@@ -64,16 +71,16 @@ Game::Game()
 
 
 
-  /*  std::shared_ptr<Entity> player = std::make_shared<Entity>();
-    player->m_sprite = sprite;
-    player->m_type = EntityType::player;
-    player->m_size = mTexture.getSize();
-    player->m_position = sprite.getPosition();
-    EntityManager::m_Entities.push_back(player);
-*/
+    /*  std::shared_ptr<Entity> player = std::make_shared<Entity>();
+      player->sprite = sprite;
+      player->type = EntityType::player;
+      player->size = mTexture.getSize();
+      player->position = sprite.getPosition();
+      EntityManager::entities.push_back(player);
+  */
     // Draw Statistic Font
 
-    mFont.loadFromFile("../Media/Sansation.ttf");
+    mFont.loadFromFile(EntityManager::MEDIA_PATH + "/Sansation.ttf");
     mStatisticsText.setString("Welcome to Donkey Kong 1981");
     mStatisticsText.setFont(mFont);
     mStatisticsText.setPosition(5.f, 5.f);
@@ -120,7 +127,7 @@ void Game::processEvents()
                 mWindow.close();
                 break;
 
-            default: ;
+            default:;
         }
     }
 }
@@ -128,16 +135,16 @@ void Game::processEvents()
 void Game::update(sf::Time elapsedTime)
 {
     sf::Vector2f movement(0.f, 0.f);
-    _mario.update(elapsedTime);
+    mario.update(elapsedTime);
 
-    for (const std::shared_ptr<Entity> &entity : EntityManager::m_Entities)
+    for (const std::shared_ptr<Entity> &entity : EntityManager::entities)
     {
-        if (!entity->m_enabled || entity->m_type != EntityType::player)
+        if (!entity->enabled || entity->type != EntityType::player)
         {
             continue;
         }
 
-        entity->m_sprite.move(movement * elapsedTime.asSeconds());
+        entity->sprite.move(movement * elapsedTime.asSeconds());
     }
 }
 
@@ -145,16 +152,16 @@ void Game::render()
 {
     mWindow.clear();
 
-    for (const std::shared_ptr<Entity> &entity : EntityManager::m_Entities)
+    for (const std::shared_ptr<Entity> &entity : EntityManager::entities)
     {
-        if (!entity->m_enabled)
+        if (!entity->enabled)
         {
             continue;
         }
 
-        mWindow.draw(entity->m_sprite);
+        mWindow.draw(entity->sprite);
     }
-    mWindow.draw(_mario.getMPlayer());
+    mWindow.draw(mario.getMPlayer());
     mWindow.draw(mStatisticsText);
     mWindow.display();
 }
@@ -189,22 +196,22 @@ void Game::handlePlayerInput(sf::Keyboard::Key key, bool isPressed)
     switch (key)
     {
         case sf::Keyboard::Up:
-            _mario.move(UP);
+            mario.move(UP);
             break;
         case sf::Keyboard::Down:
-            _mario.move(DOWN);
+            mario.move(DOWN);
             break;
         case sf::Keyboard::Left:
-            _mario.move(LEFT);
+            mario.move(LEFT);
             break;
         case sf::Keyboard::Right:
-            _mario.move(RIGHT);
+            mario.move(RIGHT);
             break;
 
-        // TODO: Jump!!!
+            // TODO: Jump!!!
         case sf::Keyboard::Space:
             break;
 
-        default: ;
+        default:;
     }
 }

@@ -11,22 +11,25 @@ class Mario
 {
 public:
     Mario();
+
     Mario(const sf::Vector2f &posMario, const sf::Texture &mTexture);
+
     void move(int value);
+
     void update(sf::Time);
+
     void render();
 
 private:
 
 
-
 private:
     //sf::Vector2f movement;
-    int direction ;
+    int direction;
     sf::Vector2f posMario;
     sf::Texture mTexture;
     sf::Vector2u _sizeBlock;
-    sf::Vector2u _sizeMario;
+    sf::Vector2u sizeMario;
     sf::Sprite sprite;
 public:
     const sf::Sprite &getMPlayer() const;
