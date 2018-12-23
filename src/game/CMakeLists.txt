@@ -1,0 +1,12 @@
+# This file is an index for sources
+# message("${PROJECT_NAME}_SOURCES")
+
+set(REGEX_H_CPP *.[ch]**)
+
+set(ENTITIES_DIR ${CMAKE_CURRENT_LIST_DIR}/entities)
+
+file(GLOB GAME ${CMAKE_CURRENT_LIST_DIR}/${REGEX_H_CPP})
+file(GLOB ENTITIES ${ENTITIES_DIR}/${REGEX_H_CPP})
+
+set(GAME_SOURCES ${GAME} ${ENTITIES})
+set(INCLUDE_DIR ${CMAKE_CURRENT_LIST_DIR} ${ENTITIES_DIR})

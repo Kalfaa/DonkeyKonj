@@ -53,7 +53,7 @@ Game::Game()
 
     // Draw Mario
 
-    mTexture.loadFromFile("../Media/Textures/Mario_small_transparent.png"); // Mario_small.png");
+    mTexture.loadFromFile("../Media/Textures/Mario_profile_droit.png"); // Mario_small.png");
     _sizeMario = mTexture.getSize();
     mPlayer.setTexture(mTexture);
     sf::Vector2f posMario;

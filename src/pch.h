@@ -17,6 +17,8 @@
 #include <sstream>
 #include <memory>
 #include <vector>
+#include <map>
+#include <list>
 
 #define SFML_STATIC
 
