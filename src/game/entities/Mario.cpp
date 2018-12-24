@@ -4,13 +4,6 @@
 
 #include "Mario.h"
 
-enum Direction
-{
-    UP,
-    DOWN,
-    LEFT,
-    RIGHT
-};
 const float PlayerSpeed = 100.f;
 
 Mario::Mario(const sf::Vector2f &posMario, const sf::Texture &mTexture) : posMario(posMario), mTexture(mTexture)
@@ -41,12 +34,12 @@ void Mario::update(sf::Time elapsedTime)
         default: ;
     }
     sprite.setPosition(posMario * elapsedTime.asSeconds());
-    direction = 0;
+    direction = DEFAULT;
 }
 
-void Mario::move(int value)
+void Mario::move(Direction direction)
 {
-    direction = value;
+    this->direction = direction;
 }
 
 Mario::Mario() = default;

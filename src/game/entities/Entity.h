@@ -1,6 +1,15 @@
 #pragma once
 
 
+enum Direction
+{
+    UP,
+    DOWN,
+    LEFT,
+    RIGHT,
+    DEFAULT
+};
+
 enum EntityType
 {
     player,

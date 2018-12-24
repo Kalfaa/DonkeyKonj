@@ -6,6 +6,7 @@
 #define DONKEYKONG_MARIO_H
 
 #include "pch.h"
+#include "Entity.h"
 
 class Mario
 {
@@ -14,7 +15,7 @@ public:
 
     Mario(const sf::Vector2f &posMario, const sf::Texture &mTexture);
 
-    void move(int value);
+    void move(Direction direction);
 
     void update(sf::Time);
 
@@ -25,7 +26,7 @@ private:
 
 private:
     //sf::Vector2f movement;
-    int direction;
+    Direction direction;
     sf::Vector2f posMario;
     sf::Texture mTexture;
     sf::Vector2u _sizeBlock;

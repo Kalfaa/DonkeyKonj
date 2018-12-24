@@ -6,13 +6,6 @@
 
 
 const sf::Time Game::TimePerFrame = sf::seconds(1.f / 60.f);
-enum Direction
-{
-    UP,
-    DOWN,
-    LEFT,
-    RIGHT
-};
 
 Game::Game()
         : mWindow(sf::VideoMode(840, 600), "Donkey Kong 1981", sf::Style::Close), mTexture(), mPlayer(), mFont(),
@@ -212,6 +205,6 @@ void Game::handlePlayerInput(sf::Keyboard::Key key, bool isPressed)
         case sf::Keyboard::Space:
             break;
 
-        default:;
+        default: mario.move(DEFAULT);
     }
 }
