@@ -6,6 +6,7 @@ const std::string EntityManager::MEDIA_PATH = "../Media";
 const std::string EntityManager::TEXTURES_PATH = "../Media/Textures";
 
 std::vector<std::shared_ptr<Entity>> EntityManager::entities;
+std::shared_ptr<Player> EntityManager::player;
 
 /*std::shared_ptr<Entity> EntityManager::getPlayer()
 {

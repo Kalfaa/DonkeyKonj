@@ -31,7 +31,7 @@ Game::Game()
 
     textureLadder.loadFromFile(EntityManager::TEXTURES_PATH + "/Ladder.PNG");
 
-    for (int i = 0; i < SCALE_COUNT; i++)
+    for (int i = 0; i < LADDER_COUNT; i++)
     {
         ladder[i].setTexture(textureLadder);
         ladder[i].setPosition(100.f + 70.f * (i + 1), 0.f + BLOCK_SPACE * (i + 1) + sizeBlock.y);
@@ -43,8 +43,7 @@ Game::Game()
     // Draw Mario
     sf::Vector2f posMario(0, 0);
     mTexture.loadFromFile(EntityManager::TEXTURES_PATH + "/Mario_right_profile.png");
-    mario = std::make_unique<Mario>(posMario, mTexture, EntityType::player);
-    // Mario_small.png");
+    EntityManager::player = std::make_shared<Mario>(posMario, mTexture, EntityType::player, 200.f);
 
     mPlayer.setTexture(mTexture);
     posMario.x = 100.f + 70.f;
@@ -116,7 +115,7 @@ void Game::processEvents()
 void Game::update(sf::Time elapsedTime)
 {
     sf::Vector2f movement(0.f, 0.f);
-    mario->update(elapsedTime);
+    EntityManager::player->update(elapsedTime);
 
     for (const std::shared_ptr<Entity> &entity : EntityManager::entities)
     {
@@ -142,7 +141,14 @@ void Game::render()
 
         mWindow.draw(entity->sprite);
     }
-    mWindow.draw(mario->getSprite());
+    for(const std::shared_ptr<Entity> &entity : EntityManager::entities)
+    {
+        if(entity->type == EntityType::player)
+        {
+            mWindow.draw(entity->getSprite());
+        }
+    }
+    mWindow.draw(EntityManager::player->getSprite());
     mWindow.draw(mStatisticsText);
     mWindow.display();
 }
@@ -177,22 +183,22 @@ void Game::handlePlayerInput(sf::Keyboard::Key key, bool isPressed)
     switch (key)
     {
         case sf::Keyboard::Up:
-            mario->move(UP);
+            EntityManager::player->move(UP);
             break;
         case sf::Keyboard::Down:
-            mario->move(DOWN);
+            EntityManager::player->move(DOWN);
             break;
         case sf::Keyboard::Left:
-            mario->move(LEFT);
+            EntityManager::player->move(LEFT);
             break;
         case sf::Keyboard::Right:
-            mario->move(RIGHT);
+            EntityManager::player->move(RIGHT);
             break;
 
             // TODO: Jump!!!
         case sf::Keyboard::Space:
             break;
 
-        default: mario->move(DEFAULT);
+        default: EntityManager::player->move(NONE);
     }
 }

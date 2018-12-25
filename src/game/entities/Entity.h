@@ -7,7 +7,7 @@ enum Direction
     DOWN,
     LEFT,
     RIGHT,
-    DEFAULT
+    NONE
 };
 
 enum EntityType

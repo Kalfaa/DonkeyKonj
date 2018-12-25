@@ -6,18 +6,18 @@
 #define DONKEYKONG_MARIO_H
 
 #include "pch.h"
-#include "Entity.h"
+#include "Player.h"
 
-class Mario : public Entity
+class Mario : public Player
 {
 public:
-    Mario(const sf::Vector2f &posMario, const sf::Texture &mTexture, EntityType);
+    Mario(const sf::Vector2f& posMario, const sf::Texture&, EntityType, float playerSpeed);
 
     ~Mario() override = default;
 
 public:
-    void update(sf::Time time1) override;
-    void move(Direction direction);
+    //void update(sf::Time time) override;
+    //void move(Direction direction);
     void render();
 
 private:
