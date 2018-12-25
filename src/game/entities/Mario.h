@@ -8,32 +8,20 @@
 #include "pch.h"
 #include "Entity.h"
 
-class Mario
+class Mario : public Entity
 {
 public:
-    Mario();
+    Mario(const sf::Vector2f &posMario, const sf::Texture &mTexture, EntityType);
 
-    Mario(const sf::Vector2f &posMario, const sf::Texture &mTexture);
+    ~Mario() override = default;
 
+public:
+    void update(sf::Time time1) override;
     void move(Direction direction);
-
-    void update(sf::Time);
-
     void render();
 
 private:
-
-
-private:
-    //sf::Vector2f movement;
     Direction direction;
-    sf::Vector2f posMario;
-    sf::Texture mTexture;
-    sf::Vector2u _sizeBlock;
-    sf::Vector2u sizeMario;
-    sf::Sprite sprite;
-public:
-    const sf::Sprite &getMPlayer() const;
 };
 
 

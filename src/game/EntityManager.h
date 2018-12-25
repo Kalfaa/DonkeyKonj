@@ -2,6 +2,8 @@
 
 #include "Entity.h"
 
+//#define shared_ptr_entity std::shared_ptr<Entity>
+
 class EntityManager
 {
 public:
@@ -10,7 +12,7 @@ public:
 
 public:
     static std::vector<std::shared_ptr<Entity>> entities;
-    static std::shared_ptr<Entity> getPlayer();
+    //static std::shared_ptr<Entity> getPlayer();
 
     static const std::string MEDIA_PATH;
     static const std::string TEXTURES_PATH;

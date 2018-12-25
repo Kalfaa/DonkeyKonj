@@ -1,11 +1,7 @@
-#include "pch.h"
-#include "StringHelpers.h"
 #include "Game.h"
-#include "EntityManager.h"
-#include "Mario.h"
 
 
-const sf::Time Game::TimePerFrame = sf::seconds(1.f / 60.f);
+const sf::Time Game::timePerFrame = sf::seconds(1.f / 60.f);
 
 Game::Game()
         : mWindow(sf::VideoMode(840, 600), "Donkey Kong 1981", sf::Style::Close), mTexture(), mPlayer(), mFont(),
@@ -26,11 +22,7 @@ Game::Game()
             block[i][j].setTexture(textureBlock);
             block[i][j].setPosition(100.f + 70.f * (i + 1), 0.f + BLOCK_SPACE * (j + 1));
 
-            std::shared_ptr<Entity> se = std::make_shared<Entity>();
-            se->sprite = block[i][j];
-            se->type = EntityType::block;
-            se->size = textureBlock.getSize();
-            se->position = block[i][j].getPosition();
+            std::shared_ptr<Entity> se = std::make_shared<Entity>(block[i][j], EntityType::block);
             EntityManager::entities.push_back(se);
         }
     }
@@ -44,23 +36,19 @@ Game::Game()
         ladder[i].setTexture(textureLadder);
         ladder[i].setPosition(100.f + 70.f * (i + 1), 0.f + BLOCK_SPACE * (i + 1) + sizeBlock.y);
 
-        std::shared_ptr<Entity> se = std::make_shared<Entity>();
-        se->sprite = ladder[i];
-        se->type = EntityType::scale;
-        se->size = textureLadder.getSize();
-        se->position = ladder[i].getPosition();
+        std::shared_ptr<Entity> se = std::make_shared<Entity>(ladder[i], EntityType::ladder);
         EntityManager::entities.push_back(se);
     }
 
     // Draw Mario
     sf::Vector2f posMario(0, 0);
     mTexture.loadFromFile(EntityManager::TEXTURES_PATH + "/Mario_right_profile.png");
-    mario = Mario(posMario, mTexture);
+    mario = std::make_unique<Mario>(posMario, mTexture, EntityType::player);
     // Mario_small.png");
 
     mPlayer.setTexture(mTexture);
     posMario.x = 100.f + 70.f;
-    posMario.y = BLOCK_SPACE * 5 - _sizeMario.y;
+    posMario.y = BLOCK_SPACE * 5 - sizeMario.y;
 
 
 
@@ -88,12 +76,12 @@ void Game::run()
     {
         sf::Time elapsedTime = clock.restart();
         timeSinceLastUpdate += elapsedTime;
-        while (timeSinceLastUpdate > TimePerFrame)
+        while (timeSinceLastUpdate > timePerFrame)
         {
-            timeSinceLastUpdate -= TimePerFrame;
+            timeSinceLastUpdate -= timePerFrame;
 
             processEvents();
-            update(TimePerFrame);
+            update(timePerFrame);
         }
 
         updateStatistics(elapsedTime);
@@ -128,7 +116,7 @@ void Game::processEvents()
 void Game::update(sf::Time elapsedTime)
 {
     sf::Vector2f movement(0.f, 0.f);
-    mario.update(elapsedTime);
+    mario->update(elapsedTime);
 
     for (const std::shared_ptr<Entity> &entity : EntityManager::entities)
     {
@@ -154,7 +142,7 @@ void Game::render()
 
         mWindow.draw(entity->sprite);
     }
-    mWindow.draw(mario.getMPlayer());
+    mWindow.draw(mario->getSprite());
     mWindow.draw(mStatisticsText);
     mWindow.display();
 }
@@ -189,22 +177,22 @@ void Game::handlePlayerInput(sf::Keyboard::Key key, bool isPressed)
     switch (key)
     {
         case sf::Keyboard::Up:
-            mario.move(UP);
+            mario->move(UP);
             break;
         case sf::Keyboard::Down:
-            mario.move(DOWN);
+            mario->move(DOWN);
             break;
         case sf::Keyboard::Left:
-            mario.move(LEFT);
+            mario->move(LEFT);
             break;
         case sf::Keyboard::Right:
-            mario.move(RIGHT);
+            mario->move(RIGHT);
             break;
 
             // TODO: Jump!!!
         case sf::Keyboard::Space:
             break;
 
-        default: mario.move(DEFAULT);
+        default: mario->move(DEFAULT);
     }
 }

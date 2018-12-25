@@ -1,5 +1,8 @@
 #pragma once
 
+#include "pch.h"
+#include "StringHelpers.h"
+#include "EntityManager.h"
 #include "Mario.h"
 
 #define SCALE_COUNT 4
@@ -29,7 +32,7 @@ private:
 
 private:
     static const float PlayerSpeed;
-    static const sf::Time TimePerFrame;
+    static const sf::Time timePerFrame;
 
     sf::RenderWindow mWindow;
     sf::Texture mTexture;
@@ -43,14 +46,16 @@ private:
     bool mIsMovingDown;
     bool mIsMovingRight;
     bool mIsMovingLeft;
-    Mario mario;
+
     sf::Texture textureLadder;
     sf::Sprite ladder[SCALE_COUNT];
     sf::Texture textureBlock;
     sf::Sprite block[BLOCK_COUNT_X][BLOCK_COUNT_Y];
-    sf::Texture _TextureWeapon;
-    sf::Sprite _Weapon;
+    sf::Texture textureWeapon;
+    sf::Sprite weapon;
     sf::Vector2u sizeBlock;
-    sf::Vector2u _sizeMario;
+    sf::Vector2u sizeMario;
+
+    std::unique_ptr<Mario> mario;
 };
 

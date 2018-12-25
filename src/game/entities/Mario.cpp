@@ -6,9 +6,9 @@
 
 const float PlayerSpeed = 100.f;
 
-Mario::Mario(const sf::Vector2f &posMario, const sf::Texture &mTexture) : posMario(posMario), mTexture(mTexture)
+Mario::Mario(const sf::Vector2f &posMario, const sf::Texture &mTexture, EntityType type) : Entity(posMario, mTexture, type)
 {
-    sizeMario = mTexture.getSize();
+    size = mTexture.getSize();
     sprite = sf::Sprite();
     sprite.setTexture(mTexture);
     sprite.setPosition(posMario);
@@ -20,20 +20,20 @@ void Mario::update(sf::Time elapsedTime)
     switch (direction)
     {
         case UP:
-            posMario.y -= PlayerSpeed;
+            position.y -= PlayerSpeed;
             break;
         case DOWN:
-            posMario.y += PlayerSpeed;
+            position.y += PlayerSpeed;
             break;
         case LEFT:
-            posMario.x -= PlayerSpeed;
+            position.x -= PlayerSpeed;
             break;
         case RIGHT:
-            posMario.x += PlayerSpeed;
+            position.x += PlayerSpeed;
             break;
         default: ;
     }
-    sprite.setPosition(posMario * elapsedTime.asSeconds());
+    sprite.setPosition(position * elapsedTime.asSeconds());
     direction = DEFAULT;
 }
 
@@ -42,14 +42,7 @@ void Mario::move(Direction direction)
     this->direction = direction;
 }
 
-Mario::Mario() = default;
-
 void Mario::render()
 {
 
-}
-
-const sf::Sprite &Mario::getMPlayer() const
-{
-    return sprite;
 }

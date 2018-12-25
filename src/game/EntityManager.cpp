@@ -1,14 +1,15 @@
 #include "pch.h"
 #include "EntityManager.h"
 
+
 const std::string EntityManager::MEDIA_PATH = "../Media";
 const std::string EntityManager::TEXTURES_PATH = "../Media/Textures";
 
 std::vector<std::shared_ptr<Entity>> EntityManager::entities;
 
-std::shared_ptr<Entity> EntityManager::getPlayer()
+/*std::shared_ptr<Entity> EntityManager::getPlayer()
 {
-    for (std::shared_ptr<Entity> entity : EntityManager::entities)
+    for (auto* entity : EntityManager::entities)
     {
         if (!entity->enabled)
         {
@@ -22,4 +23,4 @@ std::shared_ptr<Entity> EntityManager::getPlayer()
     }
 
     return nullptr;
-}
+}*/

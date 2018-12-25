@@ -14,21 +14,28 @@ enum EntityType
 {
     player,
     block,
-    scale,
+    ladder,
     unknown
 };
 
 class Entity
 {
 public:
-    Entity() = default;
-
-    ~Entity() = default;
+    Entity(const sf::Sprite&, EntityType);
+    Entity(const sf::Vector2f&, const sf::Texture&, EntityType type);
+    virtual ~Entity() = default;
 
 public:
-    sf::Sprite sprite;
+    virtual void update(sf::Time);
+
+    const sf::Sprite& getSprite() const;
+
+public:
     sf::Vector2u size;
     sf::Vector2f position;
+    sf::Texture texture;
+    sf::Sprite sprite;
+
     EntityType type = EntityType::unknown;
     bool enabled = true;
 
