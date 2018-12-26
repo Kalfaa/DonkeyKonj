@@ -15,7 +15,7 @@ Game::Game()
     texturePlatform.loadFromFile(EntityManager::TEXTURES_PATH + "/Block.png");
     sizeBlock = texturePlatform.getSize();
 
-    /*for (int i = 0; i < BLOCK_COUNT_X; i++)
+    for (int i = 0; i < BLOCK_COUNT_X; i++)
     {
         for (int j = 0; j < BLOCK_COUNT_Y; j++)
         {
@@ -25,13 +25,13 @@ Game::Game()
                     , EntityType::platform);
             EntityManager::entities.push_back(pf);
         }
-    }*/
-    block[0][0].setTexture(textureBlock);
-    block[0][0].setPosition(0,100);
-
-    std::shared_ptr<Entity> se = std::make_shared<Entity>(block[0][0], EntityType::block);
-    EntityManager::entities.push_back(se);
-    map.entity2DArray.at(0).at(100/CASE_PIXEL_VALUE) = se ;
+    }
+//    block[0][0].setTexture(textureBlock);
+//    block[0][0].setPosition(0,100);
+//
+//    std::shared_ptr<Entity> se = std::make_shared<Entity>(block[0][0], EntityType::block);
+//    EntityManager::entities.push_back(se);
+//    map.entity2DArray.at(0).at(100/CASE_PIXEL_VALUE) = se ;
     // Draw Ladder
 
     textureLadder.loadFromFile(EntityManager::TEXTURES_PATH + "/Ladder.PNG");
@@ -61,10 +61,11 @@ Game::Game()
     mStatisticsText.setCharacterSize(10);
 
     sf::Image icon;
-    if(!icon.loadFromFile("icon.ico"))
+    if(icon.loadFromFile(EntityManager::TEXTURES_PATH + "/icon.png"))
     {
-        mWindow.setIcon(256,256,icon.getPixelsPtr());
+        mWindow.setIcon(281, 210, icon.getPixelsPtr());
     }
+    else std::cerr << "Error when load " + EntityManager::TEXTURES_PATH + "/icon.png" << std::endl;
 
 }
 
