@@ -3,7 +3,7 @@
 #include "Entity.h"
 #include "Player.h"
 
-//#define shared_ptr_entity std::shared_ptr<Entity>
+#define shared_ptr_entity std::shared_ptr<Entity>
 
 class EntityManager
 {
@@ -19,5 +19,6 @@ public:
 
     static const std::string MEDIA_PATH;
     static const std::string TEXTURES_PATH;
+    static const std::string MAP_PATH;
 };
 
