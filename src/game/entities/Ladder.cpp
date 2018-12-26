@@ -3,3 +3,7 @@
 //
 
 #include "Ladder.h"
+
+Ladder::Ladder(const sf::Vector2f& position, const sf::Texture& texture, EntityType type)
+    : StaticEntity(position, texture, type)
+    {}

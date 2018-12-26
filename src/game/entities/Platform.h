@@ -8,9 +8,12 @@
 #include "pch.h"
 #include "StaticEntity.h"
 
-class Floor : public StaticEntity
+class Platform : public StaticEntity
 {
+public:
+    Platform();
 
+    Platform(const sf::Vector2f &position, const sf::Texture &, EntityType type);
 };
 
 

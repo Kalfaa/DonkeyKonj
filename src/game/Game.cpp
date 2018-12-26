@@ -1,6 +1,5 @@
 #include "Game.h"
 
-
 const sf::Time Game::timePerFrame = sf::seconds(1.f / 60.f);
 
 Game::Game()
@@ -12,18 +11,18 @@ Game::Game()
 
     // Draw blocks
 
-    textureBlock.loadFromFile(EntityManager::TEXTURES_PATH + "/Block.png");
-    sizeBlock = textureBlock.getSize();
+    texturePlatform.loadFromFile(EntityManager::TEXTURES_PATH + "/Block.png");
+    sizeBlock = texturePlatform.getSize();
 
     for (int i = 0; i < BLOCK_COUNT_X; i++)
     {
         for (int j = 0; j < BLOCK_COUNT_Y; j++)
         {
-            block[i][j].setTexture(textureBlock);
-            block[i][j].setPosition(100.f + 70.f * (i + 1), 0.f + BLOCK_SPACE * (j + 1));
-
-            std::shared_ptr<Entity> se = std::make_shared<Entity>(block[i][j], EntityType::block);
-            EntityManager::entities.push_back(se);
+            std::shared_ptr<Platform> pf = std::make_shared<Platform>(
+                    sf::Vector2f(100.f + 70.f * (i + 1), 0.f + BLOCK_SPACE * (j + 1))
+                    , texturePlatform
+                    , EntityType::platform);
+            EntityManager::entities.push_back(pf);
         }
     }
 
@@ -33,38 +32,34 @@ Game::Game()
 
     for (int i = 0; i < LADDER_COUNT; i++)
     {
-        ladder[i].setTexture(textureLadder);
-        ladder[i].setPosition(100.f + 70.f * (i + 1), 0.f + BLOCK_SPACE * (i + 1) + sizeBlock.y);
-
-        std::shared_ptr<Entity> se = std::make_shared<Entity>(ladder[i], EntityType::ladder);
-        EntityManager::entities.push_back(se);
+        std::shared_ptr<Ladder> pf = std::make_shared<Ladder>(
+                sf::Vector2f(100.f + 70.f * (i + 1), 0.f + BLOCK_SPACE * (i + 1) + sizeBlock.y)
+                , textureLadder
+                , EntityType::ladder);
+        EntityManager::entities.push_back(pf);
     }
 
     // Draw Mario
     sf::Vector2f posMario(0, 0);
     mTexture.loadFromFile(EntityManager::TEXTURES_PATH + "/Mario_right_profile.png");
-    EntityManager::player = std::make_shared<Mario>(posMario, mTexture, EntityType::player, 200.f);
+    EntityManager::player = std::make_shared<Mario>(posMario, mTexture, EntityType::player, MARIO_SPEED);
 
-    mPlayer.setTexture(mTexture);
-    posMario.x = 100.f + 70.f;
+    //mPlayer.setTexture(mTexture);
+    posMario.x = MARIO_SPEED + 70.f;
     posMario.y = BLOCK_SPACE * 5 - sizeMario.y;
-
-
-
-    /*  std::shared_ptr<Entity> player = std::make_shared<Entity>();
-      player->sprite = sprite;
-      player->type = EntityType::player;
-      player->size = mTexture.getSize();
-      player->position = sprite.getPosition();
-      EntityManager::entities.push_back(player);
-  */
-    // Draw Statistic Font
 
     mFont.loadFromFile(EntityManager::MEDIA_PATH + "/Sansation.ttf");
     mStatisticsText.setString("Welcome to Donkey Kong 1981");
     mStatisticsText.setFont(mFont);
     mStatisticsText.setPosition(5.f, 5.f);
     mStatisticsText.setCharacterSize(10);
+
+    sf::Image icon;
+    if(!icon.loadFromFile("icon.ico"))
+    {
+        mWindow.setIcon(256,256,icon.getPixelsPtr());
+    }
+
 }
 
 void Game::run()

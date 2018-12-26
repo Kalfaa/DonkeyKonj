@@ -11,6 +11,8 @@
 
 class Ladder : public StaticEntity
 {
+public:
+    Ladder(const sf::Vector2f &position, const sf::Texture &, EntityType type);
 
 };
 
