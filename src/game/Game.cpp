@@ -116,7 +116,10 @@ void Game::update(sf::Time elapsedTime)
 {
     sf::Vector2f movement(0.f, 0.f);
     EntityManager::player->update(elapsedTime);
-
+    if(mIsMovingUp)EntityManager::player->move(UP);
+    if(mIsMovingRight)EntityManager::player->move(RIGHT);
+    if(mIsMovingDown)EntityManager::player->move(DOWN);
+    if(mIsMovingLeft) EntityManager::player->move(LEFT);
     for (const std::shared_ptr<Entity> &entity : EntityManager::entities)
     {
         if (!entity->enabled || entity->type != EntityType::player)
@@ -183,16 +186,16 @@ void Game::handlePlayerInput(sf::Keyboard::Key key, bool isPressed)
     switch (key)
     {
         case sf::Keyboard::Up:
-            EntityManager::player->move(UP);
+            mIsMovingUp = isPressed;
             break;
         case sf::Keyboard::Down:
-            EntityManager::player->move(DOWN);
+            mIsMovingDown = isPressed;
             break;
         case sf::Keyboard::Left:
-            EntityManager::player->move(LEFT);
+            mIsMovingLeft = isPressed;
             break;
         case sf::Keyboard::Right:
-            EntityManager::player->move(RIGHT);
+            mIsMovingRight = isPressed;
             break;
 
             // TODO: Jump!!!
