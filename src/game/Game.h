@@ -34,7 +34,7 @@ private:
 private:
     static const float PlayerSpeed;
     static const sf::Time timePerFrame;
-
+    Map map;
     sf::RenderWindow mWindow;
     sf::Texture mTexture;
     sf::Sprite mPlayer;

@@ -7,7 +7,7 @@
 
 #include "pch.h"
 #include "Entity.h"
-
+#include <map/Map.h>
 class Player : public Entity
 {
 public:
@@ -15,7 +15,7 @@ public:
     ~Player() override = default;
 
 public:
-    void update(sf::Time) override;
+    void update(sf::Time,Map map) ;
     void move(Direction elapsedTime);
 
 protected:

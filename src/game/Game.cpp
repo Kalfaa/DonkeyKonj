@@ -2,20 +2,21 @@
 
 
 const sf::Time Game::timePerFrame = sf::seconds(1.f / 60.f);
-
+const int CASE_PIXEL_VALUE = 32;
 Game::Game()
         : mWindow(sf::VideoMode(840, 600), "Donkey Kong 1981", sf::Style::Close), mTexture(), mPlayer(), mFont(),
           mStatisticsText(), mStatisticsUpdateTime(), mStatisticsNumFrames(0), mIsMovingUp(false), mIsMovingDown(false),
           mIsMovingRight(false), mIsMovingLeft(false)
 {
     mWindow.setFramerateLimit(160);
+    map = Map(100,100) ;
 
     // Draw blocks
 
     textureBlock.loadFromFile(EntityManager::TEXTURES_PATH + "/Block.png");
     sizeBlock = textureBlock.getSize();
 
-    for (int i = 0; i < BLOCK_COUNT_X; i++)
+    /*for (int i = 0; i < BLOCK_COUNT_X; i++)
     {
         for (int j = 0; j < BLOCK_COUNT_Y; j++)
         {
@@ -25,8 +26,13 @@ Game::Game()
             std::shared_ptr<Entity> se = std::make_shared<Entity>(block[i][j], EntityType::block);
             EntityManager::entities.push_back(se);
         }
-    }
+    }*/
+    block[0][0].setTexture(textureBlock);
+    block[0][0].setPosition(0,100);
 
+    std::shared_ptr<Entity> se = std::make_shared<Entity>(block[0][0], EntityType::block);
+    EntityManager::entities.push_back(se);
+    map.entity2DArray.at(0).at(100/CASE_PIXEL_VALUE) = se ;
     // Draw Ladder
 
     textureLadder.loadFromFile(EntityManager::TEXTURES_PATH + "/Ladder.PNG");
@@ -114,8 +120,9 @@ void Game::processEvents()
 
 void Game::update(sf::Time elapsedTime)
 {
+
     sf::Vector2f movement(0.f, 0.f);
-    EntityManager::player->update(elapsedTime);
+    EntityManager::player->update(elapsedTime, map);
     if(mIsMovingUp)EntityManager::player->move(UP);
     if(mIsMovingRight)EntityManager::player->move(RIGHT);
     if(mIsMovingDown)EntityManager::player->move(DOWN);
