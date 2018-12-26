@@ -12,8 +12,18 @@ class Map
 {
 public:
     Map();
+    Map(int x , int y);
+    Map(std::vector<std::vector<std::shared_ptr<Entity>>> array2D);
     virtual ~Map();
+    //std::array<std::array<Entity,255>,255> entity2DArray ;
+    std::vector<std::vector<std::shared_ptr<Entity>>> entity2DArray;
 
+    const std::vector<std::vector<std::shared_ptr<Entity>>> &getEntity2DArray() const;
+
+    void setEntity2DArray(const std::vector<std::vector<std::shared_ptr<Entity>>>&entity2DArray);
+
+    int width;
+    int length;
 public:
 
     void print(const sf::RenderWindow&);
