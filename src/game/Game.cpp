@@ -6,7 +6,7 @@ const int CASE_PIXEL_VALUE = 32;
 Game::Game()
         : mWindow(sf::VideoMode(840, 600), "Donkey Kong 1981", sf::Style::Close), mTexture(), mPlayer(), mFont(),
           mStatisticsText(), mStatisticsUpdateTime(), mStatisticsNumFrames(0), mIsMovingUp(false), mIsMovingDown(false),
-          mIsMovingRight(false), mIsMovingLeft(false)
+          mIsMovingRight(false), mIsMovingLeft(false) ,debug(false)
 {
     mWindow.setFramerateLimit(160);
     map = Map(100,100) ;
@@ -28,11 +28,10 @@ Game::Game()
         }
     }*/
     block[0][0].setTexture(textureBlock);
-    block[0][0].setPosition(0,100);
-
+    block[0][0].setPosition(100,100);
     std::shared_ptr<Entity> se = std::make_shared<Entity>(block[0][0], EntityType::block);
     EntityManager::entities.push_back(se);
-    map.entity2DArray.at(0).at(100/CASE_PIXEL_VALUE) = se ;
+    map.addEntityToMatrix(se);
     // Draw Ladder
 
     textureLadder.loadFromFile(EntityManager::TEXTURES_PATH + "/Ladder.PNG");
@@ -47,13 +46,11 @@ Game::Game()
     }
 
     // Draw Mario
-    sf::Vector2f posMario(0, 0);
+    sf::Vector2f posMario(100, 0);
     mTexture.loadFromFile(EntityManager::TEXTURES_PATH + "/Mario_right_profile.png");
     EntityManager::player = std::make_shared<Mario>(posMario, mTexture, EntityType::player, 200.f);
 
     mPlayer.setTexture(mTexture);
-    posMario.x = 100.f + 70.f;
-    posMario.y = BLOCK_SPACE * 5 - sizeMario.y;
 
 
 
@@ -150,12 +147,23 @@ void Game::render()
         }
 
         mWindow.draw(entity->sprite);
+        if(debug)
+        {
+            sf::RectangleShape rectangle(sf::Vector2f(entity->getSprite().getTextureRect().width,
+                                                      entity->getSprite().getTextureRect().height));
+            rectangle.setPosition(entity->getSprite().getPosition());
+            rectangle.setFillColor(sf::Color(100, 250, 50));
+            mWindow.draw(rectangle);
+        }
+
     }
     for(const std::shared_ptr<Entity> &entity : EntityManager::entities)
     {
         if(entity->type == EntityType::player)
         {
+
             mWindow.draw(entity->getSprite());
+
         }
     }
     mWindow.draw(EntityManager::player->getSprite());
@@ -204,8 +212,9 @@ void Game::handlePlayerInput(sf::Keyboard::Key key, bool isPressed)
         case sf::Keyboard::Right:
             mIsMovingRight = isPressed;
             break;
-
-            // TODO: Jump!!!
+        case sf::Keyboard::P:
+            if(isPressed)debug = !debug;
+           break;
         case sf::Keyboard::Space:
             break;
 

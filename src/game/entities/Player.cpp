@@ -5,34 +5,34 @@
 #include <map/Map.h>
 #include "Player.h"
 
+
 Player::Player(const sf::Vector2f& posPlayer, const sf::Texture& texture, EntityType type, float playerSpeed)
     : Entity(posPlayer, texture, type), playerSpeed(playerSpeed){}
 
 void Player::update(sf::Time elapsedTime,Map map)
 {
-    unsigned int x = static_cast<unsigned int>(sprite.getPosition().x/32 );
-    unsigned int y = static_cast<unsigned int>( ((sprite.getPosition().y)+64)/32);
-    std::shared_ptr<Entity> entity = map.entity2DArray.at( x).at(y);
-    if (entity == nullptr || !entity->sprite.getGlobalBounds().intersects(sprite.getGlobalBounds())){
-        position.y += playerSpeed;
+
+    sf::Vector2f movement(0.f, 0.f);
+    if (!collide_down(map)){
+        movement.y += playerSpeed;
     }
     switch (direction)
     {
-        case UP:
+        /*case UP:
             position.y -= playerSpeed;
-            break;
+            break;*/
         case DOWN:
-            position.y += playerSpeed;
+            movement.y += playerSpeed;
             break;
         case LEFT:
-            position.x -= playerSpeed;
+            movement.x -= playerSpeed;
             break;
         case RIGHT:
-            position.x += playerSpeed;
+            movement.x += playerSpeed;
             break;
         default: ;
     }
-    sprite.setPosition(position * elapsedTime.asSeconds());
+    sprite.move(movement * elapsedTime.asSeconds());
     direction = NONE;
 }
 
@@ -40,4 +40,27 @@ void Player::move(Direction direction)
 {
     this->direction = direction;
 }
+
+bool Player::collide_down(Map map)
+{
+
+    auto x = static_cast<unsigned int>(sprite.getPosition().x) /32 ;
+    auto x2 =  static_cast<unsigned int>( (sprite.getPosition().x+MARIO_WIDTH )/32 );
+    auto y = static_cast<unsigned int>( ((sprite.getPosition().y)+MARIO_HEIGHT)/32);
+    std::shared_ptr<Entity> entity = map.entity2DArray.at(x).at(y);
+    std::shared_ptr<Entity> entity2 = map.entity2DArray.at(x2).at(y);
+    if(entity!= nullptr){
+        if(entity->sprite.getGlobalBounds().intersects(sprite.getGlobalBounds())){
+            return true;
+        }
+    }
+    if(entity2!= nullptr){
+        if(entity2->sprite.getGlobalBounds().intersects(sprite.getGlobalBounds())){
+            return true;
+        }
+    }
+    return false ;
+}
+
+
 
