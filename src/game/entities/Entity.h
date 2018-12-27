@@ -18,10 +18,10 @@ enum PlayerState {
 };
 enum EntityType
 {
-    player,
-    platform,
-    ladder,
-    unknown
+    PLAYER,
+    PLATFORM,
+    LADDER,
+    UNKNOWN
 };
 
 class Entity
@@ -42,7 +42,7 @@ public:
     sf::Texture texture;
     sf::Sprite sprite;
 
-    EntityType type = EntityType::unknown;
+    EntityType type = EntityType::UNKNOWN;
     bool enabled = true;
 
     // Enemy only
