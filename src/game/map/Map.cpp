@@ -49,11 +49,29 @@ void Map::addEntityToMatrix(std::shared_ptr<Entity> entity)
     int y = static_cast<int>(sprite.getPosition().y);
     int s_width = sprite.getTextureRect().width;
     int s_height =sprite.getTextureRect().height;
-
-    for(int i = 0 ;i<s_width/32;i++){
+    //@todo REFACTOR CETTE ALGO PETER QUI CREER DES DUPPLICAT DOBJET DANS LA MATRICE
+    for(int i = 0 ;i<=s_width/32; i++){
         entity3DArray.at(static_cast<unsigned int>((x+32*i) / 32)).at(static_cast<unsigned int>(y / 32)).push_back(entity);
-        for(int j =0; j<s_height/32;j++){
-            entity3DArray.at(static_cast<unsigned int>((x+32*i) / 32)).at(static_cast<unsigned int>((y*j*32) / 32)).push_back(entity);
+        for(int j =0; j<=s_height/32;j++){
+            entity3DArray.at(static_cast<unsigned int>((x+32*i) / 32)).at(static_cast<unsigned int>((y+j*32) / 32)).push_back(entity);
         }
     }
+}
+
+void Map::printElement()
+{
+ for(int i =0 ;i<entity3DArray.size();i++){
+     for(int j = 0; j<entity3DArray[i].size();j++){
+         for(int k =0;k<entity3DArray[i][j].size();k++){
+             std::shared_ptr<Entity> entity = entity3DArray[i][j].at(k);
+             std::string type  ;
+             if(entity->type ==LADDER){
+                 type = "ladder";
+             }else if(entity->type ==PLATFORM){
+                 type = "platform";
+             }
+             printf("%s  en x : %d en y %d \n" ,type.c_str() ,i,j);
+         }
+     }
+ }
 }

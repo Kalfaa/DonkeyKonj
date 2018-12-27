@@ -30,7 +30,7 @@ public:
 public:
     void addEntityToMatrix(std::shared_ptr<Entity> entity);
     void print(const sf::RenderWindow&);
-
+    void printElement();
 
 };
 

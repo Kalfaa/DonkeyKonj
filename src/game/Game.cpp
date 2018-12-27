@@ -24,13 +24,13 @@ Game::Game()
             std::shared_ptr<Platform> pf = std::make_shared<Platform>(
                     sf::Vector2f(100.f + 70.f * (i + 1), 0.f + BLOCK_SPACE * (j + 1))
                     , texturePlatform
-                    , EntityType::platform);
+                    , EntityType::PLATFORM);
             EntityManager::entities.push_back(pf);
         }
     }*/
     block[0][0].setTexture(texturePlatform);
     block[0][0].setPosition(100,300);
-    std::shared_ptr<Entity> se = std::make_shared<Entity>(block[0][0], EntityType::platform);
+    std::shared_ptr<Entity> se = std::make_shared<Entity>(block[0][0], EntityType::PLATFORM);
     EntityManager::entities.push_back(se);
     map.addEntityToMatrix(se);
     // Draw Ladder
@@ -42,14 +42,15 @@ Game::Game()
         std::shared_ptr<Ladder> pf = std::make_shared<Ladder>(
                 sf::Vector2f(100.f + 70.f * (i + 1), 0.f + BLOCK_SPACE * (i + 1) + sizeBlock.y)
                 , textureLadder
-                , EntityType::ladder);
+                , EntityType::LADDER);
         EntityManager::entities.push_back(pf);
+        map.addEntityToMatrix(pf);
     }
 
     // Draw Mario
     sf::Vector2f posMario(100, 240);
     mTexture.loadFromFile(EntityManager::TEXTURES_PATH + "/Mario_right_profile.png");
-    EntityManager::player = std::make_shared<Mario>(posMario, mTexture, EntityType::player, MARIO_SPEED);
+    EntityManager::player = std::make_shared<Mario>(posMario, mTexture, EntityType::PLAYER, MARIO_SPEED);
 
     mPlayer.setTexture(mTexture);
 
@@ -65,7 +66,7 @@ Game::Game()
         mWindow.setIcon(281, 210, icon.getPixelsPtr());
     }
     else std::cerr << "Error when load " + EntityManager::TEXTURES_PATH + "/icon.png" << std::endl;
-
+    map.printElement();
 }
 
 void Game::run()
@@ -118,7 +119,7 @@ void Game::update(sf::Time elapsedTime)
 
     sf::Vector2f movement(0.f, 0.f);
     EntityManager::player->update(elapsedTime, map);
-    //if(mIsMovingUp)EntityManager::player->move(UP);
+    if(mIsMovingUp)EntityManager::player->move(UP);
     if(mIsMovingRight)EntityManager::player->move(RIGHT);
     if(mJump){
         EntityManager::player->jump();
@@ -128,7 +129,7 @@ void Game::update(sf::Time elapsedTime)
     if(mIsMovingLeft) EntityManager::player->move(LEFT);
     for (const std::shared_ptr<Entity> &entity : EntityManager::entities)
     {
-        if (!entity->enabled || entity->type != EntityType::player)
+        if (!entity->enabled || entity->type != EntityType::PLAYER)
         {
             continue;
         }
@@ -161,7 +162,7 @@ void Game::render()
     }
     for(const std::shared_ptr<Entity> &entity : EntityManager::entities)
     {
-        if(entity->type == EntityType::player)
+        if(entity->type == EntityType::PLAYER)
         {
 
             mWindow.draw(entity->getSprite());
