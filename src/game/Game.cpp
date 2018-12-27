@@ -29,7 +29,7 @@ Game::Game()
         }
     }*/
     block[0][0].setTexture(texturePlatform);
-    block[0][0].setPosition(100,100);
+    block[0][0].setPosition(100,300);
     std::shared_ptr<Entity> se = std::make_shared<Entity>(block[0][0], EntityType::platform);
     EntityManager::entities.push_back(se);
     map.addEntityToMatrix(se);
@@ -47,7 +47,7 @@ Game::Game()
     }
 
     // Draw Mario
-    sf::Vector2f posMario(100, 0);
+    sf::Vector2f posMario(100, 240);
     mTexture.loadFromFile(EntityManager::TEXTURES_PATH + "/Mario_right_profile.png");
     EntityManager::player = std::make_shared<Mario>(posMario, mTexture, EntityType::player, MARIO_SPEED);
 
@@ -121,7 +121,8 @@ void Game::update(sf::Time elapsedTime)
     //if(mIsMovingUp)EntityManager::player->move(UP);
     if(mIsMovingRight)EntityManager::player->move(RIGHT);
     if(mJump){
-
+        EntityManager::player->jump();
+        mJump=false;
     }
     if(mIsMovingDown)EntityManager::player->move(DOWN);
     if(mIsMovingLeft) EntityManager::player->move(LEFT);
@@ -217,6 +218,7 @@ void Game::handlePlayerInput(sf::Keyboard::Key key, bool isPressed)
             if(isPressed)debug = !debug;
            break;
         case sf::Keyboard::Space:
+            if(isPressed && EntityManager::player->playerState != JUMP )mJump = true;
             break;
 
         default: EntityManager::player->move(NONE);

@@ -32,12 +32,12 @@ Map::Map(Matrix3d array3D)
     length = entity3DArray[0].size();
 }
 
-const Matrix3d& Map::getentity3DArray() const
+const Matrix3d& Map::getEntity3DArray()  const
 {
     return entity3DArray;
 }
 
-void Map::setentity3DArray(const Matrix3d& entity3DArray)
+void Map::setEntity3DArray(const Matrix3d& entity3DArray)
 {
     Map::entity3DArray = entity3DArray;
 }
@@ -51,13 +51,9 @@ void Map::addEntityToMatrix(std::shared_ptr<Entity> entity)
     int s_height =sprite.getTextureRect().height;
 
     for(int i = 0 ;i<s_width/32;i++){
-        entity3DArray.at(static_cast<unsigned int>((x+32*i) / 32)).at(static_cast<unsigned int>(y / 32)) = entity;
+        entity3DArray.at(static_cast<unsigned int>((x+32*i) / 32)).at(static_cast<unsigned int>(y / 32)).push_back(entity);
         for(int j =0; j<s_height/32;j++){
-            entity3DArray.at(static_cast<unsigned int>((x+32*i) / 32)).at(static_cast<unsigned int>((y*j*32) / 32)) = entity;
+            entity3DArray.at(static_cast<unsigned int>((x+32*i) / 32)).at(static_cast<unsigned int>((y*j*32) / 32)).push_back(entity);
         }
     }
-
-    entity3DArray.at(static_cast<unsigned int>( (x + s_width) / 32)).at(static_cast<unsigned int>(y / 32)) = entity;
-    entity3DArray.at(static_cast<unsigned int>(x / 32)).at(static_cast<unsigned int>((y + s_height) / 32)) = entity;
-    entity3DArray.at(static_cast<unsigned int>((x+s_width) / 32)).at(static_cast<unsigned int>((y + s_height) / 32)) = entity;
 }
