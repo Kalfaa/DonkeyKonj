@@ -1,4 +1,5 @@
 #include <utility>
+#include <Game.h>
 
 //
 // Created by user on 25/12/2018.
@@ -12,14 +13,52 @@ Map::Map(){
 }
 
 Map::Map(unsigned int x , unsigned int y){
-    //entity2DArray = std::vector<std::vector<std::shared_ptr<Entity>>>(x,std::vector<std::shared_ptr<Entity>>(y));
     entity3DArray = Matrix3d(x, std::vector<std::vector<std::shared_ptr<Entity>>>(y));
 }
 Map::~Map()
 {
 
 }
+Map::Map(std::ifstream file)
+{
+    std::string str((std::istreambuf_iterator<char>(file)),
+                    std::istreambuf_iterator<char>());
+    unsigned int x = str.find('\n');
+    auto y = static_cast<unsigned int>(str.begin(),str.end(),'\n');
+    entity3DArray = Matrix3d(x, std::vector<std::vector<std::shared_ptr<Entity>>>(y));
+    std::vector<std::string> list_string;
+    std::stringstream ss(str);
+    std::string tmp;
+    while(std::getline(ss, tmp, '\n'))
+    {
+        list_string.push_back(tmp);
+    }
 
+    for(auto it = list_string.begin(); it != list_string.end(); ++it)
+    {
+        std::cout << (*it) << std:: endl;
+    }
+
+    for(int i =0;i<y ;i++){
+        for(int j = 0;j<x;j++){
+            switch(list_string[i][j]){
+                case 'O':
+                    break;
+                case 'P':
+                    //CREER UNE PLATFORME ET LE PUSH DANS LA MATRICE 3D
+                    break;
+                case 'L':
+                    //CREER UNE LADDER ET LE PUSH DANS LA MATRICE 3D
+                    break;
+                case 'X':
+                    startpoint.x=j;
+                    startpoint.y=i;
+                default:break;
+            }
+        }
+    }
+
+}
 void Map::print(const sf::RenderWindow& window)
 {
     //window.draw()
@@ -50,10 +89,10 @@ void Map::addEntityToMatrix(std::shared_ptr<Entity> entity)
     int s_width = sprite.getTextureRect().width;
     int s_height =sprite.getTextureRect().height;
     //@todo REFACTOR CETTE ALGO PETER QUI CREER DES DUPPLICAT DOBJET DANS LA MATRICE
-    for(int i = 0 ;i<=s_width/32; i++){
-        entity3DArray.at(static_cast<unsigned int>((x+32*i) / 32)).at(static_cast<unsigned int>(y / 32)).push_back(entity);
-        for(int j =0; j<=s_height/32;j++){
-            entity3DArray.at(static_cast<unsigned int>((x+32*i) / 32)).at(static_cast<unsigned int>((y+j*32) / 32)).push_back(entity);
+    for(int i = 0 ;i<=s_width/CASE_AREA; i++){
+        entity3DArray.at(static_cast<unsigned int>((x+CASE_AREA*i) / CASE_AREA)).at(static_cast<unsigned int>(y / CASE_AREA)).push_back(entity);
+        for(int j =0; j<=s_height/CASE_AREA;j++){
+            entity3DArray.at(static_cast<unsigned int>((x+CASE_AREA*i) / CASE_AREA)).at(static_cast<unsigned int>((y+j*CASE_AREA) / CASE_AREA)).push_back(entity);
         }
     }
 }
@@ -75,3 +114,5 @@ void Map::printElement()
      }
  }
 }
+
+

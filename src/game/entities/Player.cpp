@@ -3,7 +3,9 @@
 //
 
 #include <map/Map.h>
+#include <Game.h>
 #include "Player.h"
+#include "Ladder.h"
 
 
 Player::Player(const sf::Vector2f& posPlayer, const sf::Texture& texture, EntityType type, float playerSpeed)
@@ -23,7 +25,9 @@ void Player::update(sf::Time elapsedTime,Map map)
     switch (direction)
     {
         case UP:
-            position.y -= playerSpeed;
+            if(checkIfCollideWithLadder(map)){
+                movement.y -= playerSpeed*2;
+            }
             break;
         case DOWN:
             if(!collide_down(map))
@@ -60,17 +64,17 @@ void Player::move(Direction direction)
 bool Player::collide_down(Map map)
 {
     std::vector<std::shared_ptr<Entity>> list_entity;
-    auto x = static_cast<unsigned int>(sprite.getPosition().x) /32 ;
-    auto x2 =  static_cast<unsigned int>( (sprite.getPosition().x+MARIO_WIDTH )/32 );
-    auto y = static_cast<unsigned int>( ((sprite.getPosition().y)+MARIO_HEIGHT)/32);
+    auto left = static_cast<unsigned int>(sprite.getPosition().x) /CASE_AREA ;
+    auto right =  static_cast<unsigned int>( (sprite.getPosition().x+MARIO_WIDTH )/CASE_AREA );
+    auto bottom = static_cast<unsigned int>( ((sprite.getPosition().y)+MARIO_HEIGHT)/CASE_AREA);
 
-    for (const auto &i : map.entity3DArray.at(x).at(y))
+    for (const auto &i : map.entity3DArray.at(left).at(bottom))
     {
-       list_entity.push_back(i) ;
+        if(i->type==PLATFORM)list_entity.push_back(i) ;
     }
-    for (const auto &i : map.entity3DArray.at(x2).at(y))
+    for (const auto &i : map.entity3DArray.at(right).at(bottom))
     {
-        list_entity.push_back(i) ;
+        if(i->type==PLATFORM)list_entity.push_back(i) ;
     }
     for(const auto &entity : list_entity){
         if(entity->sprite.getGlobalBounds().intersects(sprite.getGlobalBounds())){
@@ -87,7 +91,25 @@ void Player::jump()
 
 bool Player::checkIfCollideWithLadder(Map map)
 {
-    return false;
+    std::vector<std::shared_ptr<Entity>> list_entity;
+    auto left = static_cast<unsigned int>(sprite.getPosition().x) /CASE_AREA ;
+    auto right =  static_cast<unsigned int>( (sprite.getPosition().x+MARIO_WIDTH )/CASE_AREA );
+    auto bottom = static_cast<unsigned int>( ((sprite.getPosition().y)+MARIO_HEIGHT)/CASE_AREA);
+
+    for (const auto &i : map.entity3DArray.at(left).at(bottom))
+    {
+        if(i->type==LADDER) list_entity.push_back(i) ;
+    }
+    for (const auto &i : map.entity3DArray.at(right).at(bottom))
+    {
+        if(i->type==LADDER)list_entity.push_back(i) ;
+    }
+    for(const auto &entity : list_entity){
+        if( entity->sprite.getGlobalBounds().intersects(sprite.getGlobalBounds())){
+            return true;
+        }
+    }
+    return false ;
 }
 
 

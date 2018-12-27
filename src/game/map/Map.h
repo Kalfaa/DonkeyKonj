@@ -17,6 +17,7 @@ public:
     Map();
     Map(unsigned int x , unsigned int y);
     Map(Matrix3d array3D);
+    Map(std::ifstream file);
     virtual ~Map();
     //std::array<std::array<Entity,255>,255> entity2DArray ;
     Matrix3d entity3DArray;
@@ -27,6 +28,7 @@ public:
 
     int width;
     int length;
+    sf::Vector2f startpoint;
 public:
     void addEntityToMatrix(std::shared_ptr<Entity> entity);
     void print(const sf::RenderWindow&);
