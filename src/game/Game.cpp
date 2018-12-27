@@ -7,6 +7,8 @@ Game::Game()
           mStatisticsText(), mStatisticsUpdateTime(), mStatisticsNumFrames(0), mIsMovingUp(false), mIsMovingDown(false),
           mIsMovingRight(false), mIsMovingLeft(false)
 {
+    SpritesSheet::sprites;
+
     mWindow.setFramerateLimit(160);
     map = Map(100,100) ;
 

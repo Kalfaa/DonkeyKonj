@@ -1,0 +1,97 @@
+DonkeyKongStolePeach0 1 13 38 36
+DonkeyKongStolePeach1 44 17 43 32
+
+Peach0 92 28 15 21
+Peach1 112 28 15 21
+
+PeachHelp0 132 19 24 8
+PeachHelp1 132 28 24 8
+
+Hearth0 161 28 15 13
+Hearth1 181 28 16 13
+
+NvidiaLogo 202 29 18 20
+
+DonkeyKongFace0 1 54 40 32
+DonkeyKongFace1 46 54 40 32
+DonkeyKongFace2 183 93 40 32
+DonkeyKongFace3 228 93 40 32
+DonkeyKongFace4 273 93 40 32
+
+DonkeyKongOrange 91 54 47 32
+
+Bonus0 143 55 44 20
+Bonus1 192 55 44 20
+Bonus2 241 55 44 20
+
+DonkeyKongProfileLeft 1 91 43 32
+DonkeyKongFaceArmDown 49 91 40 32
+DonkeyKongFaceDanceLeft 94 93 46 32
+DonkeyKongClimbLeft 145 89 33 36
+
+MarioLeft0 1 141 12 16
+MarioLeft1 18 141 15 16
+MarioLeft2 38 42 15 15
+
+MarioClimbLeft0 1 162 13 16
+MarioClimbLeft1 19 163 14 15
+MarioClimbLeft2 38 166 16 12
+MarioClimbLeft2 59 163 16 15
+
+MarioLeftJump 1 183 16 15
+
+MarioLeftArm0 1 203 12 16
+MarioLeftArm1 57 203 14 16
+
+MarioMoveLeftArm0 1 203 12 16
+MarioMoveLeftArm1 18 203 13 16
+MarioMoveLeftArm2 36 204 16 15
+MarioMoveLeftArm3 57 203 14 16
+MarioMoveLeftArm4 76 203 15 16
+
+Hamer0 37 224 9 9
+Hamer1 72 224 99
+
+HamerDown0 51 224 16 9
+HamerDown1 86 224 16 9
+
+MarioLeftSlide0 1 246 16 16
+MarioLeftSlide1 22 247 16 15
+MarioLeftSlide2 43 246 16 16
+MarioLeftSlide3 64 246 16 16
+
+PlatformOrange 1 280 8 8
+PlatformRed 14 280 8 8
+
+Ladder 14 293 10 16
+
+OilBarrel 96 130 16 16
+
+OilFire0 96 151 15 14
+OilFire1 116 151 15 14
+OilFire2 136 150 16 15
+OilFire3 157 150 16 15
+
+FireElementLeft0 96 170 15 16
+FireElementLeft1 116 171 13 15
+
+FireElementLeftBlue0 134 170 15 16
+FireElementLeftBlue1 154 171 13 15
+
+Barrel 178 130 10 16
+
+BarrelVertical0 178 151 16 10
+BarrelVertical1 199 151 16 10
+
+BarrelHorizontal0 178 166 12 10
+BarrelHorizontal1 195 166 12 10
+BarrelHorizontal2 212 166 12 10
+BarrelHorizontal3 229 166 12 10
+
+BarrelVerticalBlue0 178 181 16 10
+BarrelVerticalBlue1 199 181 16 10
+
+BarrelHorizontalBlue0 178 196 12 10
+BarrelHorizontalBlue1 195 196 12 10
+BarrelHorizontalBlue2 212 196 12 10
+BarrelHorizontalBlue3 229 196 12 10
