@@ -8,6 +8,9 @@
 #include "pch.h"
 #include "EntityManager.h"
 
+typedef std::map<const std::string, sf::IntRect> MapSprites;
+typedef std::map<const std::string, std::vector<sf::IntRect>> MapPatterns;
+
 class SpritesSheet
 {
 public:
@@ -15,11 +18,14 @@ public:
 
 private:
     static std::map<std::string, std::array<int, 4>> loadSpriteSetting(std::string file);
+    static size_t isPattern(std::string currentSprite, std::string lastSpriteName);
 
 public:
     static std::map<const std::string, sf::IntRect> sprites;
-    static std::map<const std::string, std::vector<sf::IntRect>> spritesPaterns;
+    static std::map<const std::string, std::vector<sf::IntRect>> spritesPatterns;
 
+private:
+    static int lastNumSprite;
     // TODO : Exception if setting file not found
 };
 
