@@ -53,6 +53,8 @@ private:
     bool mIsMovingRight;
     bool mIsMovingLeft;
     bool debug ;
+    bool mJump;
+
     sf::Texture textureLadder;
     sf::Sprite ladder[LADDER_COUNT];
     sf::Texture texturePlatform;

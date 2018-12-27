@@ -11,6 +11,7 @@
 
 #define MARIO_HEIGHT 53
 #define MARIO_WIDTH 45
+
 class Player : public Entity
 {
 public:
@@ -25,6 +26,8 @@ protected:
     float playerSpeed;
     Direction direction;
     bool collide_down(Map map);
+    void jump();
+    PlayerState playerState = IDLE;
 };
 
 
