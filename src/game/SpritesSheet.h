@@ -17,8 +17,8 @@ private:
     static std::map<std::string, std::array<int, 4>> loadSpriteSetting(std::string file);
 
 public:
-    static std::map<const std::string, sf::Sprite&> sprites;
-    static std::map<const std::string, std::vector<sf::Sprite&>> spritesPaterns;
+    static std::map<const std::string, sf::IntRect> sprites;
+    static std::map<const std::string, std::vector<sf::IntRect>> spritesPaterns;
 
     // TODO : Exception if setting file not found
 };
