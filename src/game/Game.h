@@ -7,6 +7,7 @@
 #include "Ladder.h"
 #include "Player.h"
 #include "Mario.h"
+#include "SpritesSheet.h"
 
 #define LADDER_COUNT 4
 #define BLOCK_COUNT_X 8

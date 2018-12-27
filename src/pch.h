@@ -21,6 +21,8 @@
 #include <map>
 #include <list>
 
+#include <cassert>
+
 #define SFML_STATIC
 
 #include <SFML/Graphics.hpp>

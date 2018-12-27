@@ -3,8 +3,6 @@
 #include "Entity.h"
 #include "Player.h"
 
-#define shared_ptr_entity std::shared_ptr<Entity>
-
 class EntityManager
 {
 public:
