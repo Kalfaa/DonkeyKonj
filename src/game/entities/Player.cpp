@@ -47,8 +47,8 @@ bool Player::collide_down(Map map)
     auto x = static_cast<unsigned int>(sprite.getPosition().x) /32 ;
     auto x2 =  static_cast<unsigned int>( (sprite.getPosition().x+MARIO_WIDTH )/32 );
     auto y = static_cast<unsigned int>( ((sprite.getPosition().y)+MARIO_HEIGHT)/32);
-    std::shared_ptr<Entity> entity = map.entity2DArray.at(x).at(y);
-    std::shared_ptr<Entity> entity2 = map.entity2DArray.at(x2).at(y);
+    std::shared_ptr<Entity> entity = map.entity3DArray.at(x).at(y);
+    std::shared_ptr<Entity> entity2 = map.entity3DArray.at(x2).at(y);
     if(entity!= nullptr){
         if(entity->sprite.getGlobalBounds().intersects(sprite.getGlobalBounds())){
             return true;

@@ -8,19 +8,22 @@
 #include "pch.h"
 #include "StaticEntity.h"
 
+typedef std::vector<std::vector<std::shared_ptr<Entity>>> Matrix2d;
+typedef std::vector<Matrix2d> Matrix3d;
+
 class Map
 {
 public:
     Map();
     Map(unsigned int x , unsigned int y);
-    Map(std::vector<std::vector<std::shared_ptr<Entity>>> array2D);
+    Map(Matrix3d array3D);
     virtual ~Map();
     //std::array<std::array<Entity,255>,255> entity2DArray ;
-    std::vector<std::vector<std::shared_ptr<Entity>>> entity2DArray;
+    Matrix3d entity3DArray;
 
-    const std::vector<std::vector<std::shared_ptr<Entity>>> &getEntity2DArray() const;
+    const Matrix3d &getEntity3DArray() const;
 
-    void setEntity2DArray(const std::vector<std::vector<std::shared_ptr<Entity>>>&entity2DArray);
+    void setEntity3DArray(const Matrix3d& entity3DArray);
 
     int width;
     int length;
