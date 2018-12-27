@@ -6,6 +6,9 @@
 
 using namespace std;
 
+std::map<const std::string, sf::IntRect&> SpritesSheet::sprites;
+std::map<const std::string, std::vector<sf::IntRect&>> SpritesSheet::spritesPaterns;
+
 bool SpritesSheet::loadSprites(string file)
 {
     std::map<std::string, std::array<int, 4>> map = loadSpriteSetting(file.substr(0, file.find_last_of('.') - 1));
@@ -15,9 +18,10 @@ bool SpritesSheet::loadSprites(string file)
 
     mainTexture.loadFromFile(file);
 
-    for(const auto& tab : map)
+    for(const auto &tab : map)
     {
-        //sprites.insert(make_pair(tab.first, sf::Sprite(mainTexture, sf::IntRect(0,0,300,400))));
+        sf::IntRect rect(tab.second[0], tab.second[1], tab.second[2], tab.second[3]);
+        sprites.insert(pair<const string, sf::IntRect&>(tab.first, rect));
     }
 
     return true;
