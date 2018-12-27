@@ -8,6 +8,9 @@
 #include "pch.h"
 #include "Entity.h"
 #include <map/Map.h>
+
+#define MARIO_HEIGHT 53
+#define MARIO_WIDTH 45
 class Player : public Entity
 {
 public:
@@ -21,6 +24,7 @@ public:
 protected:
     float playerSpeed;
     Direction direction;
+    bool collide_down(Map map);
 };
 
 

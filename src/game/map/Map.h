@@ -12,7 +12,7 @@ class Map
 {
 public:
     Map();
-    Map(int x , int y);
+    Map(unsigned int x , unsigned int y);
     Map(std::vector<std::vector<std::shared_ptr<Entity>>> array2D);
     virtual ~Map();
     //std::array<std::array<Entity,255>,255> entity2DArray ;
@@ -25,7 +25,7 @@ public:
     int width;
     int length;
 public:
-
+    void addEntityToMatrix(std::shared_ptr<Entity> entity);
     void print(const sf::RenderWindow&);
 
 
