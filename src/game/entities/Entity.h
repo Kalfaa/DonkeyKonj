@@ -10,6 +10,12 @@ enum Direction
     NONE
 };
 
+enum PlayerState {
+    JUMP,
+    IDLE,
+    MOOVING,
+    STARTJUMP
+};
 enum EntityType
 {
     player,

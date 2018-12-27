@@ -5,7 +5,7 @@ const int CASE_PIXEL_VALUE = 32;
 Game::Game()
         : mWindow(sf::VideoMode(840, 600), "Donkey Kong 1981", sf::Style::Close), mTexture(), mPlayer(), mFont(),
           mStatisticsText(), mStatisticsUpdateTime(), mStatisticsNumFrames(0), mIsMovingUp(false), mIsMovingDown(false),
-          mIsMovingRight(false), mIsMovingLeft(false) ,debug(false)
+          mIsMovingRight(false), mIsMovingLeft(false) ,debug(false),mJump(false)
 {
     mWindow.setFramerateLimit(160);
     map = Map(100,100) ;
@@ -116,8 +116,11 @@ void Game::update(sf::Time elapsedTime)
 
     sf::Vector2f movement(0.f, 0.f);
     EntityManager::player->update(elapsedTime, map);
-    if(mIsMovingUp)EntityManager::player->move(UP);
+    //if(mIsMovingUp)EntityManager::player->move(UP);
     if(mIsMovingRight)EntityManager::player->move(RIGHT);
+    if(mJump){
+
+    }
     if(mIsMovingDown)EntityManager::player->move(DOWN);
     if(mIsMovingLeft) EntityManager::player->move(LEFT);
     for (const std::shared_ptr<Entity> &entity : EntityManager::entities)

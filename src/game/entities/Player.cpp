@@ -22,7 +22,10 @@ void Player::update(sf::Time elapsedTime,Map map)
             position.y -= playerSpeed;
             break;*/
         case DOWN:
-            movement.y += playerSpeed;
+            if(!collide_down(map))
+            {
+                movement.y += playerSpeed;
+            }
             break;
         case LEFT:
             movement.x -= playerSpeed;
@@ -60,6 +63,11 @@ bool Player::collide_down(Map map)
         }
     }
     return false ;
+}
+
+void Player::jump()
+{
+    playerState= STARTJUMP;
 }
 
 
