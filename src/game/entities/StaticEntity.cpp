@@ -3,3 +3,7 @@
 //
 
 #include "StaticEntity.h"
+
+StaticEntity::StaticEntity(const sf::Vector2f &position, const sf::Texture &texture, EntityType type)
+    : Entity(position, texture, type)
+    {}

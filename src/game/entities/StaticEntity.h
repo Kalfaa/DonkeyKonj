@@ -10,6 +10,8 @@
 
 class StaticEntity : public Entity
 {
+public:
+    StaticEntity(const sf::Vector2f &position, const sf::Texture &, EntityType type);
 };
 
 

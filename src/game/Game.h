@@ -3,6 +3,8 @@
 #include "pch.h"
 #include "StringHelpers.h"
 #include "EntityManager.h"
+#include "Platform.h"
+#include "Ladder.h"
 #include "Player.h"
 #include "Mario.h"
 
@@ -10,6 +12,8 @@
 #define BLOCK_COUNT_X 8
 #define BLOCK_COUNT_Y 5
 #define BLOCK_SPACE 110.f
+
+#define MARIO_SPEED 100.f
 
 class Game
 {
@@ -50,7 +54,7 @@ private:
     bool debug ;
     sf::Texture textureLadder;
     sf::Sprite ladder[LADDER_COUNT];
-    sf::Texture textureBlock;
+    sf::Texture texturePlatform;
     sf::Sprite block[BLOCK_COUNT_X][BLOCK_COUNT_Y];
     sf::Texture textureWeapon;
     sf::Sprite weapon;

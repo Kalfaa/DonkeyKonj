@@ -13,7 +13,7 @@ enum Direction
 enum EntityType
 {
     player,
-    block,
+    platform,
     ladder,
     unknown
 };
@@ -22,7 +22,7 @@ class Entity
 {
 public:
     Entity(const sf::Sprite&, EntityType);
-    Entity(const sf::Vector2f&, const sf::Texture&, EntityType type);
+    Entity(const sf::Vector2f& position, const sf::Texture&, EntityType type);
     virtual ~Entity() = default;
 
 public:
