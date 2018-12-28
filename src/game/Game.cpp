@@ -8,10 +8,7 @@ Game::Game()
           mIsMovingRight(false), mIsMovingLeft(false) ,debug(false),mJump(false)
 {
     // Load localisation of all sprites and patterns
-    // do "cerr << SpritesSheet();" to see all sprites and patterns
-    // Warning, currently you must creat sprite with a sf::IntRect
     SpritesSheet::loadSprites(EntityManager::TEXTURES_PATH + "/DonkeyKong_SpritesSheet.png");
-
 
     mWindow.setFramerateLimit(160);
     map = Map(100,100) ;

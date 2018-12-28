@@ -1,10 +1,14 @@
-// 
+#include <utility>
+
+//
 // Created by user on 26/12/2018.
 //
 
 #include "SpritesSheet.h"
 
 using namespace std;
+
+sf::Texture SpritesSheet::mainTexture;
 
 std::map<const std::string, sf::IntRect> SpritesSheet::sprites;
 std::map<const std::string, std::vector<sf::IntRect>> SpritesSheet::spritesPatterns;
@@ -40,8 +44,6 @@ ostream &operator<<(ostream &os, const SpritesSheet &sheet)
 bool SpritesSheet::loadSprites(string file)
 {
     std::map<std::string, std::array<int, 4>> map = loadSpriteSetting(file.substr(0, file.find_last_of('.')));
-
-    sf::Texture mainTexture;
     mainTexture.loadFromFile(file);
 
     string lastSpriteName;
@@ -122,3 +124,40 @@ size_t SpritesSheet::isPattern(const string currentSprite, const string lastSpri
     lastNumSprite++;
     return testEndWithNum;
 }
+
+sf::Sprite SpritesSheet::getSprite(const std::string name)
+{
+    return sf::Sprite(mainTexture, sprites.at(name));
+}
+
+sf::Sprite SpritesSheet::getOppositeSprite(const string name)
+{
+    sf::Sprite sp = getSprite(name);
+    sp.scale(-1.f,1.f);
+    return sp;
+}
+
+std::vector<sf::Sprite> SpritesSheet::getPattern(std::string name)
+{
+    vector<sf::IntRect> patternPos = spritesPatterns.at(name);
+    vector<sf::Sprite> patternSp;
+
+    for(const auto& ite : patternPos)
+    {
+        patternSp.emplace_back(mainTexture, ite);
+    }
+
+    return patternSp;
+}
+
+std::vector<sf::Sprite> SpritesSheet::getOppositePattern(std::string name)
+{
+    std::vector<sf::Sprite> vecSp = getPattern(std::move(name));
+    for(auto& ite : vecSp)
+    {
+        ite.scale(-1.f,1.f);
+    }
+
+    return vecSp;
+}
+
