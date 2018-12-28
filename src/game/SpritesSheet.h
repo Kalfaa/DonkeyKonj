@@ -5,6 +5,7 @@
 #ifndef DONKEYKONG_SPRITESSHEET_H
 #define DONKEYKONG_SPRITESSHEET_H
 
+#include <ostream>
 #include "pch.h"
 #include "EntityManager.h"
 
@@ -15,6 +16,10 @@ class SpritesSheet
 {
 public:
     static bool loadSprites(std::string file);
+
+public:
+    friend std::ostream &operator<<(std::ostream &os, const SpritesSheet &sheet);
+    friend std::ostream &operator<<(std::ostream &os, const sf::IntRect &sheet);
 
 private:
     static std::map<std::string, std::array<int, 4>> loadSpriteSetting(std::string file);

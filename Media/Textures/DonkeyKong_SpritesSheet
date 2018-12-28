@@ -36,7 +36,7 @@ MarioLeft2 38 42 15 15
 MarioClimbLeft0 1 162 13 16
 MarioClimbLeft1 19 163 14 15
 MarioClimbLeft2 38 166 16 12
-MarioClimbLeft2 59 163 16 15
+MarioClimbLeft3 59 163 16 15
 
 MarioLeftJump 1 183 16 15
 
@@ -50,7 +50,7 @@ MarioMoveLeftArm3 57 203 14 16
 MarioMoveLeftArm4 76 203 15 16
 
 Hamer0 37 224 9 9
-Hamer1 72 224 99
+Hamer1 72 224 9 9
 
 HamerDown0 51 224 16 9
 HamerDown1 86 224 16 9
