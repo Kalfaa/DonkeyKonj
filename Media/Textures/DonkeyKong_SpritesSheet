@@ -49,8 +49,8 @@ MarioMoveLeftArm2 36 204 16 15
 MarioMoveLeftArm3 57 203 14 16
 MarioMoveLeftArm4 76 203 15 16
 
-Hamer0 37 224 9 9
-Hamer1 72 224 9 9
+Hammer0 37 224 9 9
+Hammer1 72 224 9 9
 
 HamerDown0 51 224 16 9
 HamerDown1 86 224 16 9

@@ -8,14 +8,15 @@ Game::Game()
           mIsMovingRight(false), mIsMovingLeft(false) ,debug(false),mJump(false)
 {
     // Load localisation of all posTexture and patterns
-    SpritesSheet::loadSprites(EntityManager::TEXTURES_PATH + "/DonkeyKong_SpritesSheet.png");
+    SpritesSheet sps = SpritesSheet::GetInstance();
+    sps.loadSprites(EntityManager::TEXTURES_PATH + "/DonkeyKong_SpritesSheet.png");
 
     mWindow.setFramerateLimit(160);
     map = Map(100,100) ;
 
     // Draw blocks
 
-    texturePlatform = SpritesSheet::getTexture("PlatformRed");
+    texturePlatform = sps.getTexture("PlatformRed");
     sizeBlock = texturePlatform.getSize();
     for (int i = 0; i < BLOCK_COUNT_X; i++)
     {
@@ -36,7 +37,7 @@ Game::Game()
     //map.addEntityToMatrix(se);
 
     // Draw Ladder
-    textureLadder = SpritesSheet::getTexture("Ladder");
+    textureLadder = sps.getTexture("Ladder");
     //textureLadder.loadFromFile(EntityManager::TEXTURES_PATH + "/Ladder.PNG");
 
     for (int i = 0; i < LADDER_COUNT; i++)
@@ -51,7 +52,7 @@ Game::Game()
 
     // Draw Mario
     sf::Vector2f posMario(100, 240);
-    mTexture = SpritesSheet::getTexture("Bonus0");
+    mTexture = sps.getTexture("MarioLeftJump");
     EntityManager::player = std::make_shared<Mario>(posMario, mTexture, EntityType::PLAYER, MARIO_SPEED);
 
     mPlayer.setTexture(mTexture);

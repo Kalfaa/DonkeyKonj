@@ -8,12 +8,13 @@
 
 using namespace std;
 
+SpritesSheet SpritesSheet::INSTANCE = SpritesSheet();
 sf::Image SpritesSheet::mainImage;
 
 std::map<const std::string, sf::IntRect> SpritesSheet::posTexture;
 std::map<const std::string, std::vector<sf::IntRect>> SpritesSheet::posTexturePatterns;
 
-//int SpritesSheet::lastNumTex = -1;
+int SpritesSheet::lastNumTex = -1;
 
 ostream &operator<<(ostream &os, const sf::IntRect &sheet)
 {
