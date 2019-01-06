@@ -10,7 +10,7 @@
 #include "SpritesSheet.h"
 
 #define LADDER_COUNT 4
-#define BLOCK_COUNT_X 8
+#define BLOCK_COUNT_X 20//8
 #define BLOCK_COUNT_Y 5
 #define BLOCK_SPACE 110.f
 #define CASE_AREA 32

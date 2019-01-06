@@ -7,7 +7,7 @@ Game::Game()
           mStatisticsText(), mStatisticsUpdateTime(), mStatisticsNumFrames(0), mIsMovingUp(false), mIsMovingDown(false),
           mIsMovingRight(false), mIsMovingLeft(false) ,debug(false),mJump(false)
 {
-    // Load localisation of all sprites and patterns
+    // Load localisation of all posTexture and patterns
     SpritesSheet::loadSprites(EntityManager::TEXTURES_PATH + "/DonkeyKong_SpritesSheet.png");
 
     mWindow.setFramerateLimit(160);
@@ -15,9 +15,8 @@ Game::Game()
 
     // Draw blocks
 
-    texturePlatform.loadFromFile(EntityManager::TEXTURES_PATH + "/Block.png");
+    texturePlatform = SpritesSheet::getTexture("PlatformRed");
     sizeBlock = texturePlatform.getSize();
-    /*
     for (int i = 0; i < BLOCK_COUNT_X; i++)
     {
         for (int j = 0; j < BLOCK_COUNT_Y; j++)
@@ -27,16 +26,18 @@ Game::Game()
                     , texturePlatform
                     , EntityType::PLATFORM);
             EntityManager::entities.push_back(pf);
+            map.addEntityToMatrix(pf);
         }
-    }*/
-    block[0][0].setTexture(texturePlatform);
-    block[0][0].setPosition(100,300);
-    std::shared_ptr<Entity> se = std::make_shared<Entity>(block[0][0], EntityType::PLATFORM);
-    EntityManager::entities.push_back(se);
-    map.addEntityToMatrix(se);
-    // Draw Ladder
+    }
+    //block[0][0].setTexture(SpritesSheet::getTexture("PlatformRed"));
+    //block[0][0].setPosition(100,300);
+    //std::shared_ptr<Entity> se = std::make_shared<Entity>(block[0][0], EntityType::PLATFORM);
+    //EntityManager::entities.push_back(se);
+    //map.addEntityToMatrix(se);
 
-    textureLadder.loadFromFile(EntityManager::TEXTURES_PATH + "/Ladder.PNG");
+    // Draw Ladder
+    textureLadder = SpritesSheet::getTexture("Ladder");
+    //textureLadder.loadFromFile(EntityManager::TEXTURES_PATH + "/Ladder.PNG");
 
     for (int i = 0; i < LADDER_COUNT; i++)
     {
@@ -50,7 +51,7 @@ Game::Game()
 
     // Draw Mario
     sf::Vector2f posMario(100, 240);
-    mTexture.loadFromFile(EntityManager::TEXTURES_PATH + "/Mario_right_profile.png");
+    mTexture = SpritesSheet::getTexture("Bonus0");
     EntityManager::player = std::make_shared<Mario>(posMario, mTexture, EntityType::PLAYER, MARIO_SPEED);
 
     mPlayer.setTexture(mTexture);

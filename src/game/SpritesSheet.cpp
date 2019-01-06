@@ -8,12 +8,12 @@
 
 using namespace std;
 
-sf::Texture SpritesSheet::mainTexture;
+sf::Image SpritesSheet::mainImage;
 
-std::map<const std::string, sf::IntRect> SpritesSheet::sprites;
-std::map<const std::string, std::vector<sf::IntRect>> SpritesSheet::spritesPatterns;
+std::map<const std::string, sf::IntRect> SpritesSheet::posTexture;
+std::map<const std::string, std::vector<sf::IntRect>> SpritesSheet::posTexturePatterns;
 
-int SpritesSheet::lastNumSprite = -1;
+//int SpritesSheet::lastNumTex = -1;
 
 ostream &operator<<(ostream &os, const sf::IntRect &sheet)
 {
@@ -23,12 +23,12 @@ ostream &operator<<(ostream &os, const sf::IntRect &sheet)
 ostream &operator<<(ostream &os, const SpritesSheet &sheet)
 {
     os << "# SpriteSheet #" << endl;
-    for(const auto& ite : SpritesSheet::sprites)
+    for(const auto& ite : SpritesSheet::posTexture)
     {
         os << "Sprite name: " << ite.first << " with " << ite.second << endl;
     }
 
-    for(const auto& ite : SpritesSheet::spritesPatterns)
+    for(const auto& ite : SpritesSheet::posTexturePatterns)
     {
         os << "Pattern \"" << ite.first << "\"" << endl << "{" << endl;
         for(const auto& iteV : ite.second)
@@ -44,26 +44,26 @@ ostream &operator<<(ostream &os, const SpritesSheet &sheet)
 bool SpritesSheet::loadSprites(string file)
 {
     std::map<std::string, std::array<int, 4>> map = loadSpriteSetting(file.substr(0, file.find_last_of('.')));
-    mainTexture.loadFromFile(file);
+    mainImage.loadFromFile(file);
 
     string lastSpriteName;
     for(const auto& tab : map)
     {
         sf::IntRect rect(tab.second[0], tab.second[1], tab.second[2], tab.second[3]);
-        sprites.insert(make_pair(tab.first, rect));
+        posTexture.insert(make_pair(tab.first, rect));
 
         size_t pos = isPattern(tab.first, lastSpriteName);
         if(pos)
         {
-            if(spritesPatterns.find(tab.first.substr(0, pos)) != spritesPatterns.end())
+            if(posTexturePatterns.find(tab.first.substr(0, pos)) != posTexturePatterns.end())
             {
-                spritesPatterns.at(tab.first.substr(0, pos)).push_back(rect);
+                posTexturePatterns.at(tab.first.substr(0, pos)).push_back(rect);
             }
             else
             {
                 vector<sf::IntRect> vec;
                 vec.push_back(rect);
-                spritesPatterns.insert(make_pair(tab.first.substr(0, pos), vec));
+                posTexturePatterns.insert(make_pair(tab.first.substr(0, pos), vec));
             }
         }
 
@@ -99,58 +99,62 @@ std::map<std::string, std::array<int, 4>> SpritesSheet::loadSpriteSetting(std::s
 
 size_t SpritesSheet::isPattern(const string currentSprite, const string lastSprite)
 {
-    int numSprite = lastNumSprite + 1;
+    int numSprite = lastNumTex + 1;
 
-    // Test if sprite name end with lastNumSprite + 1
+    // Test if sprite name end with lastNumTex + 1
     size_t testEndWithNum = currentSprite.find_last_of(to_string(numSprite));
     if(testEndWithNum == string::npos)
     {
-        lastNumSprite = -1;
+        lastNumTex = -1;
         if(currentSprite.at(currentSprite.size() - 1) != '0') return 0;
         else testEndWithNum = currentSprite.find_last_of(to_string(0));
     }
 
     // Test if sprite name is equal to the last sprite name (without last num) and if there is one last
-    if(lastNumSprite > -1 && !lastSprite.empty())
+    if(lastNumTex > -1 && !lastSprite.empty())
     {
         string spriteNameWithoutNum = lastSprite.substr(0, lastSprite.find_last_of(to_string(numSprite - 1)));
         if(spriteNameWithoutNum != currentSprite.substr(0, testEndWithNum))
         {
-            lastNumSprite = -1;
+            lastNumTex = -1;
             return 0;
         }
     }
 
-    lastNumSprite++;
+    lastNumTex++;
     return testEndWithNum;
 }
 
-sf::Sprite SpritesSheet::getSprite(const std::string name)
+sf::Texture SpritesSheet::getTexture(const std::string& name)
 {
-    return sf::Sprite(mainTexture, sprites.at(name));
+    sf::Texture texture;
+    texture.loadFromImage(mainImage, posTexture.at(name));
+    return texture;
 }
 
-sf::Sprite SpritesSheet::getOppositeSprite(const string name)
+/*sf::Texture SpritesSheet::getOppositeTexture(const string &name)
 {
-    sf::Sprite sp = getSprite(name);
-    sp.scale(-1.f,1.f);
-    return sp;
-}
+    sf::Texture tx = getTexture(name);
+    tx.scale(-1.f,1.f);
+    return tx;
+}*/
 
-std::vector<sf::Sprite> SpritesSheet::getPattern(std::string name)
+std::vector<sf::Texture> SpritesSheet::getPattern(const std::string& name)
 {
-    vector<sf::IntRect> patternPos = spritesPatterns.at(name);
-    vector<sf::Sprite> patternSp;
+    vector<sf::IntRect> patternPos = posTexturePatterns.at(name);
+    vector<sf::Texture> patternTx;
 
     for(const auto& ite : patternPos)
     {
-        patternSp.emplace_back(mainTexture, ite);
+        sf::Texture texture;
+        texture.loadFromImage(mainImage, posTexture.at(name));
+        patternTx.emplace_back(texture);
     }
 
-    return patternSp;
+    return patternTx;
 }
 
-std::vector<sf::Sprite> SpritesSheet::getOppositePattern(std::string name)
+/*std::vector<sf::Texture> SpritesSheet::getOppositePattern(const std::string& name)
 {
     std::vector<sf::Sprite> vecSp = getPattern(std::move(name));
     for(auto& ite : vecSp)
@@ -159,5 +163,5 @@ std::vector<sf::Sprite> SpritesSheet::getOppositePattern(std::string name)
     }
 
     return vecSp;
-}
+}*/
 
