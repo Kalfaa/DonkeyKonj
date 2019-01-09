@@ -11,8 +11,8 @@ using namespace std;
 SpritesSheet SpritesSheet::INSTANCE = SpritesSheet();
 sf::Image SpritesSheet::mainImage;
 
-std::map<const std::string, sf::IntRect> SpritesSheet::posTexture;
-std::map<const std::string, std::vector<sf::IntRect>> SpritesSheet::posTexturePatterns;
+std::map<const std::string, sf::IntRect> SpritesSheet::posSprites;
+std::map<const std::string, std::vector<sf::IntRect>> SpritesSheet::posPatterns;
 
 int SpritesSheet::lastNumTex = -1;
 
@@ -24,12 +24,12 @@ ostream &operator<<(ostream &os, const sf::IntRect &sheet)
 ostream &operator<<(ostream &os, const SpritesSheet &sheet)
 {
     os << "# SpriteSheet #" << endl;
-    for(const auto& ite : SpritesSheet::posTexture)
+    for(const auto& ite : SpritesSheet::posSprites)
     {
         os << "Sprite name: " << ite.first << " with " << ite.second << endl;
     }
 
-    for(const auto& ite : SpritesSheet::posTexturePatterns)
+    for(const auto& ite : SpritesSheet::posPatterns)
     {
         os << "Pattern \"" << ite.first << "\"" << endl << "{" << endl;
         for(const auto& iteV : ite.second)
@@ -51,20 +51,20 @@ bool SpritesSheet::loadSprites(string file)
     for(const auto& tab : map)
     {
         sf::IntRect rect(tab.second[0], tab.second[1], tab.second[2], tab.second[3]);
-        posTexture.insert(make_pair(tab.first, rect));
+        posSprites.insert(make_pair(tab.first, rect));
 
         size_t pos = isPattern(tab.first, lastSpriteName);
         if(pos)
         {
-            if(posTexturePatterns.find(tab.first.substr(0, pos)) != posTexturePatterns.end())
+            if(posPatterns.find(tab.first.substr(0, pos)) != posPatterns.end())
             {
-                posTexturePatterns.at(tab.first.substr(0, pos)).push_back(rect);
+                posPatterns.at(tab.first.substr(0, pos)).push_back(rect);
             }
             else
             {
                 vector<sf::IntRect> vec;
                 vec.push_back(rect);
-                posTexturePatterns.insert(make_pair(tab.first.substr(0, pos), vec));
+                posPatterns.insert(make_pair(tab.first.substr(0, pos), vec));
             }
         }
 
@@ -126,36 +126,42 @@ size_t SpritesSheet::isPattern(const string currentSprite, const string lastSpri
     return testEndWithNum;
 }
 
-sf::Texture SpritesSheet::getTexture(const std::string& name)
+sf::Sprite SpritesSheet::getSprite(const std::string &name)
 {
-    sf::Texture texture;
-    texture.loadFromImage(mainImage, posTexture.at(name));
-    return texture;
+    //shared_ptr<sf::Texture> texture = make_shared<sf::Texture>();
+    auto* texture = new sf::Texture();
+    texture->loadFromImage(mainImage, posSprites.at(name));
+
+    sf::Sprite sp;
+    sp.setTexture(*texture, true);
+    sp.scale(3.0f, 3.0f);
+
+    return sp;
 }
 
-/*sf::Texture SpritesSheet::getOppositeTexture(const string &name)
+/*sf::Sprite SpritesSheet::getOppositeSprite(const string &name)
 {
-    sf::Texture tx = getTexture(name);
+    sf::Texture tx = getSprite(name);
     tx.scale(-1.f,1.f);
     return tx;
 }*/
 
-std::vector<sf::Texture> SpritesSheet::getPattern(const std::string& name)
+/*std::vector<sf::Sprite> SpritesSheet::getPattern(const std::string& name)
 {
-    vector<sf::IntRect> patternPos = posTexturePatterns.at(name);
+    vector<sf::IntRect> patternPos = posPatterns.at(name);
     vector<sf::Texture> patternTx;
 
     for(const auto& ite : patternPos)
     {
         sf::Texture texture;
-        texture.loadFromImage(mainImage, posTexture.at(name));
+        texture.loadFromImage(mainImage, posSprites.at(name));
         patternTx.emplace_back(texture);
     }
 
     return patternTx;
-}
+}*/
 
-/*std::vector<sf::Texture> SpritesSheet::getOppositePattern(const std::string& name)
+/*std::vector<sf::Sprite> SpritesSheet::getOppositePattern(const std::string& name)
 {
     std::vector<sf::Sprite> vecSp = getPattern(std::move(name));
     for(auto& ite : vecSp)

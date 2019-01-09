@@ -6,8 +6,8 @@
 
 //const float playerSpeed = 100.f;
 
-Mario::Mario(const sf::Vector2f &posPlayer, const sf::Texture &mTexture, EntityType type, float playerSpeed)
-    : Player(posPlayer, mTexture, type, playerSpeed)
+Mario::Mario(const sf::Sprite &sprite, const sf::Vector2f &posPlayer, EntityType type, float playerSpeed)
+    : Player(sprite, posPlayer, type, playerSpeed)
 {}
 
 void Mario::render(){}

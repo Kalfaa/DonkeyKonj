@@ -8,7 +8,7 @@
 #include "pch.h"
 #include "EntityManager.h"
 
-typedef std::map<const std::string, sf::IntRect> MapTextures;
+typedef std::map<const std::string, sf::IntRect> MapSprites;
 typedef std::map<const std::string, std::vector<sf::IntRect>> MapPatterns;
 
 class SpritesSheet
@@ -23,10 +23,10 @@ public:
 public:
     static bool loadSprites(std::string file);
 
-    sf::Texture getTexture(const std::string& name);
-    sf::Texture getOppositeTexture(const std::string& name);
-    std::vector<sf::Texture> getPattern(const std::string& name);
-    std::vector<sf::Texture> getOppositePattern(const std::string& name);
+    sf::Sprite getSprite(const std::string &name);
+    sf::Sprite getOppositeSprite(const std::string &name);
+    std::vector<sf::Sprite> getPattern(const std::string& name);
+    std::vector<sf::Sprite> getOppositePattern(const std::string& name);
 
 private:
     static std::map<std::string, std::array<int, 4>> loadSpriteSetting(std::string file);
@@ -36,8 +36,8 @@ private:
     static SpritesSheet INSTANCE;
     static sf::Image mainImage;
 
-    static MapTextures posTexture;
-    static MapPatterns posTexturePatterns;
+    static MapSprites posSprites;
+    static MapPatterns posPatterns;
 
     static int lastNumTex;
     // TODO : Exception if setting file not found

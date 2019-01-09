@@ -1,3 +1,4 @@
+#include <zconf.h>
 #include "Game.h"
 
 const sf::Time Game::timePerFrame = sf::seconds(1.f / 60.f);
@@ -7,53 +8,58 @@ Game::Game()
           mStatisticsText(), mStatisticsUpdateTime(), mStatisticsNumFrames(0), mIsMovingUp(false), mIsMovingDown(false),
           mIsMovingRight(false), mIsMovingLeft(false) ,debug(false),mJump(false)
 {
-    // Load localisation of all posTexture and patterns
+    // Load localisation of all posSprites and patterns
     SpritesSheet sps = SpritesSheet::GetInstance();
     sps.loadSprites(EntityManager::TEXTURES_PATH + "/DonkeyKong_SpritesSheet.png");
 
     mWindow.setFramerateLimit(160);
     map = Map(100,100) ;
 
+    //mWindow.draw(sps.getSprite("PlatformRed"));
+    //mWindow.display();
+
+    //sleep(1000);
+
     // Draw blocks
 
-    texturePlatform = sps.getTexture("PlatformRed");
-    sizeBlock = texturePlatform.getSize();
+    //texturePlatform = *(sps.getSprite("PlatformRed").getTexture());
+    //sizeBlock = texturePlatform.getSize();
     for (int i = 0; i < BLOCK_COUNT_X; i++)
     {
         for (int j = 0; j < BLOCK_COUNT_Y; j++)
         {
             std::shared_ptr<Platform> pf = std::make_shared<Platform>(
-                    sf::Vector2f(100.f + 70.f * (i + 1), 0.f + BLOCK_SPACE * (j + 1))
-                    , texturePlatform
-                    , EntityType::PLATFORM);
+                    sps.getSprite("Barrel"),
+                    sf::Vector2f(100.f + 70.f * (i + 1), 0.f + BLOCK_SPACE * (j + 1)),
+                    EntityType::PLATFORM);
             EntityManager::entities.push_back(pf);
             map.addEntityToMatrix(pf);
         }
     }
-    //block[0][0].setTexture(SpritesSheet::getTexture("PlatformRed"));
+    //block[0][0].setTexture(SpritesSheet::getSprite("PlatformRed"));
     //block[0][0].setPosition(100,300);
     //std::shared_ptr<Entity> se = std::make_shared<Entity>(block[0][0], EntityType::PLATFORM);
     //EntityManager::entities.push_back(se);
     //map.addEntityToMatrix(se);
 
     // Draw Ladder
-    textureLadder = sps.getTexture("Ladder");
-    //textureLadder.loadFromFile(EntityManager::TEXTURES_PATH + "/Ladder.PNG");
-
     for (int i = 0; i < LADDER_COUNT; i++)
     {
         std::shared_ptr<Ladder> pf = std::make_shared<Ladder>(
-                sf::Vector2f(100.f + 70.f * (i + 1), 0.f + BLOCK_SPACE * (i + 1) + sizeBlock.y)
-                , textureLadder
-                , EntityType::LADDER);
+                sps.getSprite("Ladder"),
+                sf::Vector2f(100.f + 70.f * (i + 1), 0.f + BLOCK_SPACE * (i + 1) + sizeBlock.y),
+                EntityType::LADDER);
         EntityManager::entities.push_back(pf);
         map.addEntityToMatrix(pf);
     }
 
     // Draw Mario
     sf::Vector2f posMario(100, 240);
-    mTexture = sps.getTexture("MarioLeftJump");
-    EntityManager::player = std::make_shared<Mario>(posMario, mTexture, EntityType::PLAYER, MARIO_SPEED);
+    EntityManager::player = std::make_shared<Mario>(
+            sps.getSprite("MarioLeftJump"),
+            posMario,
+            EntityType::PLAYER,
+            MARIO_SPEED);
 
     mPlayer.setTexture(mTexture);
 

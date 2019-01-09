@@ -4,6 +4,6 @@
 
 #include "StaticEntity.h"
 
-StaticEntity::StaticEntity(const sf::Vector2f &position, const sf::Texture &texture, EntityType type)
-    : Entity(position, texture, type)
+StaticEntity::StaticEntity(const sf::Sprite& sprite, const sf::Vector2f &position, EntityType type)
+    : Entity(sprite, position, type)
     {}

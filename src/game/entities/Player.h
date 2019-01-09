@@ -16,7 +16,7 @@
 class Player : public Entity
 {
 public:
-    Player(const sf::Vector2f& posPlayer, const sf::Texture&, EntityType, float playerSpeed);
+    Player(const sf::Sprite&, const sf::Vector2f& posPlayer, EntityType, float playerSpeed);
     ~Player() override = default;
 
 public:
