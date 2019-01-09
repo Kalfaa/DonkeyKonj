@@ -10,7 +10,7 @@ Game::Game()
 {
     // Load localisation of all posSprites and patterns
     SpritesSheet sps = SpritesSheet::GetInstance();
-    sps.loadSprites(EntityManager::TEXTURES_PATH + "/DonkeyKong_SpritesSheet.png");
+    sps.loadSprites(EntityManager::TEXTURES_PATH + "/DonkeyKong_SpritesSheet.png", 2.5f);
 
     mWindow.setFramerateLimit(160);
     map = Map(100,100) ;
@@ -29,7 +29,7 @@ Game::Game()
         for (int j = 0; j < BLOCK_COUNT_Y; j++)
         {
             std::shared_ptr<Platform> pf = std::make_shared<Platform>(
-                    sps.getSprite("Barrel"),
+                    sps.getSprite("PlatformRed"),
                     sf::Vector2f(100.f + 70.f * (i + 1), 0.f + BLOCK_SPACE * (j + 1)),
                     EntityType::PLATFORM);
             EntityManager::entities.push_back(pf);
@@ -56,7 +56,7 @@ Game::Game()
     // Draw Mario
     sf::Vector2f posMario(100, 240);
     EntityManager::player = std::make_shared<Mario>(
-            sps.getSprite("MarioLeftJump"),
+            sps.getSprite("MarioLeft0"),
             posMario,
             EntityType::PLAYER,
             MARIO_SPEED);
