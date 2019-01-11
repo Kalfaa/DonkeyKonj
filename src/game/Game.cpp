@@ -10,7 +10,6 @@ Game::Game()
     SpritesSheet::sprites;
 
     mWindow.setFramerateLimit(160);
-    map = Map(100,100) ;
 
     // Draw blocks
 
@@ -28,6 +27,7 @@ Game::Game()
             EntityManager::entities.push_back(pf);
         }
     }*/
+    /*
     block[0][0].setTexture(texturePlatform);
     block[0][0].setPosition(100,300);
     std::shared_ptr<Entity> se = std::make_shared<Entity>(block[0][0], EntityType::PLATFORM);
@@ -46,14 +46,18 @@ Game::Game()
         EntityManager::entities.push_back(pf);
         map.addEntityToMatrix(pf);
     }
-
+*/
     // Draw Mario
-    sf::Vector2f posMario(100, 240);
+
+
+
+
     mTexture.loadFromFile(EntityManager::TEXTURES_PATH + "/Mario_right_profile.png");
-    EntityManager::player = std::make_shared<Mario>(posMario, mTexture, EntityType::PLAYER, MARIO_SPEED);
+
 
     mPlayer.setTexture(mTexture);
-
+    std::string filename = EntityManager::MAP_PATH + "/" + "map_donkeykong";
+    map = createMap( std::ifstream (filename.c_str()));
     mFont.loadFromFile(EntityManager::MEDIA_PATH + "/Sansation.ttf");
     mStatisticsText.setString("Welcome to Donkey Kong 1981");
     mStatisticsText.setFont(mFont);
@@ -224,4 +228,62 @@ void Game::handlePlayerInput(sf::Keyboard::Key key, bool isPressed)
 
         default: EntityManager::player->move(NONE);
     }
+
 }
+Map Game::createMap(std::ifstream  mapFile)
+{
+
+    std::string str((std::istreambuf_iterator<char>(mapFile)),
+                    std::istreambuf_iterator<char>());
+    unsigned int x = str.find('\n');
+    auto y = static_cast<unsigned int>(str.begin(),str.end(),'\n');
+    Map newMap = Map(x,y) ;
+    //map.entity3DArray = Matrix3d(x, std::vector<std::vector<std::shared_ptr<Entity>>>(y));
+    std::vector<std::string> list_string;
+    std::stringstream ss(str);
+    std::string tmp;
+    while(std::getline(ss, tmp, '\n'))
+    {
+        list_string.push_back(tmp);
+    }
+
+    for(auto it = list_string.begin(); it != list_string.end(); ++it)
+    {
+        std::cout << (*it) << std:: endl;
+    }
+
+    for(int i =0;i<y-2 ;i++){
+        std::cout << (list_string[i].size()) << std:: endl;
+        for(int j = 0;j<x-1;j++){
+
+            //printf(list_string[i].size());
+            sf::Sprite sprite = sf::Sprite();
+            switch(list_string[i][j]){
+                case 'O':
+                    break;
+                case 'P' :
+                    {
+                    sprite.setTexture(texturePlatform);
+                    sprite.setPosition(j * 32, i * 32);
+                    std::shared_ptr<Entity> plat = std::make_shared<Entity>(sprite, EntityType::PLATFORM);
+                    EntityManager::entities.push_back(plat);
+                    newMap.addEntityToMatrix(plat);
+                    break;
+                }
+                case 'L':
+                    //CREER UNE LADDER ET LE PUSH DANS LA MATRICE 3D
+                    break;
+                case 'X':{
+                    sf::Vector2f posMario(j*32, i*32);
+                    EntityManager::player = std::make_shared<Mario>(posMario, mTexture, EntityType::PLAYER, MARIO_SPEED);
+                    newMap.startpoint.x=j;
+                    newMap.startpoint.y=i;
+                }
+                default:break;
+            }
+        }
+    }
+    return newMap;
+
+}
+

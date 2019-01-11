@@ -13,7 +13,7 @@ Map::Map(){
 }
 
 Map::Map(unsigned int x , unsigned int y){
-    entity3DArray = Matrix3d(x, std::vector<std::vector<std::shared_ptr<Entity>>>(y));
+    entity3DArray = Matrix3d(y, std::vector<std::vector<std::shared_ptr<Entity>>>(x));
 }
 Map::~Map()
 {
@@ -39,13 +39,12 @@ Map::Map(std::ifstream file)
         std::cout << (*it) << std:: endl;
     }
 
-    for(int i =0;i<y ;i++){
-        for(int j = 0;j<x;j++){
+    for(int i =0;i<x ;i++){
+        for(int j = 0;j<y;j++){
             switch(list_string[i][j]){
                 case 'O':
                     break;
                 case 'P':
-                    //CREER UNE PLATFORME ET LE PUSH DANS LA MATRICE 3D
                     break;
                 case 'L':
                     //CREER UNE LADDER ET LE PUSH DANS LA MATRICE 3D
@@ -89,18 +88,21 @@ void Map::addEntityToMatrix(std::shared_ptr<Entity> entity)
     int s_width = sprite.getTextureRect().width;
     int s_height =sprite.getTextureRect().height;
     //@todo REFACTOR CETTE ALGO PETER QUI CREER DES DUPPLICAT DOBJET DANS LA MATRICE
-    for(int i = 0 ;i<=s_width/CASE_AREA; i++){
-        entity3DArray.at(static_cast<unsigned int>((x+CASE_AREA*i) / CASE_AREA)).at(static_cast<unsigned int>(y / CASE_AREA)).push_back(entity);
+    for(int i = 0 ;i<=(s_width/CASE_AREA)+1; i++){
+        auto mposx = static_cast<unsigned int>((x+CASE_AREA*i) / CASE_AREA);
+        auto mposy = static_cast<unsigned int>(y / CASE_AREA);
+        entity3DArray.at(mposy).at(mposx).push_back(entity);
         for(int j =0; j<=s_height/CASE_AREA;j++){
-            entity3DArray.at(static_cast<unsigned int>((x+CASE_AREA*i) / CASE_AREA)).at(static_cast<unsigned int>((y+j*CASE_AREA) / CASE_AREA)).push_back(entity);
+            mposy = static_cast<unsigned int>((y+j*CASE_AREA) / CASE_AREA);
+            entity3DArray.at(mposy).at(mposx).push_back(entity);
         }
     }
 }
 
 void Map::printElement()
 {
- for(int i =0 ;i<entity3DArray.size();i++){
-     for(int j = 0; j<entity3DArray[i].size();j++){
+ for(int i =0 ;i<entity3DArray.size()-1;i++){
+     for(int j = 0; j<entity3DArray[i].size()-1;j++){
          for(int k =0;k<entity3DArray[i][j].size();k++){
              std::shared_ptr<Entity> entity = entity3DArray[i][j].at(k);
              std::string type  ;
