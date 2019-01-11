@@ -7,9 +7,8 @@
 #include "Player.h"
 #include "Ladder.h"
 
-
-Player::Player(const sf::Vector2f& posPlayer, const sf::Texture& texture, EntityType type, float playerSpeed)
-    : Entity(posPlayer, texture, type), playerSpeed(playerSpeed){}
+Player::Player(const sf::Sprite& sprite, const sf::Vector2f& posPlayer, EntityType type, float playerSpeed)
+    : Entity(sprite, posPlayer, type), playerSpeed(playerSpeed){}
 
 void Player::update(sf::Time elapsedTime,Map map)
 {
@@ -111,6 +110,8 @@ bool Player::checkIfCollideWithLadder(Map map)
     }
     return false ;
 }
+
+
 
 
 

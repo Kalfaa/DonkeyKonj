@@ -28,7 +28,8 @@ class Entity
 {
 public:
     Entity(const sf::Sprite&, EntityType);
-    Entity(const sf::Vector2f& position, const sf::Texture&, EntityType type);
+    Entity(const sf::Sprite&, const sf::Vector2f &pos, EntityType);
+    //Entity(const sf::Vector2f& position, const sf::Texture&, EntityType type);
     virtual ~Entity() = default;
 
 public:

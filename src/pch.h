@@ -20,6 +20,7 @@
 #include <vector>
 #include <map>
 #include <list>
+#include <regex>
 
 #include <cassert>
 

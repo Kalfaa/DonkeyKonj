@@ -13,7 +13,7 @@ class Platform : public StaticEntity
 public:
     Platform();
 
-    Platform(const sf::Vector2f &position, const sf::Texture &, EntityType type);
+    Platform(const sf::Sprite&, const sf::Vector2f &position, EntityType type);
 };
 
 

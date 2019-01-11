@@ -8,17 +8,41 @@
 #include "pch.h"
 #include "EntityManager.h"
 
+
 class SpritesSheet
 {
 public:
-    static bool loadSprites(std::string file);
+    static SpritesSheet& GetInstance() { return INSTANCE; };
+
+public:
+    friend std::ostream &operator<<(std::ostream &os, const SpritesSheet &sheet);
+    friend std::ostream &operator<<(std::ostream &os, const sf::IntRect &sheet);
+
+public:
+    typedef std::map<const std::string, sf::IntRect> MapSprites;
+    typedef std::map<const std::string, std::vector<sf::IntRect>> MapPatterns;
+
+public:
+    bool loadSprites(std::string file);
+    bool loadSprites(std::string file, float extendRatio);
+
+    sf::Sprite getSprite(const std::string& name);
+    sf::Sprite getOppositeSprite(const std::string &name);
+    std::vector<sf::Sprite> getPattern(const std::string& name);
+    std::vector<sf::Sprite> getOppositePattern(const std::string& name);
 
 private:
     static std::map<std::string, std::array<int, 4>> loadSpriteSetting(std::string file);
+    static size_t isPattern(std::string currentSprite, std::string lastSpriteName, int& lastNumSprite);
 
-public:
-    static std::map<const std::string, sf::Sprite&> sprites;
-    static std::map<const std::string, std::vector<sf::Sprite&>> spritesPaterns;
+private:
+    static SpritesSheet INSTANCE;
+    sf::Image mainImage;
+
+    MapSprites posSprites;
+    MapPatterns posPatterns;
+
+    float extendRatio = 0.f;
 
     // TODO : Exception if setting file not found
 };
