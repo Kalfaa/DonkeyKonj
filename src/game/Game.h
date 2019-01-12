@@ -15,6 +15,7 @@
 #define BLOCK_SPACE 110.f
 #define CASE_AREA 32
 #define MARIO_SPEED 100.f
+#define ZOOM_SPRITE 2.5f
 
 class Game
 {
@@ -44,7 +45,10 @@ private:
 
     static const float PlayerSpeed;
     static const sf::Time timePerFrame;
+
     Map map;
+    SpritesSheet sps;
+
     sf::RenderWindow mWindow;
     sf::Texture mTexture;
     sf::Sprite mPlayer;

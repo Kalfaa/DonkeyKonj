@@ -7,9 +7,9 @@ Game::Game()
           mStatisticsText(), mStatisticsUpdateTime(), mStatisticsNumFrames(0), mIsMovingUp(false), mIsMovingDown(false),
           mIsMovingRight(false), mIsMovingLeft(false) ,debug(false),mJump(false)
 {
-    //SpritesSheet::sprites;
-
     mWindow.setFramerateLimit(160);
+    sps = SpritesSheet::GetInstance();
+    sps.loadSprites(EntityManager::TEXTURES_PATH + "/DonkeyKong_SpritesSheet.png", ZOOM_SPRITE);
 
     // Draw blocks
 
@@ -275,7 +275,7 @@ Map Game::createMap(std::ifstream  mapFile)
                     break;
                 case 'X':{
                     sf::Vector2f posMario(j*32, i*32);
-                    EntityManager::player = std::make_shared<Mario>(posMario, mTexture, EntityType::PLAYER, MARIO_SPEED);
+                    EntityManager::player = std::make_shared<Mario>(sps.getSprite("MarioLeft0"), posMario, EntityType::PLAYER, MARIO_SPEED);
                     newMap.startpoint.x=j;
                     newMap.startpoint.y=i;
                 }

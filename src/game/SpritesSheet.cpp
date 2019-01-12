@@ -84,7 +84,11 @@ bool SpritesSheet::loadSprites(string file)
 std::map<std::string, std::array<int, 4>> SpritesSheet::loadSpriteSetting(std::string file)
 {
     ifstream flux(file);
-    if(!flux) assert(false);
+    if(!flux)
+    {
+        cerr << "Error when opening file \"" << file << "\"" << endl;
+        assert(false);
+    }
     map<string, array<int, 4>> mapSettings;
 
     while(!flux.eof())
