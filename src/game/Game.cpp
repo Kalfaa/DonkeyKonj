@@ -265,7 +265,8 @@ Map Game::createMap(std::ifstream  mapFile)
                     {
                     sprite.setTexture(texturePlatform);
                     sprite.setPosition(j * 32, i * 32);
-                    std::shared_ptr<Entity> plat = std::make_shared<Entity>(sprite, EntityType::PLATFORM);
+                    sf::Vector2f pos(j * 32, i * 32);
+                    std::shared_ptr<Entity> plat = std::make_shared<Platform>(sps.getSprite("PlatformOrange"),pos,EntityType::PLATFORM);
                     EntityManager::entities.push_back(plat);
                     newMap.addEntityToMatrix(plat);
                     break;

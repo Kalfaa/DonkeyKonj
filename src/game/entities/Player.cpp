@@ -67,11 +67,11 @@ bool Player::collide_down(Map map)
     auto right =  static_cast<unsigned int>( (sprite.getPosition().x+MARIO_WIDTH )/CASE_AREA );
     auto bottom = static_cast<unsigned int>( ((sprite.getPosition().y)+MARIO_HEIGHT)/CASE_AREA);
 
-    for (const auto &i : map.entity3DArray.at(left).at(bottom))
+    for (const auto &i : map.entity3DArray.at(bottom).at(left))
     {
         if(i->type==PLATFORM)list_entity.push_back(i) ;
     }
-    for (const auto &i : map.entity3DArray.at(right).at(bottom))
+    for (const auto &i : map.entity3DArray.at(bottom).at(right))
     {
         if(i->type==PLATFORM)list_entity.push_back(i) ;
     }
