@@ -8,31 +8,6 @@
 #include "pch.h"
 #include "EntityManager.h"
 
-class SpriteLoader
-{
-public:
-    union IntRectTexture
-    {
-        IntRectTexture(sf::IntRect &posTexture);
-        ~IntRectTexture();
-
-        std::shared_ptr<sf::Texture> texture;
-        sf::IntRect posTexture{};
-    };
-
-public:
-    SpriteLoader(sf::IntRect &posTexture);
-    virtual ~SpriteLoader();
-
-    std::shared_ptr<sf::Texture> getTexture(const sf::Image& spriteSheet);
-
-private:
-    void loadTexture(const sf::Image& spriteSheet);
-
-private:
-    bool textureLoad = false;
-    IntRectTexture intRectTexture;
-};
 
 class SpritesSheet
 {
@@ -44,8 +19,8 @@ public:
     friend std::ostream &operator<<(std::ostream &os, const sf::IntRect &sheet);
 
 public:
-    typedef std::map<const std::string, std::shared_ptr<SpriteLoader>> MapSprites;
-    typedef std::map<const std::string, std::vector<std::shared_ptr<SpriteLoader>>> MapPatterns;
+    typedef std::map<const std::string, sf::IntRect> MapSprites;
+    typedef std::map<const std::string, std::vector<sf::IntRect>> MapPatterns;
 
 public:
     bool loadSprites(std::string file);

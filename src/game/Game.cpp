@@ -7,7 +7,7 @@ Game::Game()
           mStatisticsText(), mStatisticsUpdateTime(), mStatisticsNumFrames(0), mIsMovingUp(false), mIsMovingDown(false),
           mIsMovingRight(false), mIsMovingLeft(false) ,debug(false),mJump(false)
 {
-    SpritesSheet::sprites;
+    //SpritesSheet::sprites;
 
     mWindow.setFramerateLimit(160);
 
