@@ -10,35 +10,71 @@
 
 using namespace std;
 
+/*SpriteLoader::SpriteLoader(const sf::IntRect &posTexture)
+{
+    intRectTexture.posTexture = posTexture;
+}*/
+
+void SpriteLoader::loadTexture(const sf::Image& spriteSheet)
+{
+    shared_ptr<sf::Texture> texture = make_shared<sf::Texture>();
+    texture->loadFromImage(spriteSheet, intRectTexture.posTexture);
+
+    intRectTexture.texture = texture;
+    textureLoad = true;
+}
+
+std::shared_ptr<sf::Texture> SpriteLoader::getTexture(const sf::Image& spriteSheet)
+{
+    if (!textureLoad)
+    {
+        loadTexture(spriteSheet);
+    }
+
+    return intRectTexture.texture;
+}
+
+SpriteLoader::IntRectTexture::IntRectTexture(sf::IntRect &posTexture) : posTexture(posTexture) {}
+
+SpriteLoader::IntRectTexture::~IntRectTexture()
+{
+
+}
+
+SpriteLoader::SpriteLoader(sf::IntRect &posTexture) : intRectTexture(posTexture) {}
+
+SpriteLoader::~SpriteLoader()
+{
+
+}
 
 SpritesSheet SpritesSheet::INSTANCE = SpritesSheet();
-
 
 ostream &operator<<(ostream &os, const sf::IntRect &sheet)
 {
     return os << "rect{" << sheet.top << ", " << sheet.left << ", " << sheet.height << ", " << sheet.width << "}";
 }
 
-ostream &operator<<(ostream &os, const SpritesSheet &sheet)
-{
-    os << "# SpriteSheet #" << endl;
-    for(const auto& ite : sheet.posSprites)
-    {
-        os << "Sprite name: " << ite.first << " with " << ite.second << endl;
-    }
-
-    for(const auto& ite : sheet.posPatterns)
-    {
-        os << "Pattern \"" << ite.first << "\"" << endl << "{" << endl;
-        for(const auto& iteV : ite.second)
-        {
-            os << "\t" << iteV << "," << endl;
-        }
-        os << "}" << endl;
-    }
-
-    return os;
-}
+//ostream &operator<<(ostream &os, const SpritesSheet &sheet)
+//{
+//    os << "# SpriteSheet #" << endl;
+//    for(const auto& ite : sheet.posSprites)
+//    {
+//        os << "Sprite name: " << ite.first << " with " << ite.second << endl;
+//    }
+//
+//    for(const auto& ite : sheet.posPatterns)
+//    {
+//        os << "Pattern \"" << ite.first << "\"" << endl << "{" << endl;
+//        for(const auto& iteV : ite.second)
+//        {
+//            os << "\t" << iteV << "," << endl;
+//        }
+//        os << "}" << endl;
+//    }
+//
+//    return os;
+//}
 
 bool SpritesSheet::loadSprites(std::string file, float extendRatio)
 {
@@ -53,10 +89,12 @@ bool SpritesSheet::loadSprites(string file)
     mainImage.loadFromFile(file);
 
     string lastSpriteName;
-    for(const auto& tab : map)
+    for(auto tab : map)
     {
         sf::IntRect rect(tab.second[0], tab.second[1], tab.second[2], tab.second[3]);
-        posSprites.insert(make_pair(tab.first, rect));
+        //unique_ptr<SpriteLoader> spl =
+        posSprites[tab.first] = make_shared<SpriteLoader>(rect);
+        //posSprites.insert(make_pair(tab.first, spl));
 
         int lastNumSp = -1;
         size_t pos = isPattern(tab.first, lastSpriteName, lastNumSp);
@@ -65,12 +103,12 @@ bool SpritesSheet::loadSprites(string file)
         {
             if(posPatterns.find(tab.first.substr(0, pos)) != posPatterns.end())
             {
-                posPatterns.at(tab.first.substr(0, pos)).push_back(rect);
+                posPatterns.at(tab.first.substr(0, pos)).push_back(make_shared<SpriteLoader>(rect));
             }
             else
             {
-                vector<sf::IntRect> vec;
-                vec.push_back(rect);
+                vector<std::shared_ptr<SpriteLoader>> vec;
+                vec.push_back(make_shared<SpriteLoader>(rect));
                 posPatterns.insert(make_pair(tab.first.substr(0, pos), vec));
             }
         }
@@ -144,11 +182,11 @@ sf::Sprite SpritesSheet::getSprite(const std::string &name)
 //    if(extendRatio > 0.f) sp->scale(extendRatio, extendRatio);
 
     //shared_ptr<sf::Texture> texture = make_shared<sf::Texture>();
-    auto* texture = new sf::Texture();
-    texture->loadFromImage(mainImage, posSprites.at(name));
+    /*auto* texture = new sf::Texture();
+    texture->loadFromImage(mainImage, );*/
 
     sf::Sprite sp;
-    sp.setTexture(*texture, true);
+    sp.setTexture(*(posSprites.at(name)->getTexture(mainImage)), true);
 
     if(extendRatio > 0.f) sp.scale(extendRatio, extendRatio);
 
@@ -187,4 +225,3 @@ sf::Sprite SpritesSheet::getSprite(const std::string &name)
     tx.scale(-1.f,1.f);
     return tx;
 }*/
-
