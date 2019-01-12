@@ -25,7 +25,11 @@ public:
 
     void run();
 
+
 private:
+
+    Map createMap(std::ifstream mapFile);
+
     void processEvents();
 
     void update(sf::Time elapsedTime);
@@ -37,6 +41,7 @@ private:
     void handlePlayerInput(sf::Keyboard::Key key, bool isPressed);
 
 private:
+
     static const float PlayerSpeed;
     static const sf::Time timePerFrame;
     Map map;
