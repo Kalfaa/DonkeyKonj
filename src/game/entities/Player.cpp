@@ -13,12 +13,18 @@ Player::Player(const sf::Sprite& sprite, const sf::Vector2f& posPlayer, EntityTy
 void Player::update(sf::Time elapsedTime,Map map)
 {
     sf::Vector2f movement(0.f, 0.f);
-    if (!collide_down(map)&& playerState!= JUMP){
+    if (!collide_down(map)&& playerState != JUMP && playerState != STARTJUMP  ){
         movement.y += playerSpeed;
+        playerState=FALLING;
     }else{
-        if(playerState==STARTJUMP){
+        if(playerState==FALLING){
+            playerState=IDLE;
+        }
+        if(playerState==STARTJUMP)
+        {
+            printf("jump");
             playerState = JUMP;
-            jumpvalue=MARIO_JUMP_MAX ;
+            jumpvalue = MARIO_JUMP_MAX;
         }
     }
     switch (direction)
@@ -26,6 +32,7 @@ void Player::update(sf::Time elapsedTime,Map map)
         case UP:
             if(checkIfCollideWithLadder(map)){
                 movement.y -= playerSpeed*2;
+                printf("ok");
             }
             break;
         case DOWN:
@@ -85,21 +92,21 @@ bool Player::collide_down(Map map)
 
 void Player::jump()
 {
-    playerState= STARTJUMP;
+    if(FALLING != playerState)playerState= STARTJUMP;
 }
 
 bool Player::checkIfCollideWithLadder(Map map)
 {
     std::vector<std::shared_ptr<Entity>> list_entity;
-    auto left = static_cast<unsigned int>(sprite.getPosition().x) /CASE_AREA ;
+    auto left = static_cast<unsigned int>(sprite.getPosition().x) /CASE_AREA;
     auto right =  static_cast<unsigned int>( (sprite.getPosition().x+MARIO_WIDTH )/CASE_AREA );
     auto bottom = static_cast<unsigned int>( ((sprite.getPosition().y)+MARIO_HEIGHT)/CASE_AREA);
 
-    for (const auto &i : map.entity3DArray.at(left).at(bottom))
+    for (const auto &i : map.entity3DArray.at(bottom).at(left))
     {
         if(i->type==LADDER) list_entity.push_back(i) ;
     }
-    for (const auto &i : map.entity3DArray.at(right).at(bottom))
+    for (const auto &i : map.entity3DArray.at(bottom).at(right))
     {
         if(i->type==LADDER)list_entity.push_back(i) ;
     }
