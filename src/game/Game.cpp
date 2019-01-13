@@ -146,8 +146,8 @@ void Game::render()
         mWindow.draw(entity->sprite);
         if(debug)
         {
-            sf::RectangleShape rectangle(sf::Vector2f(entity->getSprite().getTextureRect().width*entity->getSprite().getScale().x,
-                                                      entity->getSprite().getTextureRect().height*entity->getSprite().getScale().y));
+            sf::RectangleShape rectangle(sf::Vector2f(entity->getSprite().getGlobalBounds().width,
+                                                      entity->getSprite().getGlobalBounds().height));
             rectangle.setPosition(entity->getSprite().getPosition());
             rectangle.setFillColor(sf::Color(100, 250, 50));
             mWindow.draw(rectangle);
@@ -168,8 +168,8 @@ void Game::render()
     mWindow.draw(mStatisticsText);
 
     if(debug){
-        sf::RectangleShape rectangle(sf::Vector2f(EntityManager::player->getSprite().getTextureRect().width*EntityManager::player->getSprite().getScale().x,
-                                                  EntityManager::player->getSprite().getTextureRect().height*EntityManager::player->getSprite().getScale().y));
+        sf::RectangleShape rectangle(sf::Vector2f(EntityManager::player->getSprite().getGlobalBounds().width,
+                                                  EntityManager::player->getSprite().getGlobalBounds().height));
         rectangle.setPosition(EntityManager::player->getSprite().getPosition());
         rectangle.setFillColor(sf::Color(100, 250, 50));
         mWindow.draw(rectangle);
