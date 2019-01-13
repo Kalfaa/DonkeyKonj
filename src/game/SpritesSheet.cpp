@@ -166,8 +166,7 @@ sf::Sprite SpritesSheet::getSprite(const std::string &name)
 sf::Sprite SpritesSheet::getOppositeSprite(const string &name)
 {
     sf::Sprite sp = getSprite(name);
-    sp.scale(-1.f,1.f);
-    sp.setPosition(0.f, 0.f);
+    sp.setTextureRect(sf::IntRect(sp.getTextureRect().width, 0, -sp.getTextureRect().width, sp.getTextureRect().height));
     return sp;
 }
 

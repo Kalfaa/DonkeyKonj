@@ -11,28 +11,6 @@ Game::Game()
     sps = SpritesSheet::GetInstance();
     sps.loadSprites(EntityManager::TEXTURES_PATH + "/DonkeyKong_SpritesSheet.png", ZOOM_SPRITE);
 
-   do
-   {
-      for(auto& sp : sps.getOppositePattern("MarioMoveLeftArm"))
-      {
-            sp.setPosition(100, 100);
-            mWindow.clear(sf::Color::Black);
-            mWindow.draw(sp);
-            mWindow.display();
-            Sleep(333);
-        }
-
-        for(auto& sp : sps.getPattern("MarioMoveLeftArm"))
-        {
-            sp.setPosition(100, 100);
-            mWindow.clear(sf::Color::Black);
-            mWindow.draw(sp);
-            mWindow.display();
-            Sleep(333);
-        }
-   }while (true);
-
-
     // Draw blocks
 
     texturePlatform.loadFromFile(EntityManager::TEXTURES_PATH + "/Block.png");
@@ -279,7 +257,7 @@ Map Game::createMap(std::ifstream  mapFile)
                     break;
                 }
                 case 'X':{
-                    EntityManager::player = std::make_shared<Mario>(sps.getSprite("MarioLeft0"), pos, EntityType::PLAYER, MARIO_SPEED);
+                    EntityManager::player = std::make_shared<Mario>(sps.getOppositeSprite("MarioLeft0"), pos, EntityType::PLAYER, MARIO_SPEED);
                     newMap.startpoint.x=j;
                     newMap.startpoint.y=i;
                 }
