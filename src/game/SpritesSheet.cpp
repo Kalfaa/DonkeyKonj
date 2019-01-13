@@ -10,35 +10,47 @@
 
 using namespace std;
 
+std::shared_ptr<sf::Texture> SpriteLoader::getTexture(const sf::Image& spriteSheet)
+{
+    return texture;
+}
+
+SpriteLoader::SpriteLoader(const sf::Image& spriteSheet, const sf::IntRect &pos)
+{
+    texture = make_shared<sf::Texture>();
+    texture->loadFromImage(spriteSheet, pos);
+}
+
+SpriteLoader::~SpriteLoader()
+= default;
 
 SpritesSheet SpritesSheet::INSTANCE = SpritesSheet();
-
 
 ostream &operator<<(ostream &os, const sf::IntRect &sheet)
 {
     return os << "rect{" << sheet.top << ", " << sheet.left << ", " << sheet.height << ", " << sheet.width << "}";
 }
 
-ostream &operator<<(ostream &os, const SpritesSheet &sheet)
-{
-    os << "# SpriteSheet #" << endl;
-    for(const auto& ite : sheet.posSprites)
-    {
-        os << "Sprite name: " << ite.first << " with " << ite.second << endl;
-    }
-
-    for(const auto& ite : sheet.posPatterns)
-    {
-        os << "Pattern \"" << ite.first << "\"" << endl << "{" << endl;
-        for(const auto& iteV : ite.second)
-        {
-            os << "\t" << iteV << "," << endl;
-        }
-        os << "}" << endl;
-    }
-
-    return os;
-}
+//ostream &operator<<(ostream &os, const SpritesSheet &sheet)
+//{
+//    os << "# SpriteSheet #" << endl;
+//    for(const auto& ite : sheet.posSprites)
+//    {
+//        os << "Sprite name: " << ite.first << " with " << ite.second << endl;
+//    }
+//
+//    for(const auto& ite : sheet.posPatterns)
+//    {
+//        os << "Pattern \"" << ite.first << "\"" << endl << "{" << endl;
+//        for(const auto& iteV : ite.second)
+//        {
+//            os << "\t" << iteV << "," << endl;
+//        }
+//        os << "}" << endl;
+//    }
+//
+//    return os;
+//}
 
 bool SpritesSheet::loadSprites(std::string file, float extendRatio)
 {
@@ -53,25 +65,29 @@ bool SpritesSheet::loadSprites(string file)
     mainImage.loadFromFile(file);
 
     string lastSpriteName;
-    for(const auto& tab : map)
+    int lastNumSp = -1;
+    for(auto tab : map)
     {
         sf::IntRect rect(tab.second[0], tab.second[1], tab.second[2], tab.second[3]);
-        posSprites.insert(make_pair(tab.first, rect));
+        //unique_ptr<SpriteLoader> spl =
+        posSprites[tab.first] = make_shared<SpriteLoader>(mainImage, rect);
+        //posSprites.insert(make_pair(tab.first, spl));
 
-        int lastNumSp = -1;
         size_t pos = isPattern(tab.first, lastSpriteName, lastNumSp);
 
         if(pos)
         {
             if(posPatterns.find(tab.first.substr(0, pos)) != posPatterns.end())
             {
-                posPatterns.at(tab.first.substr(0, pos)).push_back(rect);
+                posPatterns.at(tab.first.substr(0, pos)).push_back(make_shared<SpriteLoader>(mainImage, rect));
+                cout << "vectPush " << tab.first << endl;
             }
             else
             {
-                vector<sf::IntRect> vec;
-                vec.push_back(rect);
+                vector<std::shared_ptr<SpriteLoader>> vec;
+                vec.push_back(make_shared<SpriteLoader>(mainImage, rect));
                 posPatterns.insert(make_pair(tab.first.substr(0, pos), vec));
+                cout << "Init vectPush " << tab.first << " with name : " << tab.first.substr(0, pos) << endl;
             }
         }
 
@@ -86,7 +102,7 @@ std::map<std::string, std::array<int, 4>> SpritesSheet::loadSpriteSetting(std::s
     ifstream flux(file);
     if(!flux)
     {
-        cerr << "Error when opening file \"" << file << "\"" << endl;
+        cerr << "Error when opening " << file << endl;
         assert(false);
     }
     map<string, array<int, 4>> mapSettings;
@@ -139,56 +155,46 @@ size_t SpritesSheet::isPattern(const string currentSprite, const string lastSpri
 
 sf::Sprite SpritesSheet::getSprite(const std::string &name)
 {
-//    unique_ptr<sf::Texture> texture = make_unique<sf::Texture>();
-//    texture->loadFromImage(mainImage, posSprites.at(name));
-//
-//    shared_ptr<sf::Sprite> sp = make_shared<sf::Sprite>();
-//    sp->setTexture(*texture, true);
-//
-//    if(extendRatio > 0.f) sp->scale(extendRatio, extendRatio);
-
-    //shared_ptr<sf::Texture> texture = make_shared<sf::Texture>();
-    auto* texture = new sf::Texture();
-    texture->loadFromImage(mainImage, posSprites.at(name));
-
-    sf::Sprite sp;
-    sp.setTexture(*texture, true);
+    sf::Sprite sp(*(posSprites.at(name)->getTexture(mainImage)));
+    //sp.setTexture(*(posSprites.at(name)->getTexture(mainImage)), true);
 
     if(extendRatio > 0.f) sp.scale(extendRatio, extendRatio);
 
     return sp;
 }
 
-/*std::vector<sf::Sprite> SpritesSheet::getPattern(const std::string& name)
+sf::Sprite SpritesSheet::getOppositeSprite(const string &name)
 {
-    vector<sf::IntRect> patternPos = posPatterns.at(name);
-    vector<sf::Texture> patternTx;
+    sf::Sprite sp = getSprite(name);
+    sp.scale(-1.f,1.f);
+    sp.setPosition(0.f, 0.f);
+    return sp;
+}
+
+std::vector<sf::Sprite> SpritesSheet::getPattern(const std::string& name)
+{
+    vector<std::shared_ptr<SpriteLoader>> patternPos = posPatterns.at(name);
+    vector<sf::Sprite> patternSp;
 
     for(const auto& ite : patternPos)
     {
-        sf::Texture texture;
-        texture.loadFromImage(mainImage, posSprites.at(name));
-        patternTx.emplace_back(texture);
+        sf::Sprite sp = sf::Sprite(*(ite->getTexture(mainImage)));
+        if(extendRatio > 0.f) sp.scale(extendRatio, extendRatio);
+
+        patternSp.emplace_back(sp);
     }
 
-    return patternTx;
-}*/
+    return patternSp;
+}
 
-/*std::vector<sf::Sprite> SpritesSheet::getOppositePattern(const std::string& name)
+std::vector<sf::Sprite> SpritesSheet::getOppositePattern(const std::string& name)
 {
-    std::vector<sf::Sprite> vecSp = getPattern(std::move(name));
+    std::vector<sf::Sprite> vecSp = getPattern(name);
     for(auto& ite : vecSp)
     {
         ite.scale(-1.f,1.f);
+        ite.setPosition(0.f, 0.f);
     }
 
     return vecSp;
-}*/
-
-/*sf::Sprite SpritesSheet::getOppositeSprite(const string &name)
-{
-    sf::Texture tx = getSprite(name);
-    tx.scale(-1.f,1.f);
-    return tx;
-}*/
-
+}
