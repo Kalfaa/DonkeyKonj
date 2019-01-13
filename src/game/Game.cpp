@@ -141,9 +141,20 @@ void Game::render()
 
         }
     }
+
     mWindow.draw(EntityManager::player->getSprite());
     mWindow.draw(mStatisticsText);
+
+    if(debug){
+        sf::RectangleShape rectangle(sf::Vector2f(EntityManager::player->getSprite().getTextureRect().width*EntityManager::player->getSprite().getScale().x,
+                                                  EntityManager::player->getSprite().getTextureRect().height*EntityManager::player->getSprite().getScale().y));
+        rectangle.setPosition(EntityManager::player->getSprite().getPosition());
+        rectangle.setFillColor(sf::Color(100, 250, 50));
+        mWindow.draw(rectangle);
+    }
+
     mWindow.display();
+
 }
 
 void Game::updateStatistics(sf::Time elapsedTime)
