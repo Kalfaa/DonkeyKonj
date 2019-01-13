@@ -38,39 +38,7 @@ Game::Game()
 
     texturePlatform.loadFromFile(EntityManager::TEXTURES_PATH + "/Block.png");
     sizeBlock = texturePlatform.getSize();
-    /*
-    for (int i = 0; i < BLOCK_COUNT_X; i++)
-    {
-        for (int j = 0; j < BLOCK_COUNT_Y; j++)
-        {
-            std::shared_ptr<Platform> pf = std::make_shared<Platform>(
-                    sf::Vector2f(100.f + 70.f * (i + 1), 0.f + BLOCK_SPACE * (j + 1))
-                    , texturePlatform
-                    , EntityType::PLATFORM);
-            EntityManager::entities.push_back(pf);
-        }
-    }*/
-    /*
-    block[0][0].setTexture(texturePlatform);
-    block[0][0].setPosition(100,300);
-    std::shared_ptr<Entity> se = std::make_shared<Entity>(block[0][0], EntityType::PLATFORM);
-    EntityManager::entities.push_back(se);
-    map.addEntityToMatrix(se);
-    // Draw Ladder
 
-    textureLadder.loadFromFile(EntityManager::TEXTURES_PATH + "/Ladder.PNG");
-
-    for (int i = 0; i < LADDER_COUNT; i++)
-    {
-        std::shared_ptr<Ladder> pf = std::make_shared<Ladder>(
-                sf::Vector2f(100.f + 70.f * (i + 1), 0.f + BLOCK_SPACE * (i + 1) + sizeBlock.y)
-                , textureLadder
-                , EntityType::LADDER);
-        EntityManager::entities.push_back(pf);
-        map.addEntityToMatrix(pf);
-    }
-*/
-    // Draw Mario
 
 
 
@@ -179,8 +147,8 @@ void Game::render()
         mWindow.draw(entity->sprite);
         if(debug)
         {
-            sf::RectangleShape rectangle(sf::Vector2f(entity->getSprite().getTextureRect().width,
-                                                      entity->getSprite().getTextureRect().height));
+            sf::RectangleShape rectangle(sf::Vector2f(entity->getSprite().getTextureRect().width*entity->getSprite().getScale().x,
+                                                      entity->getSprite().getTextureRect().height*entity->getSprite().getScale().y));
             rectangle.setPosition(entity->getSprite().getPosition());
             rectangle.setFillColor(sf::Color(100, 250, 50));
             mWindow.draw(rectangle);
@@ -281,25 +249,27 @@ Map Game::createMap(std::ifstream  mapFile)
 
             //printf(list_string[i].size());
             sf::Sprite sprite = sf::Sprite();
+            sf::Vector2f pos(j*32, i*32);
             switch(list_string[i][j]){
                 case 'O':
                     break;
                 case 'P' :
                     {
-                    sprite.setTexture(texturePlatform);
-                    sprite.setPosition(j * 32, i * 32);
-                    sf::Vector2f pos(j * 32, i * 32);
                     std::shared_ptr<Entity> plat = std::make_shared<Platform>(sps.getSprite("PlatformOrange"),pos,EntityType::PLATFORM);
                     EntityManager::entities.push_back(plat);
                     newMap.addEntityToMatrix(plat);
                     break;
                 }
-                case 'L':
-                    //CREER UNE LADDER ET LE PUSH DANS LA MATRICE 3D
+                case 'H':
+                {
+                    std::shared_ptr<Entity> ladder = std::make_shared<Ladder>(sps.getSprite("Ladder"), pos,
+                                                                              EntityType::LADDER);
+                    EntityManager::entities.push_back(ladder);
+                    newMap.addEntityToMatrix(ladder);
                     break;
+                }
                 case 'X':{
-                    sf::Vector2f posMario(j*32, i*32);
-                    EntityManager::player = std::make_shared<Mario>(sps.getSprite("MarioLeft0"), posMario, EntityType::PLAYER, MARIO_SPEED);
+                    EntityManager::player = std::make_shared<Mario>(sps.getSprite("MarioLeft0"), pos, EntityType::PLAYER, MARIO_SPEED);
                     newMap.startpoint.x=j;
                     newMap.startpoint.y=i;
                 }

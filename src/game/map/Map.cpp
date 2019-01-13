@@ -92,7 +92,7 @@ void Map::addEntityToMatrix(std::shared_ptr<Entity> entity)
         auto mposx = static_cast<unsigned int>((x+CASE_AREA*i) / CASE_AREA);
         auto mposy = static_cast<unsigned int>(y / CASE_AREA);
         entity3DArray.at(mposy).at(mposx).push_back(entity);
-        for(int j =0; j<=s_height/CASE_AREA;j++){
+        for(int j =0; j<=s_height/CASE_AREA+1;j++){
             mposy = static_cast<unsigned int>((y+j*CASE_AREA) / CASE_AREA);
             entity3DArray.at(mposy).at(mposx).push_back(entity);
         }
@@ -111,7 +111,7 @@ void Map::printElement()
              }else if(entity->type ==PLATFORM){
                  type = "platform";
              }
-             printf("%s  en x : %d en y %d \n" ,type.c_str() ,i,j);
+             printf("%s  en x : %d en y %d \n" ,type.c_str() ,j,i);
          }
      }
  }
