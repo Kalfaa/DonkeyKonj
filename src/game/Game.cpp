@@ -1,6 +1,5 @@
-#include <zconf.h>
 #include "Game.h"
-
+#include "windows.h"
 const sf::Time Game::timePerFrame = sf::seconds(1.f / 60.f);
 const int CASE_PIXEL_VALUE = 32;
 Game::Game()
@@ -12,26 +11,26 @@ Game::Game()
     sps = SpritesSheet::GetInstance();
     sps.loadSprites(EntityManager::TEXTURES_PATH + "/DonkeyKong_SpritesSheet.png", ZOOM_SPRITE);
 
-//    do
-//    {
-//        for(auto& sp : sps.getOppositePattern("MarioMoveLeftArm"))
-//        {
-//            sp.setPosition(100, 100);
-//            mWindow.clear(sf::Color::Black);
-//            mWindow.draw(sp);
-//            mWindow.display();
-//            usleep(333333);
-//        }
-//
-//        for(auto& sp : sps.getPattern("MarioMoveLeftArm"))
-//        {
-//            sp.setPosition(100, 100);
-//            mWindow.clear(sf::Color::Black);
-//            mWindow.draw(sp);
-//            mWindow.display();
-//            usleep(333333);
-//        }
-//    }while (true);
+   do
+   {
+      for(auto& sp : sps.getOppositePattern("MarioMoveLeftArm"))
+      {
+            sp.setPosition(100, 100);
+            mWindow.clear(sf::Color::Black);
+            mWindow.draw(sp);
+            mWindow.display();
+            Sleep(333);
+        }
+
+        for(auto& sp : sps.getPattern("MarioMoveLeftArm"))
+        {
+            sp.setPosition(100, 100);
+            mWindow.clear(sf::Color::Black);
+            mWindow.draw(sp);
+            mWindow.display();
+            Sleep(333);
+        }
+   }while (true);
 
 
     // Draw blocks

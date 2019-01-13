@@ -192,9 +192,7 @@ std::vector<sf::Sprite> SpritesSheet::getOppositePattern(const std::string& name
     std::vector<sf::Sprite> vecSp = getPattern(name);
     for(auto& ite : vecSp)
     {
-        ite.scale(-1.f,1.f);
-        ite.setPosition(0.f, 0.f);
+        ite.setTextureRect(sf::IntRect(ite.getTextureRect().width, 0, -ite.getTextureRect().width, ite.getTextureRect().height));
     }
-
     return vecSp;
 }
