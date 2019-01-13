@@ -9,8 +9,8 @@
 
 Player::Player(const sf::Sprite& sprite, const sf::Vector2f& posPlayer, EntityType type, float playerSpeed)
     : Entity(sprite, posPlayer, type), playerSpeed(playerSpeed){
-    MARIO_WIDTH = sprite.getScale().x*sprite.getTextureRect().width;
-    MARIO_HEIGHT = sprite.getScale().y*sprite.getTextureRect().height;
+    MARIO_WIDTH = abs(sprite.getScale().x*sprite.getTextureRect().width);
+    MARIO_HEIGHT = abs(sprite.getScale().y*sprite.getTextureRect().height);
 }
 
 void Player::update(sf::Time elapsedTime,Map map)
