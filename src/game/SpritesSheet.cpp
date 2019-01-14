@@ -80,14 +80,12 @@ bool SpritesSheet::loadSprites(string file)
             if(posPatterns.find(tab.first.substr(0, pos)) != posPatterns.end())
             {
                 posPatterns.at(tab.first.substr(0, pos)).push_back(make_shared<SpriteLoader>(mainImage, rect));
-                cout << "vectPush " << tab.first << endl;
             }
             else
             {
                 vector<std::shared_ptr<SpriteLoader>> vec;
                 vec.push_back(make_shared<SpriteLoader>(mainImage, rect));
                 posPatterns.insert(make_pair(tab.first.substr(0, pos), vec));
-                cout << "Init vectPush " << tab.first << " with name : " << tab.first.substr(0, pos) << endl;
             }
         }
 

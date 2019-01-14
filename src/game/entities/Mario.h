@@ -11,7 +11,7 @@
 class Mario : public Player
 {
 public:
-    Mario(const sf::Sprite &sprite, const sf::Vector2f &posPlayer, EntityType, float playerSpeed);
+    Mario(const sf::Sprite &sprite, const sf::Vector2f &posPlayer, EntityType, float playerSpeed, SpritesPatterns);
 
     ~Mario() override = default;
 

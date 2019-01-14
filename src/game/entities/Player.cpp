@@ -7,8 +7,10 @@
 #include "Player.h"
 #include "Ladder.h"
 
-Player::Player(const sf::Sprite& sprite, const sf::Vector2f& posPlayer, EntityType type, float playerSpeed)
-    : Entity(sprite, posPlayer, type), playerSpeed(playerSpeed){
+Player::Player(const sf::Sprite& sprite, const sf::Vector2f& posPlayer, EntityType type, float playerSpeed, const SpritesPatterns& playerSprites)
+    : Entity(sprite, posPlayer, type),
+    playerSpeed(playerSpeed), spritesPtns(playerSprites)
+{
     MARIO_WIDTH = abs(sprite.getScale().x*sprite.getTextureRect().width);
     MARIO_HEIGHT = abs(sprite.getScale().y*sprite.getTextureRect().height);
 }
@@ -37,7 +39,7 @@ void Player::update(sf::Time elapsedTime,Map map)
         {
             printf("jump");
             playerState = JUMP;
-            jumpvalue = MARIO_JUMP_MAX;
+            jumpValue = MARIO_JUMP_MAX;
         }
     }
 
@@ -68,12 +70,12 @@ void Player::update(sf::Time elapsedTime,Map map)
             sprite.move(moveJump * elapsedTime.asSeconds());
             if(!collide(map,EntityType::PLATFORM,RIGHT))
             {
-                jumpvalue -= MARIO_JUMP_SPEED;
+                jumpValue -= MARIO_JUMP_SPEED;
             }else{
                 sprite.move(moveNotJump * elapsedTime.asSeconds());
-                jumpvalue =0;
+                jumpValue =0;
             }
-            if(jumpvalue<=0){
+            if(jumpValue<=0){
                 playerState=IDLE;
             }
         default:;
