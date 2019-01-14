@@ -1,5 +1,4 @@
 #include "Game.h"
-#include "windows.h"
 const sf::Time Game::timePerFrame = sf::seconds(1.f / 60.f);
 const int CASE_PIXEL_VALUE = 32;
 Game::Game()
@@ -48,6 +47,7 @@ Game::Game()
     mPlayer.setTexture(mTexture);
     std::string filename = EntityManager::MAP_PATH + "/" + "map_donkeykong";
     map = createMap( std::ifstream (filename.c_str()));
+   // map = basicMap(sps);
     mFont.loadFromFile(EntityManager::MEDIA_PATH + "/Sansation.ttf");
     mStatisticsText.setString("Welcome to Donkey Kong 1981");
     mStatisticsText.setFont(mFont);
@@ -288,6 +288,35 @@ Map Game::createMap(std::ifstream  mapFile)
         }
     }
     return newMap;
+
+}
+
+Map Game::basicMap(SpritesSheet sps){
+    Map newMap = Map(100,100);
+    for (int i = 0; i < BLOCK_COUNT_X; i++)
+    {
+        for (int j = 0; j < BLOCK_COUNT_Y; j++)
+        {
+            sf::Vector2f pos;
+            pos.x = 100.f + 70.f * (i + 1);
+            pos.y =  0.f + BLOCK_SPACE * (j + 1);
+            std::shared_ptr<Entity> plat = std::make_shared<Platform>(sps.getSprite("PlatformOrange"),pos,EntityType::PLATFORM);
+            EntityManager::entities.push_back(plat);
+            newMap.addEntityToMatrix(plat);
+        }
+    }
+
+    // Draw Echelles
+/*
+    for (int i = 0; i < 4; i++)
+    {
+        _Echelle[i].setTexture(_TextureEchelle);
+        _Echelle[i].setPosition(100.f + 70.f * (i + 1), 0.f + BLOCK_SPACE * (i + 1) + _sizeBlock.y );
+        sf::Vector2f pos;
+        pos.x = 100.f + 70.f * (i + 1);
+        pos.y =  0.f + BLOCK_SPACE * (j + 1);
+        std::shared_ptr<Entity> plat = std::make_shared<Platform>(sps.getSprite("Ladder"),pos,EntityType::LADDER);
+    }*/
 
 }
 
