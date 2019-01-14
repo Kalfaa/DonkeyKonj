@@ -41,6 +41,8 @@ private:
 
     void handlePlayerInput(sf::Keyboard::Key key, bool isPressed);
 
+    static Map basicMap(SpritesSheet sps);
+
 private:
 
     static const float PlayerSpeed;
