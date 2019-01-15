@@ -304,8 +304,31 @@ Map Game::basicMap(){
     sf::Vector2f posmario(5*32, 3*32);
     newMap.startpoint.x=posmario.x;
     newMap.startpoint.y=posmario.y;
-    EntityManager::player = std::make_shared<Mario>(sps.getOppositeSprite("MarioLeft0"), posmario,
-                                                    EntityType::PLAYER, MARIO_SPEED);
+
+    Mario::SpritesPatterns spritesPatterns
+            {
+                    {Player::climbPatternLeft, sps.getPattern("MarioClimbLeft")},
+                    {Player::climbPatternRight, sps.getOppositePattern("MarioClimbLeft")},
+                    {Player::deadPatternLeft, sps.getPattern("MarioLeftSlide")},
+                    {Player::deadPatternRight, sps.getOppositePattern("MarioLeftSlide")},
+                    {Player::fightPatternLeft, sps.getPattern("MarioMoveLeftArm")},
+                    {Player::fightPatternRight, sps.getOppositePattern("MarioMoveLeftArm")},
+                    {Player::moveFightPatternLeft, sps.getPattern("MarioLeftArm")},
+                    {Player::moveFightPatternRight, sps.getOppositePattern("MarioLeftArm")},
+                    {Player::movePatternLeft, sps.getPattern("MarioLeft")},
+                    {Player::movePatternRight, sps.getOppositePattern("MarioLeft")},
+                    //{Player::jumpPatternLeft, std::vector<sf::Sprite>(1, sps.getSprite("jumpPatternLeft"))},
+                    //{Player::jumpPatternRight, std::vector<sf::Sprite>(1, sps.getOppositeSprite("jumpPatternLeft"))}
+            };
+    EntityManager::player = std::make_shared<Mario>(spritesPatterns.at(Player::movePatternLeft)[2], posmario,
+                                                    EntityType::PLAYER, MARIO_SPEED,spritesPatterns);
+
+
+
+
+
+
+
     return newMap;
 }
 
