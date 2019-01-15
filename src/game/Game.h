@@ -41,7 +41,9 @@ private:
 
     void handlePlayerInput(sf::Keyboard::Key key, bool isPressed);
 
-    static Map basicMap(SpritesSheet sps);
+    Map basicMap();
+    void addBlockLine(Map &map, int number,int posx,int posy);
+    void addLadder(Map &map, int height,int posx,int posy);
 
 private:
 

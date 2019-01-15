@@ -46,8 +46,9 @@ Game::Game()
 
     mPlayer.setTexture(mTexture);
     std::string filename = EntityManager::MAP_PATH + "/" + "map_donkeykong";
-    map = createMap( std::ifstream (filename.c_str()));
-   // map = basicMap(sps);
+    //map = createMap( std::ifstream (filename.c_str()));
+    map = basicMap();
+
     mFont.loadFromFile(EntityManager::MEDIA_PATH + "/Sansation.ttf");
     mStatisticsText.setString("Welcome to Donkey Kong 1981");
     mStatisticsText.setFont(mFont);
@@ -291,32 +292,49 @@ Map Game::createMap(std::ifstream  mapFile)
 
 }
 
-Map Game::basicMap(SpritesSheet sps){
+Map Game::basicMap(){
+
     Map newMap = Map(100,100);
-    for (int i = 0; i < BLOCK_COUNT_X; i++)
-    {
-        for (int j = 0; j < BLOCK_COUNT_Y; j++)
-        {
-            sf::Vector2f pos;
-            pos.x = 100.f + 70.f * (i + 1);
-            pos.y =  0.f + BLOCK_SPACE * (j + 1);
-            std::shared_ptr<Entity> plat = std::make_shared<Platform>(sps.getSprite("PlatformOrange"),pos,EntityType::PLATFORM);
-            EntityManager::entities.push_back(plat);
-            newMap.addEntityToMatrix(plat);
-        }
-    }
+    addBlockLine(newMap,20,50,250);
+    addBlockLine(newMap,20,50,350);
+    addBlockLine(newMap,20,50,450);
+    addLadder(newMap,4,50,410);
 
-    // Draw Echelles
-/*
-    for (int i = 0; i < 4; i++)
+
+    sf::Vector2f posmario(5*32, 3*32);
+    newMap.startpoint.x=posmario.x;
+    newMap.startpoint.y=posmario.y;
+    EntityManager::player = std::make_shared<Mario>(sps.getOppositeSprite("MarioLeft0"), posmario,
+                                                    EntityType::PLAYER, MARIO_SPEED);
+    return newMap;
+}
+
+void Game::addBlockLine(Map &map, int number, int posx,int posy)
+{
+    int block_space = sps.getSprite("PlatformOrange").getGlobalBounds().width;
+    for (int j = 0; j < number; j++)
     {
-        _Echelle[i].setTexture(_TextureEchelle);
-        _Echelle[i].setPosition(100.f + 70.f * (i + 1), 0.f + BLOCK_SPACE * (i + 1) + _sizeBlock.y );
         sf::Vector2f pos;
-        pos.x = 100.f + 70.f * (i + 1);
-        pos.y =  0.f + BLOCK_SPACE * (j + 1);
-        std::shared_ptr<Entity> plat = std::make_shared<Platform>(sps.getSprite("Ladder"),pos,EntityType::LADDER);
-    }*/
+        pos.y = posy;
+        pos.x =  posx + (block_space-4) * j;
+        std::shared_ptr<Entity> plat = std::make_shared<Platform>(sps.getSprite("PlatformOrange"), pos,EntityType::PLATFORM);
+        EntityManager::entities.push_back(plat);
+        map.addEntityToMatrix(plat);
+    }
+}
 
+void Game::addLadder(Map &map, int height, int posx, int posy)
+{
+    int block_space = sps.getSprite("PlatformOrange").getGlobalBounds().height;
+    sf::Vector2f pos;
+    for (int j = 0; j < height; j++)
+    {
+        pos.y = posy + block_space*-j ;
+        pos.x =  posx ;
+    std::shared_ptr<Entity> ladder = std::make_shared<Ladder>(sps.getSprite("Ladder"), pos,
+                                                              EntityType::LADDER);
+    EntityManager::entities.push_back(ladder);
+    map.addEntityToMatrix(ladder);
+    }
 }
 
