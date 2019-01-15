@@ -9,13 +9,32 @@
 #include "Entity.h"
 #include <map/Map.h>
 
-
 #define MARIO_JUMP_MAX 3500
 #define MARIO_JUMP_SPEED 700
+
 class Player : public Entity
 {
 public:
-    Player(const sf::Sprite&, const sf::Vector2f& posPlayer, EntityType, float playerSpeed);
+    enum PatternType
+    {
+        deadPatternLeft,
+        deadPatternRight,
+        movePatternLeft,
+        movePatternRight,
+        climbPatternLeft,
+        climbPatternRight,
+        fightPatternLeft,
+        fightPatternRight,
+        moveFightPatternLeft,
+        moveFightPatternRight,
+        jumpPatternLeft,
+        jumpPatternRight
+    };
+
+    typedef std::map<PatternType, std::vector<sf::Sprite>> SpritesPatterns;
+
+public:
+    Player(const sf::Sprite&, const sf::Vector2f& posPlayer, EntityType, float playerSpeed, const SpritesPatterns&);
     ~Player() override = default;
      int MARIO_HEIGHT ;
      int MARIO_WIDTH;
@@ -26,10 +45,14 @@ public:
     PlayerState playerState = IDLE;
 
 protected:
+    bool collide(Map map, EntityType entityType, Direction direction);
+
+protected:
     float playerSpeed;
     Direction direction;
-    bool collide(Map map,EntityType entityType,Direction direction);
-    float jumpvalue;
+    float jumpValue;
+
+    SpritesPatterns spritesPtns;
 };
 
 
