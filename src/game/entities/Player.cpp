@@ -13,10 +13,13 @@ Player::Player(const sf::Sprite& sprite, const sf::Vector2f& posPlayer, EntityTy
 {
     MARIO_WIDTH = abs(sprite.getScale().x*sprite.getTextureRect().width);
     MARIO_HEIGHT = abs(sprite.getScale().y*sprite.getTextureRect().height);
+    TimeAnimation = 0;
+
 }
 
 void Player::update(sf::Time elapsedTime,Map map)
 {
+
     sf::Vector2f grindLadder(0.f, -playerSpeed*2); // en attendant de trouver une maniere plus propre
     sf::Vector2f moveJump(0.f, -MARIO_JUMP_SPEED);
     sf::Vector2f moveNotJump(0.f, +MARIO_JUMP_SPEED);
@@ -55,15 +58,36 @@ void Player::update(sf::Time elapsedTime,Map map)
             /*if(!collide(map,EntityType::PLATFORM,DOWN))
                 movement.y += playerSpeed;*/
             break;
-        case LEFT:
+        case LEFT: {
+            if (lastDirection != LEFT) {
+                TimeAnimation = 0;
+            }else{
+                TimeAnimation += elapsedTime.asMilliseconds();
+            }
+            //printf("%d |",elapsedTime.asMilliseconds());
+            int animation_offset = (TimeAnimation / 100);
+            if (animation_offset >= 3) {
+                TimeAnimation = 0;
+                animation_offset =0;
+            }
+            changeSprite(spritesPtns.at(movePatternLeft)[0+animation_offset]);
             sprite.move(moveLeft * elapsedTime.asSeconds());
-            if(collide(map,EntityType::PLATFORM,RIGHT))sprite.move(moveRight * elapsedTime.asSeconds());
+            if (collide(map, EntityType::PLATFORM, RIGHT))sprite.move(moveRight * elapsedTime.asSeconds());
+            lastDirection = LEFT;
+
             break;
+        }
         case RIGHT:
+            if(lastDirection==NONE){
+
+            }
+            changeSprite(spritesPtns.at(movePatternRight)[0]);
             sprite.move(moveRight * elapsedTime.asSeconds());
             if(collide(map,EntityType::PLATFORM,RIGHT))sprite.move(moveLeft * elapsedTime.asSeconds());
+            lastDirection = RIGHT;
             break;
-        default: ;
+        default:
+            lastDirection = NONE;
     }
     switch(playerState){
         case JUMP:
@@ -81,6 +105,13 @@ void Player::update(sf::Time elapsedTime,Map map)
         default:;
     }
     direction = NONE;
+}
+
+void Player::changeSprite(sf::Sprite newSprite) {
+    sf::Vector2f tempos = sprite.getPosition();
+    sprite = newSprite;
+    sprite.setPosition(tempos);
+
 }
 
 void Player::move(Direction direction)
@@ -154,6 +185,7 @@ void Player::jump()
 {
     if(FALLING != playerState)playerState= STARTJUMP;
 }
+
 
 
 

@@ -1,5 +1,4 @@
 #include "Game.h"
-#include "windows.h"
 const sf::Time Game::timePerFrame = sf::seconds(1.f / 60.f);
 const int CASE_PIXEL_VALUE = 32;
 Game::Game()
@@ -40,7 +39,7 @@ Game::Game()
         mWindow.setIcon(281, 210, icon.getPixelsPtr());
     }
     else std::cerr << "Error when load " + EntityManager::TEXTURES_PATH + "/icon.png" << std::endl;
-    map.printElement();
+    //map.printElement();
 }
 
 void Game::run()
@@ -320,7 +319,7 @@ Map Game::basicMap(){
                     //{Player::jumpPatternLeft, std::vector<sf::Sprite>(1, sps.getSprite("jumpPatternLeft"))},
                     //{Player::jumpPatternRight, std::vector<sf::Sprite>(1, sps.getOppositeSprite("jumpPatternLeft"))}
             };
-    EntityManager::player = std::make_shared<Mario>(spritesPatterns.at(Player::movePatternLeft)[2], posmario,
+    EntityManager::player = std::make_shared<Mario>(spritesPatterns.at(Player::movePatternLeft)[0], posmario,
                                                     EntityType::PLAYER, MARIO_SPEED,spritesPatterns);
 
 

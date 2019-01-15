@@ -46,11 +46,14 @@ public:
 
 protected:
     bool collide(Map map, EntityType entityType, Direction direction);
+    void changeSprite(sf::Sprite newSprite);
 
 protected:
     float playerSpeed;
     Direction direction;
+    Direction lastDirection ;
     float jumpValue;
+    int TimeAnimation ;
 
     SpritesPatterns spritesPtns;
 };
