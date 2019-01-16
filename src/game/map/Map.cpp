@@ -106,7 +106,7 @@ void Map::printElement()
          for(int k =0;k<entity3DArray[i][j].size();k++){
              std::shared_ptr<Entity> entity = entity3DArray[i][j].at(k);
              std::string type  ;
-             if(entity->type ==LADDER){
+             if(entity->type ==LADDER){ //ÇA FIT PAS LES CONVENTIONS DE CODAGE
                  type = "ladder";
              }else if(entity->type ==PLATFORM){
                  type = "platform";
@@ -117,4 +117,66 @@ void Map::printElement()
  }
 }
 
+
+bool Map::collide(sf::Sprite sprite,EntityType entityType,Direction direction)
+{
+    std::vector<std::shared_ptr<Entity>> list_entity;
+    auto left = static_cast<unsigned int>(sprite.getPosition().x) /CASE_AREA ;
+    auto right =  static_cast<unsigned int>( (sprite.getPosition().x+sprite.getGlobalBounds().width )/CASE_AREA );
+    auto bottom = static_cast<unsigned int>( ((sprite.getPosition().y)+sprite.getGlobalBounds().height)/CASE_AREA);
+    auto top = static_cast<unsigned int>( ((sprite.getPosition().y))/CASE_AREA);
+    unsigned y1;
+    unsigned x1;
+    unsigned y2;
+    unsigned x2;
+    switch (direction)
+    {
+        case UP:
+            y1 = top;
+            x1 =left ;
+            y2 =top ;
+            x2 = right ;
+            break;
+        case DOWN:
+            y1 = bottom;
+            x1 = left ;
+            y2 = bottom ;
+            x2 = right ;
+            break;
+        case LEFT:
+            y1 = top;
+            x1 = left ;
+            y2 = bottom ;
+            x2 = left ;
+            break;
+        case RIGHT:
+            y1 =top ;
+            x1 = right ;
+            y2 = bottom ;
+            x2 = right ;
+            break;
+        default: ;
+    }
+    for (const auto &i : entity3DArray.at(y1).at(x1))
+    {
+        if(i->type==entityType)list_entity.push_back(i) ;
+    }
+
+    for (const auto &i : entity3DArray.at(y2).at(x2))
+    {
+        if (i->type == entityType)list_entity.push_back(i);
+    }
+
+
+    for (const auto &i : entity3DArray.at(y2-1).at(x2))
+    {
+        if (i->type == entityType)list_entity.push_back(i);
+    }
+    for(const auto &entity : list_entity){
+        if(entity->sprite.getGlobalBounds().intersects(sprite.getGlobalBounds())){
+            return true;
+        }
+    }
+    return false ;
+}
 

@@ -1,3 +1,4 @@
+#include <entities/Barrel.h>
 #include "Game.h"
 const sf::Time Game::timePerFrame = sf::seconds(1.f / 60.f);
 const int CASE_PIXEL_VALUE = 32;
@@ -304,9 +305,18 @@ Map Game::basicMap(){
                     {Player::moveFightPatternRight, sps.getOppositePattern("MarioLeftArm")},
                     {Player::movePatternLeft, sps.getPattern("MarioLeft")},
                     {Player::movePatternRight, sps.getOppositePattern("MarioLeft")},
-                    //{Player::jumpPatternLeft, std::vector<sf::Sprite>(1, sps.getSprite("jumpPatternLeft"))},
-                    //{Player::jumpPatternRight, std::vector<sf::Sprite>(1, sps.getOppositeSprite("jumpPatternLeft"))}
+                    {Player::jumpPatternLeft, std::vector<sf::Sprite>(1, sps.getSprite("MarioLeftJump"))},
+                    {Player::jumpPatternRight, std::vector<sf::Sprite>(1, sps.getOppositeSprite("MarioLeftJump"))}
             };
+
+
+    Barrel::SpritesPatterns spritesPatternsBarrel {
+            {
+                    {Barrel::barrel, std::vector<sf::Sprite>(1,sps.getSprite("Barrel"))},
+                    {Barrel::barrelHorizontal, sps.getPattern("BarrelHorizontal")},
+                    {Barrel::barrelVertical, sps.getPattern("BarrelVertical")},
+            }
+    };
     EntityManager::player = std::make_shared<Mario>(spritesPatterns.at(Player::movePatternLeft)[0], posmario,
                                                     EntityType::PLAYER, MARIO_SPEED,spritesPatterns);
 

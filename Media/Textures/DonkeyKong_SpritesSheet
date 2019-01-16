@@ -38,7 +38,7 @@ MarioClimbLeft1 19 163 14 15
 MarioClimbLeft2 38 166 16 12
 MarioClimbLeft3 59 163 16 15
 
-MarioLeftJump 1 183 16 15
+MarioLeftJump 1 183 16 16
 
 MarioLeftArm0 1 203 12 16
 MarioLeftArm1 57 203 14 16

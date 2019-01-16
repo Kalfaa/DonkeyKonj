@@ -56,7 +56,7 @@ include(${CMAKE_CURRENT_SOURCE_DIR}/src/CMakeLists.txt)
 
 # Add executable to build.
 add_executable(${PROJECT_NAME}
-        ${SOURCES})
+        ${SOURCES} src/game/entities/Barrel.cpp src/game/entities/Barrel.h)
 
 # Include directory 
 target_include_directories(${PROJECT_NAME} PRIVATE ${INCLUDE_DIR})
