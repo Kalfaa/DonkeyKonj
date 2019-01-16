@@ -11,7 +11,7 @@
 class StaticEntity : public Entity
 {
 public:
-    StaticEntity(const sf::Sprite&, const sf::Vector2f &position, EntityType type);
+    StaticEntity(const sf::Sprite &, const sf::Vector2f &position, EntityType type);
 };
 
 

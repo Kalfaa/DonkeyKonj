@@ -44,8 +44,12 @@ private:
     void handlePlayerInput(sf::Keyboard::Key key, bool isPressed);
 
     Map basicMap();
-    void addBlockLine(Map &map, int number,int posx,int posy);
-    void addLadder(Map &map, int height,int posx,int posy);
+
+    void addBlockLine(Map &map, int number, int posx, int posy);
+
+    void addLadder(Map &map, int height, int posx, int posy);
+
+    void addBonus(Map &map, int posx[3], int posy[3]);
 
 private:
 
@@ -67,7 +71,7 @@ private:
     bool mIsMovingDown;
     bool mIsMovingRight;
     bool mIsMovingLeft;
-    bool debug ;
+    bool debug;
     bool mJump;
 
     sf::Texture textureLadder;

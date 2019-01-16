@@ -11,7 +11,8 @@
 class BonusItem : public StaticEntity
 {
 public:
-    BonusItem(const sf::Sprite &sprite, const sf::Vector2f &position, EntityType type, unsigned int valueBonus, sf::Sprite& valueSprite);
+    BonusItem(const sf::Sprite &sprite, const sf::Vector2f &position, EntityType type, unsigned int valueBonus,
+              const sf::Sprite &valueSprite);
 
 
 public:
