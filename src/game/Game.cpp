@@ -302,8 +302,10 @@ Map Game::basicMap()
     addBlockLine(newMap, 20, 50, 450);
     addLadder(newMap, 4, 50, 410);
 
-    int bonusX[3] = {55, 140, 180};
-    int bonusY[3] = {210, 0, 0};
+    //string bonusTab[3] = {"UmbrellaBonus", "HandbagBonus", "HatBonus"};
+
+    int bonusX[3] = {50, 140, 180};
+    int bonusY[3] = {static_cast<int>(250 - sps.getSpriteSize("UmbrellaBonus")[0]), 0, 0};
     addBonus(newMap, bonusX, bonusY);
 
     sf::Vector2f posmario(5 * 32, 3 * 32);

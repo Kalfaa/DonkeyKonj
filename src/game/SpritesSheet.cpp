@@ -54,13 +54,8 @@ ostream &operator<<(ostream &os, const sf::IntRect &sheet)
 
 bool SpritesSheet::loadSprites(std::string file, float extendRatio)
 {
-    this->loadSprites(file);
     this->extendRatio = extendRatio;
-    return false;
-}
 
-bool SpritesSheet::loadSprites(string file)
-{
     std::map<std::string, std::array<int, 4>> map = loadSpriteSetting(file.substr(0, file.find_last_of('.')));
     mainImage.loadFromFile(file);
 
@@ -204,4 +199,16 @@ std::vector<sf::Sprite> SpritesSheet::getOppositePattern(const std::string &name
                 sf::IntRect(ite.getTextureRect().width, 0, -ite.getTextureRect().width, ite.getTextureRect().height));
     }
     return vecSp;
+}
+
+std::array<float, 2> SpritesSheet::getSpriteSize(const std::string &name)
+{
+    if (posSprites.find(name) == posSprites.end())
+    {
+        throw std::out_of_range("Unable to load the sprite \"" + name + "\" : this texture name doesn't exist");
+    }
+    sf::Sprite sp = getSprite(name);
+
+    std::array<float, 2> size{sp.getGlobalBounds().height, sp.getGlobalBounds().width};
+    return size;
 }
