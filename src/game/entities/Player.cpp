@@ -11,8 +11,8 @@ Player::Player(const sf::Sprite& sprite, const sf::Vector2f& posPlayer, EntityTy
     : Entity(sprite, posPlayer, type),
     playerSpeed(playerSpeed), spritesPtns(playerSprites)
 {
-    MARIO_WIDTH = abs(sprite.getScale().x*sprite.getTextureRect().width);
-    MARIO_HEIGHT = abs(sprite.getScale().y*sprite.getTextureRect().height);
+    MARIO_WIDTH = sprite.getGlobalBounds().width;
+    MARIO_HEIGHT = sprite.getGlobalBounds().height;
     TimeAnimation = 0;
 
 }
@@ -51,7 +51,6 @@ void Player::update(sf::Time elapsedTime,Map map)
         case UP:
             if(collide(map,EntityType::LADDER,DOWN)){
                 sprite.move(grindLadder * elapsedTime.asSeconds());
-
             }
             break;
         case DOWN:
@@ -64,29 +63,39 @@ void Player::update(sf::Time elapsedTime,Map map)
             }else{
                 TimeAnimation += elapsedTime.asMilliseconds();
             }
-            //printf("%d |",elapsedTime.asMilliseconds());
-            int animation_offset = (TimeAnimation / 100);
-            if (animation_offset >= 3) {
-                TimeAnimation = 0;
-                animation_offset =0;
+            if(playerState!=FALLING) {
+
+                changeSprite(updateAnimation(&TimeAnimation,100,spritesPtns.at(movePatternLeft)));
+            }else{
+                changeSprite(spritesPtns.at(movePatternLeft)[0]);
             }
-            changeSprite(spritesPtns.at(movePatternLeft)[0+animation_offset]);
+            //printf("%d |",elapsedTime.asMilliseconds());
             sprite.move(moveLeft * elapsedTime.asSeconds());
             if (collide(map, EntityType::PLATFORM, RIGHT))sprite.move(moveRight * elapsedTime.asSeconds());
             lastDirection = LEFT;
-
             break;
         }
         case RIGHT:
-            if(lastDirection==NONE){
-
+            if (lastDirection != RIGHT) {
+                TimeAnimation = 0;
+            }else{
+                TimeAnimation += elapsedTime.asMilliseconds();
             }
-            changeSprite(spritesPtns.at(movePatternRight)[0]);
+            //printf("%d |",elapsedTime.asMilliseconds());
+            if(playerState!=FALLING) {
+
+                changeSprite(updateAnimation(&TimeAnimation, 100, spritesPtns.at(movePatternRight)));
+            }else{
+                changeSprite(spritesPtns.at(movePatternRight)[0]);
+            }
             sprite.move(moveRight * elapsedTime.asSeconds());
             if(collide(map,EntityType::PLATFORM,RIGHT))sprite.move(moveLeft * elapsedTime.asSeconds());
             lastDirection = RIGHT;
             break;
         default:
+            if(lastDirection==LEFT){
+                 changeSprite(spritesPtns.at(movePatternLeft)[0]);
+            }
             lastDirection = NONE;
     }
     switch(playerState){
@@ -184,6 +193,11 @@ bool Player::collide(Map map,EntityType entityType,Direction direction)
 void Player::jump()
 {
     if(FALLING != playerState)playerState= STARTJUMP;
+}
+
+sf::Sprite Player::updateAnimation(int *now, int frequency, std::vector<sf::Sprite> animation) {
+    if(*now/frequency >= animation.size()) *now=0;
+    return animation[*now/frequency] ;
 }
 
 
