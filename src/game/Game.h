@@ -3,11 +3,13 @@
 #include "pch.h"
 #include "StringHelpers.h"
 #include "EntityManager.h"
+#include "SpritesSheet.h"
+
 #include "Platform.h"
 #include "Ladder.h"
 #include "Player.h"
 #include "Mario.h"
-#include "SpritesSheet.h"
+#include "BonusItem.h"
 
 #define LADDER_COUNT 4
 #define BLOCK_COUNT_X 20//8
@@ -42,8 +44,12 @@ private:
     void handlePlayerInput(sf::Keyboard::Key key, bool isPressed);
 
     Map basicMap();
-    void addBlockLine(Map &map, int number,int posx,int posy);
-    void addLadder(Map &map, int height,int posx,int posy);
+
+    void addBlockLine(Map &map, int number, int posx, int posy);
+
+    void addLadder(Map &map, int height, int posx, int posy);
+
+    void addBonus(Map &map, int posx[3], int posy[3]);
 
 private:
 
@@ -65,7 +71,7 @@ private:
     bool mIsMovingDown;
     bool mIsMovingRight;
     bool mIsMovingLeft;
-    bool debug ;
+    bool debug;
     bool mJump;
 
     sf::Texture textureLadder;

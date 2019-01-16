@@ -7,6 +7,7 @@ class EntityManager
 {
 public:
     EntityManager() = default;
+
     virtual ~EntityManager() = default;
 
 public:

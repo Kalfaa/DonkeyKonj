@@ -4,6 +4,5 @@
 
 #include "Ladder.h"
 
-Ladder::Ladder(const sf::Sprite& sprite, const sf::Vector2f& position, EntityType type)
-    : StaticEntity(sprite, position, type)
-    {}
+Ladder::Ladder(const sf::Sprite &sprite, const sf::Vector2f &position, EntityType type)
+        : StaticEntity(sprite, position, type) {}

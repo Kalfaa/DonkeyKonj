@@ -20,9 +20,9 @@ DonkeyKongFace4 273 93 40 32
 
 DonkeyKongOrange 91 54 47 32
 
-Bonus0 143 55 44 20
-Bonus1 192 55 44 20
-Bonus2 241 55 44 20
+BonusPanel0 143 55 44 20
+BonusPanel1 192 55 44 20
+BonusPanel2 241 55 44 20
 
 DonkeyKongProfileLeft 1 91 43 32
 DonkeyKongFaceArmDown 49 91 40 32
@@ -52,8 +52,8 @@ MarioMoveLeftArm4 76 203 15 16
 Hammer0 37 224 9 9
 Hammer1 72 224 9 9
 
-HamerDown0 51 224 16 9
-HamerDown1 86 224 16 9
+HammerDown0 51 224 16 9
+HammerDown1 86 224 16 9
 
 MarioLeftSlide0 1 246 16 16
 MarioLeftSlide1 22 247 16 15
@@ -95,3 +95,11 @@ BarrelHorizontalBlue0 178 196 12 10
 BarrelHorizontalBlue1 195 196 12 10
 BarrelHorizontalBlue2 212 196 12 10
 BarrelHorizontalBlue3 229 196 12 10
+
+UmbrellaBonus 266 149 16 15
+HandbagBonus 287 155 9 9
+HatBonus 301 156 15 8
+
+100Bonus 246 159 15 7
+300Bonus 246 171 15 7
+500Bonus 246 173 15 7

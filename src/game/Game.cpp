@@ -1,11 +1,15 @@
 #include <entities/Barrel.h>
 #include "Game.h"
+
+using namespace std;
+
 const sf::Time Game::timePerFrame = sf::seconds(1.f / 60.f);
 const int CASE_PIXEL_VALUE = 32;
+
 Game::Game()
         : mWindow(sf::VideoMode(840, 600), "Donkey Kong 1981", sf::Style::Close), mTexture(), mPlayer(), mFont(),
           mStatisticsText(), mStatisticsUpdateTime(), mStatisticsNumFrames(0), mIsMovingUp(false), mIsMovingDown(false),
-          mIsMovingRight(false), mIsMovingLeft(false) ,debug(false),mJump(false)
+          mIsMovingRight(false), mIsMovingLeft(false), debug(false), mJump(false)
 {
     mWindow.setFramerateLimit(160);
 
@@ -23,11 +27,10 @@ Game::Game()
     mStatisticsText.setCharacterSize(10);
 
     sf::Image icon;
-    if(icon.loadFromFile(EntityManager::TEXTURES_PATH + "/icon.png"))
+    if (icon.loadFromFile(EntityManager::TEXTURES_PATH + "/icon.png"))
     {
         mWindow.setIcon(281, 210, icon.getPixelsPtr());
-    }
-    else std::cerr << "Error when load " + EntityManager::TEXTURES_PATH + "/icon.png" << std::endl;
+    } else std::cerr << "Error when load " + EntityManager::TEXTURES_PATH + "/icon.png" << std::endl;
     //map.printElement();
 }
 
@@ -78,17 +81,17 @@ void Game::processEvents()
 
 void Game::update(sf::Time elapsedTime)
 {
-
     sf::Vector2f movement(0.f, 0.f);
     EntityManager::player->update(elapsedTime, map);
-    if(mIsMovingUp)EntityManager::player->move(UP);
-    if(mIsMovingRight)EntityManager::player->move(RIGHT);
-    if(mJump){
+    if (mIsMovingUp)EntityManager::player->move(UP);
+    if (mIsMovingRight)EntityManager::player->move(RIGHT);
+    if (mJump)
+    {
         EntityManager::player->jump();
-        mJump=false;
+        mJump = false;
     }
-    if(mIsMovingDown)EntityManager::player->move(DOWN);
-    if(mIsMovingLeft) EntityManager::player->move(LEFT);
+    if (mIsMovingDown)EntityManager::player->move(DOWN);
+    if (mIsMovingLeft) EntityManager::player->move(LEFT);
     for (const std::shared_ptr<Entity> &entity : EntityManager::entities)
     {
         if (!entity->enabled || entity->type != EntityType::PLAYER)
@@ -112,7 +115,7 @@ void Game::render()
         }
 
         mWindow.draw(entity->sprite);
-        if(debug)
+        if (debug)
         {
             sf::RectangleShape rectangle(sf::Vector2f(entity->getSprite().getGlobalBounds().width,
                                                       entity->getSprite().getGlobalBounds().height));
@@ -122,9 +125,9 @@ void Game::render()
         }
 
     }
-    for(const std::shared_ptr<Entity> &entity : EntityManager::entities)
+    for (const std::shared_ptr<Entity> &entity : EntityManager::entities)
     {
-        if(entity->type == EntityType::PLAYER)
+        if (entity->type == EntityType::PLAYER)
         {
 
             mWindow.draw(entity->getSprite());
@@ -135,7 +138,8 @@ void Game::render()
     mWindow.draw(EntityManager::player->getSprite());
     mWindow.draw(mStatisticsText);
 
-    if(debug){
+    if (debug)
+    {
         sf::RectangleShape rectangle(sf::Vector2f(EntityManager::player->getSprite().getGlobalBounds().width,
                                                   EntityManager::player->getSprite().getGlobalBounds().height));
         rectangle.setPosition(EntityManager::player->getSprite().getPosition());
@@ -189,51 +193,57 @@ void Game::handlePlayerInput(sf::Keyboard::Key key, bool isPressed)
             mIsMovingRight = isPressed;
             break;
         case sf::Keyboard::P:
-            if(isPressed)debug = !debug;
-           break;
+            if (isPressed)debug = !debug;
+            break;
         case sf::Keyboard::Space:
-            if(isPressed && EntityManager::player->playerState != JUMP )mJump = true;
+            if (isPressed && EntityManager::player->playerState != JUMP)mJump = true;
             break;
 
-        default: EntityManager::player->move(NONE);
+        default:
+            EntityManager::player->move(NONE);
     }
 
 }
-Map Game::createMap(std::ifstream  mapFile)
+
+Map Game::createMap(std::ifstream mapFile)
 {
 
     std::string str((std::istreambuf_iterator<char>(mapFile)),
                     std::istreambuf_iterator<char>());
     auto x = static_cast<unsigned int>(str.find('\n'));
-    auto y = static_cast<unsigned int>(str.begin(),str.end(),'\n');
-    Map newMap = Map(x,y) ;
+    auto y = static_cast<unsigned int>(str.begin(), str.end(), '\n');
+    Map newMap = Map(x, y);
     //map.entity3DArray = Matrix3d(x, std::vector<std::vector<std::shared_ptr<Entity>>>(y));
     std::vector<std::string> list_string;
     std::stringstream ss(str);
     std::string tmp;
-    while(std::getline(ss, tmp, '\n'))
+    while (std::getline(ss, tmp, '\n'))
     {
         list_string.push_back(tmp);
     }
 
-     for (auto &it : list_string)
-     {
-        std::cout << it << std:: endl;
-     }
+    for (auto &it : list_string)
+    {
+        std::cout << it << std::endl;
+    }
 
-    for(int i =0;i<y-2 ;i++){
-        std::cout << (list_string[i].size()) << std:: endl;
-        for(int j = 0;j<x-1;j++){
+    for (int i = 0; i < y - 2; i++)
+    {
+        std::cout << (list_string[i].size()) << std::endl;
+        for (int j = 0; j < x - 1; j++)
+        {
 
             //printf(list_string[i].size());
             sf::Sprite sprite = sf::Sprite();
-            sf::Vector2f pos(j*32, i*32);
-            switch(list_string[i][j]){
+            sf::Vector2f pos(j * 32, i * 32);
+            switch (list_string[i][j])
+            {
                 case 'O':
                     break;
                 case 'P' :
-                    {
-                    std::shared_ptr<Entity> plat = std::make_shared<Platform>(sps.getSprite("PlatformOrange"),pos,EntityType::PLATFORM);
+                {
+                    std::shared_ptr<Entity> plat = std::make_shared<Platform>(sps.getSprite("PlatformRed"), pos,
+                                                                              EntityType::PLATFORM);
                     EntityManager::entities.push_back(plat);
                     newMap.addEntityToMatrix(plat);
                     break;
@@ -246,33 +256,37 @@ Map Game::createMap(std::ifstream  mapFile)
                     newMap.addEntityToMatrix(ladder);
                     break;
                 }
-                case 'X':{
+                case 'X':
+                {
                     Mario::SpritesPatterns spritesPatterns
                             {
-                                    {Player::climbPatternLeft, sps.getPattern("MarioClimbLeft")},
-                                    {Player::climbPatternRight, sps.getOppositePattern("MarioClimbLeft")},
-                                    {Player::deadPatternLeft, sps.getPattern("MarioLeftSlide")},
-                                    {Player::deadPatternRight, sps.getOppositePattern("MarioLeftSlide")},
-                                    {Player::fightPatternLeft, sps.getPattern("MarioMoveLeftArm")},
-                                    {Player::fightPatternRight, sps.getOppositePattern("MarioMoveLeftArm")},
-                                    {Player::moveFightPatternLeft, sps.getPattern("MarioLeftArm")},
+                                    {Player::climbPatternLeft,      sps.getPattern("MarioClimbLeft")},
+                                    {Player::climbPatternRight,     sps.getOppositePattern("MarioClimbLeft")},
+                                    {Player::deadPatternLeft,       sps.getPattern("MarioLeftSlide")},
+                                    {Player::deadPatternRight,      sps.getOppositePattern("MarioLeftSlide")},
+                                    {Player::fightPatternLeft,      sps.getPattern("MarioMoveLeftArm")},
+                                    {Player::fightPatternRight,     sps.getOppositePattern("MarioMoveLeftArm")},
+                                    {Player::moveFightPatternLeft,  sps.getPattern("MarioLeftArm")},
                                     {Player::moveFightPatternRight, sps.getOppositePattern("MarioLeftArm")},
-                                    {Player::movePatternLeft, sps.getPattern("MarioLeft")},
-                                    {Player::movePatternRight, sps.getOppositePattern("MarioLeft")},
-                                    {Player::jumpPatternLeft, std::vector<sf::Sprite>(1, sps.getSprite("jumpPatternLeft"))},
-                                    {Player::jumpPatternRight, std::vector<sf::Sprite>(1, sps.getOppositeSprite("jumpPatternLeft"))}
+                                    {Player::movePatternLeft,       sps.getPattern("MarioLeft")},
+                                    {Player::movePatternRight,      sps.getOppositePattern("MarioLeft")},
+                                    {Player::jumpPatternLeft,       std::vector<sf::Sprite>(1, sps.getSprite(
+                                            "jumpPatternLeft"))},
+                                    {Player::jumpPatternRight,      std::vector<sf::Sprite>(1, sps.getOppositeSprite(
+                                            "jumpPatternLeft"))}
                             };
 
                     // spritesPatterns.at(Player::movePatternRight)[0]
                     EntityManager::player = std::make_shared<Mario>(spritesPatterns.at(Player::movePatternLeft)[2],
-                            pos,
-                            EntityType::PLAYER,
-                            MARIO_SPEED,
-                            spritesPatterns);
-                    newMap.startpoint.x=j;
-                    newMap.startpoint.y=i;
+                                                                    pos,
+                                                                    EntityType::PLAYER,
+                                                                    MARIO_SPEED,
+                                                                    spritesPatterns);
+                    newMap.startpoint.x = j;
+                    newMap.startpoint.y = i;
                 }
-                default:break;
+                default:
+                    break;
             }
         }
     }
@@ -280,28 +294,34 @@ Map Game::createMap(std::ifstream  mapFile)
 
 }
 
-Map Game::basicMap(){
+Map Game::basicMap()
+{
 
-    Map newMap = Map(100,100);
-    addBlockLine(newMap,20,50,250);
-    addBlockLine(newMap,20,50,350);
-    addBlockLine(newMap,20,50,450);
-    addLadder(newMap,4,50,410);
+    Map newMap = Map(100, 100);
+    addBlockLine(newMap, 20, 50, 250);
+    addBlockLine(newMap, 20, 50, 350);
+    addBlockLine(newMap, 20, 50, 450);
+    addLadder(newMap, 4, 50, 410);
 
+    //string bonusTab[3] = {"UmbrellaBonus", "HandbagBonus", "HatBonus"};
 
-    sf::Vector2f posmario(5*32, 3*32);
-    newMap.startpoint.x=posmario.x;
-    newMap.startpoint.y=posmario.y;
+    int bonusX[3] = {50, 140, 180};
+    int bonusY[3] = {static_cast<int>(250 - sps.getSpriteSize("UmbrellaBonus")[0]), 0, 0};
+    addBonus(newMap, bonusX, bonusY);
+
+    sf::Vector2f posmario(5 * 32, 3 * 32);
+    newMap.startpoint.x = posmario.x;
+    newMap.startpoint.y = posmario.y;
 
     Mario::SpritesPatterns spritesPatterns
             {
-                    {Player::climbPatternLeft, sps.getPattern("MarioClimbLeft")},
-                    {Player::climbPatternRight, sps.getOppositePattern("MarioClimbLeft")},
-                    {Player::deadPatternLeft, sps.getPattern("MarioLeftSlide")},
-                    {Player::deadPatternRight, sps.getOppositePattern("MarioLeftSlide")},
-                    {Player::fightPatternLeft, sps.getPattern("MarioMoveLeftArm")},
-                    {Player::fightPatternRight, sps.getOppositePattern("MarioMoveLeftArm")},
-                    {Player::moveFightPatternLeft, sps.getPattern("MarioLeftArm")},
+                    {Player::climbPatternLeft,      sps.getPattern("MarioClimbLeft")},
+                    {Player::climbPatternRight,     sps.getOppositePattern("MarioClimbLeft")},
+                    {Player::deadPatternLeft,       sps.getPattern("MarioLeftSlide")},
+                    {Player::deadPatternRight,      sps.getOppositePattern("MarioLeftSlide")},
+                    {Player::fightPatternLeft,      sps.getPattern("MarioMoveLeftArm")},
+                    {Player::fightPatternRight,     sps.getOppositePattern("MarioMoveLeftArm")},
+                    {Player::moveFightPatternLeft,  sps.getPattern("MarioLeftArm")},
                     {Player::moveFightPatternRight, sps.getOppositePattern("MarioLeftArm")},
                     {Player::movePatternLeft, sps.getPattern("MarioLeft")},
                     {Player::movePatternRight, sps.getOppositePattern("MarioLeft")},
@@ -318,26 +338,23 @@ Map Game::basicMap(){
             }
     };
     EntityManager::player = std::make_shared<Mario>(spritesPatterns.at(Player::movePatternLeft)[0], posmario,
-                                                    EntityType::PLAYER, MARIO_SPEED,spritesPatterns);
-
-
-
-
-
+                                                    EntityType::PLAYER, MARIO_SPEED, spritesPatterns);
 
 
     return newMap;
 }
 
-void Game::addBlockLine(Map &map, int number, int posx,int posy)
+void Game::addBlockLine(Map &map, int number, int posx, int posy)
 {
-    int block_space = sps.getSprite("PlatformOrange").getGlobalBounds().width;
+    int block_space = static_cast<int>(sps.getSprite("PlatformRed").getGlobalBounds().width);
     for (int j = 0; j < number; j++)
     {
         sf::Vector2f pos;
         pos.y = posy;
-        pos.x =  posx + (block_space-4) * j;
-        std::shared_ptr<Entity> plat = std::make_shared<Platform>(sps.getSprite("PlatformOrange"), pos,EntityType::PLATFORM);
+        pos.x = posx + (block_space - 4) * j;
+        std::shared_ptr<Entity> plat = std::make_shared<Platform>(sps.getSprite("PlatformRed"), pos,
+                                                                  EntityType::PLATFORM);
+
         EntityManager::entities.push_back(plat);
         map.addEntityToMatrix(plat);
     }
@@ -345,16 +362,35 @@ void Game::addBlockLine(Map &map, int number, int posx,int posy)
 
 void Game::addLadder(Map &map, int height, int posx, int posy)
 {
-    int block_space = sps.getSprite("PlatformOrange").getGlobalBounds().height;
+    int block_space = static_cast<int>(sps.getSprite("PlatformRed").getGlobalBounds().height);
     sf::Vector2f pos;
     for (int j = 0; j < height; j++)
     {
-        pos.y = posy + block_space*-j ;
-        pos.x =  posx ;
-    std::shared_ptr<Entity> ladder = std::make_shared<Ladder>(sps.getSprite("Ladder"), pos,
-                                                              EntityType::LADDER);
-    EntityManager::entities.push_back(ladder);
-    map.addEntityToMatrix(ladder);
+        pos.y = posy + block_space * -j;
+        pos.x = posx;
+        std::shared_ptr<Entity> ladder = std::make_shared<Ladder>(sps.getSprite("Ladder"), pos,
+                                                                  EntityType::LADDER);
+        EntityManager::entities.push_back(ladder);
+        map.addEntityToMatrix(ladder);
+    }
+}
+
+void Game::addBonus(Map &map, int posx[3], int posy[3])
+{
+    string bonusTab[3] = {"UmbrellaBonus", "HandbagBonus", "HatBonus"};
+    string bonusValue[3] = {"100Bonus", "300Bonus", "500Bonus"};
+
+    for (int cnt = 0; cnt < 3; cnt++)
+    {
+        sf::Vector2f pos(posx[cnt], posy[cnt]);
+        std::shared_ptr<Entity> bonus = std::make_shared<BonusItem>(sps.getSprite(bonusTab[cnt]),
+                                                                    pos,
+                                                                    EntityType::BONUS_ITEM,
+                                                                    cnt * 200 + 100,
+                                                                    sps.getSprite(bonusValue[cnt]));
+
+        EntityManager::entities.push_back(bonus);
+        map.addEntityToMatrix(bonus);
     }
 }
 

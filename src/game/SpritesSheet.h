@@ -11,11 +11,12 @@
 class SpriteLoader
 {
 public:
-    explicit SpriteLoader(const sf::Image& spriteSheet, const sf::IntRect &pos);
+    explicit SpriteLoader(const sf::Image &spriteSheet, const sf::IntRect &pos);
+
     virtual ~SpriteLoader();
 
 public:
-    std::shared_ptr<sf::Texture> getTexture(const sf::Image& spriteSheet);
+    std::shared_ptr<sf::Texture> getTexture(const sf::Image &spriteSheet);
 
 private:
     std::shared_ptr<sf::Texture> texture;
@@ -24,7 +25,7 @@ private:
 class SpritesSheet
 {
 public:
-    static SpritesSheet& GetInstance() { return INSTANCE; };
+    static SpritesSheet &GetInstance() { return INSTANCE; };
 
 public:
     friend std::ostream &operator<<(std::ostream &os, const SpritesSheet &sheet);
@@ -35,17 +36,19 @@ public:
     typedef std::map<const std::string, std::vector<std::shared_ptr<SpriteLoader>>> MapPatterns;
 
 public:
-    bool loadSprites(std::string file);
-    bool loadSprites(std::string file, float extendRatio);
+    //bool loadSprites(std::string file);
+    bool loadSprites(std::string file, float extendRatio = 0);
 
-    sf::Sprite getSprite(const std::string& name);
+    sf::Sprite getSprite(const std::string &name);
     sf::Sprite getOppositeSprite(const std::string &name);
-    std::vector<sf::Sprite> getPattern(const std::string& name);
-    std::vector<sf::Sprite> getOppositePattern(const std::string& name);
+    std::vector<sf::Sprite> getPattern(const std::string &name);
+    std::vector<sf::Sprite> getOppositePattern(const std::string &name);
+    std::array<float, 2> getSpriteSize(const std::string &name);
 
 private:
     static std::map<std::string, std::array<int, 4>> loadSpriteSetting(std::string file);
-    static size_t isPattern(std::string currentSprite, std::string lastSpriteName, int& lastNumSprite);
+
+    static size_t isPattern(std::string currentSprite, std::string lastSpriteName, int &lastNumSprite);
 
 private:
     static SpritesSheet INSTANCE;

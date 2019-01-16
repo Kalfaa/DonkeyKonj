@@ -1,7 +1,7 @@
 #include "pch.h"
 #include "Entity.h"
 
-Entity::Entity(const sf::Sprite& sprite, EntityType type)
+Entity::Entity(const sf::Sprite &sprite, EntityType type)
         : sprite(sprite), type(type)
 {
     position = sprite.getPosition();
@@ -9,8 +9,8 @@ Entity::Entity(const sf::Sprite& sprite, EntityType type)
     size = texture.getSize();
 }
 
-Entity::Entity(const sf::Sprite& sprite, const sf::Vector2f &pos, EntityType type)
-    : sprite(sprite), type(type)
+Entity::Entity(const sf::Sprite &sprite, const sf::Vector2f &pos, EntityType type)
+        : sprite(sprite), type(type)
 {
     position = sprite.getPosition();
     this->sprite.setPosition(pos);

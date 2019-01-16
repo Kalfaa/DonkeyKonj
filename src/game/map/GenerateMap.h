@@ -12,7 +12,8 @@
 class GenerateMap
 {
 public:
-    GenerateMap(const std::map<char, StaticEntity>& staticObjects);
+    GenerateMap(const std::map<char, StaticEntity> &staticObjects);
+
     virtual ~GenerateMap() = default;
 
 public:
