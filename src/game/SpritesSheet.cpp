@@ -153,6 +153,11 @@ size_t SpritesSheet::isPattern(const string currentSprite, const string lastSpri
 
 sf::Sprite SpritesSheet::getSprite(const std::string &name)
 {
+    if(posSprites.find(name) == posSprites.end())
+    {
+        throw std::out_of_range("Unable to load the sprite \"" + name + "\" : this texture name doesn't exist");
+    }
+
     sf::Sprite sp(*(posSprites.at(name)->getTexture(mainImage)));
     //sp.setTexture(*(posSprites.at(name)->getTexture(mainImage)), true);
 
@@ -170,6 +175,11 @@ sf::Sprite SpritesSheet::getOppositeSprite(const string &name)
 
 std::vector<sf::Sprite> SpritesSheet::getPattern(const std::string& name)
 {
+    if(posPatterns.find(name) == posPatterns.end())
+    {
+        throw std::out_of_range("Unable to load the pattern \"" + name + "\" : this pattern name doesn't exist");
+    }
+
     vector<std::shared_ptr<SpriteLoader>> patternPos = posPatterns.at(name);
     vector<sf::Sprite> patternSp;
 

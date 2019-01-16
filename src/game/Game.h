@@ -3,11 +3,13 @@
 #include "pch.h"
 #include "StringHelpers.h"
 #include "EntityManager.h"
+#include "SpritesSheet.h"
+
 #include "Platform.h"
 #include "Ladder.h"
 #include "Player.h"
 #include "Mario.h"
-#include "SpritesSheet.h"
+#include "BonusItem.h"
 
 #define LADDER_COUNT 4
 #define BLOCK_COUNT_X 20//8

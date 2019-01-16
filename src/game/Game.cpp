@@ -1,6 +1,10 @@
 #include "Game.h"
+
+using namespace std;
+
 const sf::Time Game::timePerFrame = sf::seconds(1.f / 60.f);
 const int CASE_PIXEL_VALUE = 32;
+
 Game::Game()
         : mWindow(sf::VideoMode(840, 600), "Donkey Kong 1981", sf::Style::Close), mTexture(), mPlayer(), mFont(),
           mStatisticsText(), mStatisticsUpdateTime(), mStatisticsNumFrames(0), mIsMovingUp(false), mIsMovingDown(false),
@@ -304,9 +308,12 @@ Map Game::basicMap(){
                     {Player::moveFightPatternRight, sps.getOppositePattern("MarioLeftArm")},
                     {Player::movePatternLeft, sps.getPattern("MarioLeft")},
                     {Player::movePatternRight, sps.getOppositePattern("MarioLeft")},
-                    //{Player::jumpPatternLeft, std::vector<sf::Sprite>(1, sps.getSprite("jumpPatternLeft"))},
-                    //{Player::jumpPatternRight, std::vector<sf::Sprite>(1, sps.getOppositeSprite("jumpPatternLeft"))}
+                    {Player::jumpPatternLeft, std::vector<sf::Sprite>(1, sps.getSprite("MarioLeftJump"))},
+                    {Player::jumpPatternRight, std::vector<sf::Sprite>(1, sps.getOppositeSprite("MarioLeftJump"))}
             };
+
+
+
     EntityManager::player = std::make_shared<Mario>(spritesPatterns.at(Player::movePatternLeft)[0], posmario,
                                                     EntityType::PLAYER, MARIO_SPEED,spritesPatterns);
 
@@ -321,13 +328,13 @@ Map Game::basicMap(){
 
 void Game::addBlockLine(Map &map, int number, int posx,int posy)
 {
-    int block_space = sps.getSprite("PlatformOrange").getGlobalBounds().width;
+    int block_space = sps.getSprite("PlatformRed").getGlobalBounds().width;
     for (int j = 0; j < number; j++)
     {
         sf::Vector2f pos;
         pos.y = posy;
         pos.x =  posx + (block_space-4) * j;
-        std::shared_ptr<Entity> plat = std::make_shared<Platform>(sps.getSprite("PlatformOrange"), pos,EntityType::PLATFORM);
+        std::shared_ptr<Entity> plat = std::make_shared<Platform>(sps.getSprite("PlatformRed"), pos,EntityType::PLATFORM);
         EntityManager::entities.push_back(plat);
         map.addEntityToMatrix(plat);
     }
@@ -335,7 +342,7 @@ void Game::addBlockLine(Map &map, int number, int posx,int posy)
 
 void Game::addLadder(Map &map, int height, int posx, int posy)
 {
-    int block_space = sps.getSprite("PlatformOrange").getGlobalBounds().height;
+    int block_space = sps.getSprite("PlatformRed").getGlobalBounds().height;
     sf::Vector2f pos;
     for (int j = 0; j < height; j++)
     {
