@@ -7,24 +7,12 @@ Game::Game()
           mIsMovingRight(false), mIsMovingLeft(false) ,debug(false),mJump(false)
 {
     mWindow.setFramerateLimit(160);
+
+    // Load sprites
     sps = SpritesSheet::GetInstance();
     sps.loadSprites(EntityManager::TEXTURES_PATH + "/DonkeyKong_SpritesSheet.png", ZOOM_SPRITE);
 
-    // Draw blocks
-
-    texturePlatform.loadFromFile(EntityManager::TEXTURES_PATH + "/Block.png");
-    sizeBlock = texturePlatform.getSize();
-
-
-
-
-
-    mTexture.loadFromFile(EntityManager::TEXTURES_PATH + "/Mario_right_profile.png");
-
-
-    mPlayer.setTexture(mTexture);
     std::string filename = EntityManager::MAP_PATH + "/" + "map_donkeykong";
-    //map = createMap( std::ifstream (filename.c_str()));
     map = basicMap();
 
     mFont.loadFromFile(EntityManager::MEDIA_PATH + "/Sansation.ttf");
@@ -215,7 +203,7 @@ Map Game::createMap(std::ifstream  mapFile)
 
     std::string str((std::istreambuf_iterator<char>(mapFile)),
                     std::istreambuf_iterator<char>());
-    unsigned int x = str.find('\n');
+    auto x = static_cast<unsigned int>(str.find('\n'));
     auto y = static_cast<unsigned int>(str.begin(),str.end(),'\n');
     Map newMap = Map(x,y) ;
     //map.entity3DArray = Matrix3d(x, std::vector<std::vector<std::shared_ptr<Entity>>>(y));
@@ -227,10 +215,10 @@ Map Game::createMap(std::ifstream  mapFile)
         list_string.push_back(tmp);
     }
 
-    for(auto it = list_string.begin(); it != list_string.end(); ++it)
-    {
-        std::cout << (*it) << std:: endl;
-    }
+     for (auto &it : list_string)
+     {
+        std::cout << it << std:: endl;
+     }
 
     for(int i =0;i<y-2 ;i++){
         std::cout << (list_string[i].size()) << std:: endl;
@@ -270,8 +258,8 @@ Map Game::createMap(std::ifstream  mapFile)
                                     {Player::moveFightPatternRight, sps.getOppositePattern("MarioLeftArm")},
                                     {Player::movePatternLeft, sps.getPattern("MarioLeft")},
                                     {Player::movePatternRight, sps.getOppositePattern("MarioLeft")},
-                                    //{Player::jumpPatternLeft, std::vector<sf::Sprite>(1, sps.getSprite("jumpPatternLeft"))},
-                                    //{Player::jumpPatternRight, std::vector<sf::Sprite>(1, sps.getOppositeSprite("jumpPatternLeft"))}
+                                    {Player::jumpPatternLeft, std::vector<sf::Sprite>(1, sps.getSprite("jumpPatternLeft"))},
+                                    {Player::jumpPatternRight, std::vector<sf::Sprite>(1, sps.getOppositeSprite("jumpPatternLeft"))}
                             };
 
                     // spritesPatterns.at(Player::movePatternRight)[0]
