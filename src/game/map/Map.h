@@ -11,6 +11,14 @@
 typedef std::vector<std::vector<std::shared_ptr<Entity>>> Matrix2d;
 typedef std::vector<Matrix2d> Matrix3d;
 
+struct CollideRes
+{
+    inline CollideRes(bool collide, Entity entity);
+    inline CollideRes(bool collide);
+    bool collide;
+    Entity entity;
+};
+
 class Map
 {
 public:
@@ -35,12 +43,13 @@ public:
     int length;
     sf::Vector2f startpoint;
 public:
-    void addEntityToMatrix(std::shared_ptr<Entity> entity);
+    void addEntityToMatrix(std::shared_ptr<Entity>);
+    void removeEntityToMatrix(const std::shared_ptr<Entity> &);
 
     void print(const sf::RenderWindow &);
 
     void printElement();
-    bool collide(sf::Sprite sprite,EntityType entityType,Direction direction);
+    std::shared_ptr<CollideRes> collide(sf::Sprite sprite,EntityType entityType,Direction direction);
 };
 
 

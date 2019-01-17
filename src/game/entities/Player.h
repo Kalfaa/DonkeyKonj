@@ -50,7 +50,7 @@ public:
     PlayerState playerState = IDLE;
 
 protected:
-    bool collide(Map map, EntityType entityType, Direction direction);
+    //bool collide(Map map, EntityType entityType, Direction direction);
 
     void changeSprite(sf::Sprite newSprite);
 

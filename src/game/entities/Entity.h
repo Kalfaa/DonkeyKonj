@@ -30,6 +30,7 @@ enum EntityType
 class Entity
 {
 public:
+    Entity(EntityType = EntityType::UNKNOWN);
     Entity(const sf::Sprite &, EntityType);
 
     Entity(const sf::Sprite &, const sf::Vector2f &pos, EntityType);

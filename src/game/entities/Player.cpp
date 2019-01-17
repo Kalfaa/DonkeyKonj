@@ -1,3 +1,5 @@
+#include <utility>
+
 //
 // Created by user on 25/12/2018.
 //
@@ -17,7 +19,7 @@ Player::Player(const sf::Sprite& sprite, const sf::Vector2f& posPlayer, EntityTy
 
 }
 
-void Player::update(sf::Time elapsedTime,Map map)
+void Player::update(sf::Time elapsedTime, Map map)
 {
 
     sf::Vector2f grindLadder(0.f, -playerSpeed*2); // en attendant de trouver une maniere plus propre
@@ -30,7 +32,7 @@ void Player::update(sf::Time elapsedTime,Map map)
     sf::Vector2f moveLeft(-playerSpeed, 0.f);
     if ( playerState != JUMP && playerState != STARTJUMP  ){
         sprite.move(moveDown * elapsedTime.asSeconds());
-        if(!map.collide(sprite,EntityType::PLATFORM,DOWN )){
+        if(!map.collide(sprite,EntityType::PLATFORM,DOWN )->collide){
             playerState=FALLING;
         }else{
             sprite.move(moveUp * elapsedTime.asSeconds());
@@ -46,9 +48,19 @@ void Player::update(sf::Time elapsedTime,Map map)
         }
     }
 
+    std::shared_ptr<CollideRes> collideL = map.collide(sprite, EntityType::BONUS_ITEM, LEFT);
+    std::shared_ptr<CollideRes> collideR = map.collide(sprite, EntityType::BONUS_ITEM, RIGHT);
+    std::shared_ptr<CollideRes> collideU = map.collide(sprite, EntityType::BONUS_ITEM, UP);
+    std::shared_ptr<CollideRes> collideD = map.collide(sprite, EntityType::BONUS_ITEM, DOWN);
+    if(collideL->collide || collideR->collide || collideU->collide || collideD->collide)
+    {
+        std::cout << "Collide with bonus " << std::endl;
+        map.removeEntityToMatrix(std::make_shared<Entity>(collideL->entity));
+    }
+
     switch (direction) {
         case UP:
-            if (map.collide(sprite, EntityType::LADDER, DOWN)) {
+            if (map.collide(sprite, EntityType::LADDER, DOWN)->collide) {
                 sprite.move(grindLadder * elapsedTime.asSeconds());
             }
             break;
@@ -70,7 +82,7 @@ void Player::update(sf::Time elapsedTime,Map map)
             }
             //printf("%d |",elapsedTime.asMilliseconds());
             sprite.move(moveLeft * elapsedTime.asSeconds());
-            if (map.collide(sprite, EntityType::PLATFORM, RIGHT))sprite.move(moveRight * elapsedTime.asSeconds());
+            if (map.collide(sprite, EntityType::PLATFORM, RIGHT)->collide)sprite.move(moveRight * elapsedTime.asSeconds());
             lastDirection = LEFT;
             break;
         }
@@ -88,7 +100,7 @@ void Player::update(sf::Time elapsedTime,Map map)
                 changeSprite(spritesPtns.at(movePatternRight)[0]);
             }
             sprite.move(moveRight * elapsedTime.asSeconds());
-            if (map.collide(sprite, EntityType::PLATFORM, RIGHT))sprite.move(moveLeft * elapsedTime.asSeconds());
+            if (map.collide(sprite, EntityType::PLATFORM, RIGHT)->collide)sprite.move(moveLeft * elapsedTime.asSeconds());
             lastDirection = RIGHT;
             break;
         default:
@@ -103,7 +115,7 @@ void Player::update(sf::Time elapsedTime,Map map)
     switch(playerState){
         case JUMP:
             sprite.move(moveJump * elapsedTime.asSeconds());
-            if(!map.collide(sprite,EntityType::PLATFORM,RIGHT))
+            if(!map.collide(sprite,EntityType::PLATFORM,RIGHT)->collide)
             {
                 changeSprite(spritesPtns.at(jumpPatternLeft)[0]);
                 jumpValue -= MARIO_JUMP_SPEED;
@@ -126,7 +138,7 @@ void Player::update(sf::Time elapsedTime,Map map)
 
 void Player::changeSprite(sf::Sprite newSprite) {
     sf::Vector2f tempos = sprite.getPosition();
-    sprite = newSprite;
+    sprite = std::move(newSprite);
     sprite.setPosition(tempos);
 
 }

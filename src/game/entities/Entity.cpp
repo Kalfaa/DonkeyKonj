@@ -26,3 +26,7 @@ const sf::Sprite &Entity::getSprite() const
 void Entity::update(sf::Time)
 {
 }
+
+Entity::Entity(EntityType)
+{
+}
