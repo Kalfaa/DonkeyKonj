@@ -30,7 +30,7 @@ void Player::update(sf::Time elapsedTime, Map &map)
     sf::Vector2f moveUp(0.f, -playerSpeed);
     sf::Vector2f moveRight(playerSpeed, 0.f);
     sf::Vector2f moveLeft(-playerSpeed, 0.f);
-    if ( playerState != JUMP && playerState != STARTJUMP  ){
+    if ( playerState != JUMP && playerState != STARTJUMP && playerState != GRINDING  ){
         sprite.move(moveDown * elapsedTime.asSeconds());
         if(!map.collide(sprite,EntityType::PLATFORM,DOWN )->collide){
             playerState=FALLING;
@@ -62,6 +62,7 @@ void Player::update(sf::Time elapsedTime, Map &map)
         case UP:
             if (map.collide(sprite, EntityType::LADDER, DOWN)->collide) {
                 sprite.move(grindLadder * elapsedTime.asSeconds());
+                playerState = GRINDING;
             }
             break;
         case DOWN:
@@ -113,6 +114,10 @@ void Player::update(sf::Time elapsedTime, Map &map)
             }
     }
     switch(playerState){
+        case  GRINDING:
+            if(!map.collide(sprite, EntityType::LADDER, DOWN)->collide){
+                playerState = IDLE;
+            }
         case JUMP:
             sprite.move(moveJump * elapsedTime.asSeconds());
             if(!map.collide(sprite,EntityType::PLATFORM,RIGHT)->collide)

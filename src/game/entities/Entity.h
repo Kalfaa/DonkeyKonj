@@ -16,7 +16,8 @@ enum PlayerState
     IDLE,
     MOOVING,
     STARTJUMP,
-    FALLING
+    FALLING,
+    GRINDING
 };
 enum EntityType
 {
