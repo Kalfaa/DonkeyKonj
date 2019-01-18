@@ -108,6 +108,7 @@ void Map::addEntityToMatrix(std::shared_ptr<Entity> entity)
     }
 }
 
+using namespace std;
 void Map::removeEntityToMatrix(const std::shared_ptr<Entity> &entity)
 {
     sf::Sprite sprite = entity->sprite;
@@ -121,12 +122,27 @@ void Map::removeEntityToMatrix(const std::shared_ptr<Entity> &entity)
         auto mposx = static_cast<unsigned int>((x + CASE_AREA * i) / CASE_AREA);
         auto mposy = static_cast<unsigned int>(y / CASE_AREA);
         std::vector<std::shared_ptr<Entity>> vec = entity3DArray.at(mposy).at(mposx);
+
+//       for(vector<std::shared_ptr<Entity>>::const_iterator itSel = selection.m_objects.begin() ; itSel!=selection.m_objects.end() ; itSel++ )
+//       {
+//            //std::shared_ptr<CElement> pElement = *itSel;
+//            auto pos = find(vec.begin(), vec.end(), entity);
+//
+//            if( pos != vec.end() )
+//            {
+//                std::cout << "erase" << std::endl;
+//                vec.erase(pos);
+//            }
+//        }
+
         for(size_t cnt = 0; cnt < vec.size(); cnt++)
         {
-            if(vec[cnt]->type == entity->type)
+            auto pos1 = find(vec.begin(), vec.end(), entity);
+
+            if( pos1 != vec.end() )
             {
-                std::cout << "erase" << std::endl;
-                vec.erase(vec.begin() + cnt);
+                std::cout << "erase1" << std::endl;
+                vec.erase(pos1);
             }
         }
 

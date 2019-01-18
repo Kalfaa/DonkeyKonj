@@ -199,7 +199,7 @@ void Game::handlePlayerInput(sf::Keyboard::Key key, bool isPressed)
             if (isPressed && EntityManager::player->playerState != JUMP)mJump = true;
             break;
         case sf::Keyboard::M:
-            
+
         default:
             EntityManager::player->move(NONE);
     }
