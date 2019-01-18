@@ -41,7 +41,7 @@ public:
     int MARIO_HEIGHT;
     int MARIO_WIDTH;
 public:
-    void update(sf::Time, Map map);
+    void update(sf::Time, Map &map);
 
     void move(Direction elapsedTime);
 
