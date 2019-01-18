@@ -39,7 +39,7 @@ public:
     const Matrix3d &getEntity3DArray() const;
 
     void setEntity3DArray(const Matrix3d &entity3DArray);
-
+    void countElement();
     int width;
     int length;
     sf::Vector2f startpoint;

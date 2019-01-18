@@ -73,6 +73,7 @@ private:
     bool mIsMovingLeft;
     bool debug;
     bool mJump;
+    bool countElement;
 
     sf::Texture textureLadder;
     sf::Sprite ladder[LADDER_COUNT];

@@ -9,7 +9,7 @@ const int CASE_PIXEL_VALUE = 32;
 Game::Game()
         : mWindow(sf::VideoMode(840, 600), "Donkey Kong 1981", sf::Style::Close), mTexture(), mPlayer(), mFont(),
           mStatisticsText(), mStatisticsUpdateTime(), mStatisticsNumFrames(0), mIsMovingUp(false), mIsMovingDown(false),
-          mIsMovingRight(false), mIsMovingLeft(false), debug(false), mJump(false)
+          mIsMovingRight(false), mIsMovingLeft(false), debug(false), mJump(false),countElement(false)
 {
     mWindow.setFramerateLimit(160);
 
@@ -83,6 +83,10 @@ void Game::update(sf::Time elapsedTime)
 {
     sf::Vector2f movement(0.f, 0.f);
     EntityManager::player->update(elapsedTime, map);
+    if(countElement){
+        map.countElement();
+        countElement = false ;
+    }
     if (mIsMovingUp)EntityManager::player->move(UP);
     if (mIsMovingRight)EntityManager::player->move(RIGHT);
     if (mJump)
@@ -199,7 +203,7 @@ void Game::handlePlayerInput(sf::Keyboard::Key key, bool isPressed)
             if (isPressed && EntityManager::player->playerState != JUMP)mJump = true;
             break;
         case sf::Keyboard::M:
-
+            countElement = true ;
         default:
             EntityManager::player->move(NONE);
     }
