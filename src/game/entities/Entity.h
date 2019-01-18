@@ -25,7 +25,8 @@ enum EntityType
     PLATFORM,
     LADDER,
     BONUS_ITEM,
-    UNKNOWN
+    UNKNOWN,
+    BARREL
 };
 
 class Entity

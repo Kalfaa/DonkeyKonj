@@ -83,6 +83,10 @@ void Game::update(sf::Time elapsedTime)
 {
     sf::Vector2f movement(0.f, 0.f);
     EntityManager::player->update(elapsedTime, map);
+    for(int k = 0; k<EntityManager::entities.size();k++){
+       std::shared_ptr<Entity> entity = EntityManager::entities[k] ;
+       //entity.update(elapsedTime,map);
+    }
     if(countElement){
         map.countElement();
         countElement = false ;
@@ -342,9 +346,14 @@ Map Game::basicMap()
                     {Barrel::barrelVertical, sps.getPattern("BarrelVertical")},
             }
     };
+    sf::Vector2f posbarrel(4,  5);
+
+    std::shared_ptr<Entity> barrel = std::make_shared<Barrel>(spritesPatternsBarrel.at(Barrel::barrelHorizontal)[0], posbarrel,
+                                                    EntityType::BARREL, spritesPatternsBarrel);
+    EntityManager::entities.push_back(barrel);
+    map.addEntityToMatrix(barrel);
     EntityManager::player = std::make_shared<Mario>(spritesPatterns.at(Player::movePatternLeft)[0], posmario,
                                                     EntityType::PLAYER, MARIO_SPEED, spritesPatterns);
-
 
     return newMap;
 }
