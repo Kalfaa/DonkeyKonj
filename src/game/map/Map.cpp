@@ -133,6 +133,7 @@ void Map::removeEntityToMatrix(const std::shared_ptr<Entity> &entity)
         for (int j = 0; j <= s_height / CASE_AREA + 1; j++)
         {
             mposy = static_cast<unsigned int>((y + j * CASE_AREA) / CASE_AREA);
+            vec = entity3DArray.at(mposy).at(mposx);
             for(size_t cnt = 0; cnt < vec.size(); cnt++)
             {
                 if(vec[cnt]->type == entity->type)
@@ -166,6 +167,34 @@ void Map::printElement()
             }
         }
     }
+}
+
+void Map::countElement()
+{
+    int countLadder = 0;
+    int countPlatform = 0;
+    int countBonus = 0;
+    for (int i = 0; i < entity3DArray.size() - 1; i++)
+    {
+        for (int j = 0; j < entity3DArray[i].size() - 1; j++)
+        {
+            for (int k = 0; k < entity3DArray[i][j].size(); k++)
+            {
+                std::shared_ptr<Entity> entity = entity3DArray[i][j].at(k);
+                std::string type;
+                if (entity->type == LADDER)
+                {
+                    countLadder++;
+                } else if (entity->type == PLATFORM)
+                {
+                    countPlatform++;
+                }else if(entity->type == BONUS_ITEM){
+                    countBonus++;
+                }
+            }
+        }
+    }
+    printf("Nombre d'echelle : %d \n Nombre de Platforme %d \n Nombre de Bonus ITEM %d", countLadder, countPlatform, countBonus);
 }
 
 
