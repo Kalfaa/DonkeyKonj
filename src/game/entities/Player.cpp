@@ -55,7 +55,7 @@ void Player::update(sf::Time elapsedTime, Map map)
     if(collideL->collide || collideR->collide || collideU->collide || collideD->collide)
     {
         std::cout << "Collide with bonus " << std::endl;
-        map.removeEntityToMatrix(std::make_shared<Entity>(collideL->entity));
+        map.removeEntityToMatrix(collideL->entity);
     }
 
     switch (direction) {

@@ -10,10 +10,9 @@
 
 struct CollideRes
 {
-    inline CollideRes(bool collide, Entity entity);
-    inline CollideRes(bool collide);
+    inline CollideRes(bool collide, std::shared_ptr<Entity> entity);
     bool collide;
-    Entity entity;
+    std::shared_ptr<Entity> entity;
 };
 
 class Map

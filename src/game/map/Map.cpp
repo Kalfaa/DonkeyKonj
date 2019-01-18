@@ -123,18 +123,6 @@ void Map::removeEntityToMatrix(const std::shared_ptr<Entity> &entity)
         auto mposy = static_cast<unsigned int>(y / CASE_AREA);
         std::vector<std::shared_ptr<Entity>> vec = entity3DArray.at(mposy).at(mposx);
 
-//       for(vector<std::shared_ptr<Entity>>::const_iterator itSel = selection.m_objects.begin() ; itSel!=selection.m_objects.end() ; itSel++ )
-//       {
-//            //std::shared_ptr<CElement> pElement = *itSel;
-//            auto pos = find(vec.begin(), vec.end(), entity);
-//
-//            if( pos != vec.end() )
-//            {
-//                std::cout << "erase" << std::endl;
-//                vec.erase(pos);
-//            }
-//        }
-
         for(size_t cnt = 0; cnt < vec.size(); cnt++)
         {
             auto pos1 = find(vec.begin(), vec.end(), entity);
@@ -152,10 +140,12 @@ void Map::removeEntityToMatrix(const std::shared_ptr<Entity> &entity)
             vec = entity3DArray.at(mposy).at(mposx);
             for(size_t cnt = 0; cnt < vec.size(); cnt++)
             {
-                if(vec[cnt]->type == entity->type)
+                auto pos1 = find(vec.begin(), vec.end(), entity);
+
+                if( pos1 != vec.end() )
                 {
-                    std::cout << "erase1" << std::endl;
-                    vec.erase(vec.begin() + cnt);
+                    std::cout << "erase1bis" << std::endl;
+                    vec.erase(pos1);
                 }
             }
         }
@@ -269,12 +259,12 @@ std::shared_ptr<CollideRes> Map::collide(sf::Sprite sprite, EntityType entityTyp
     }
     for(auto &entity : list_entity){
         if(entity->sprite.getGlobalBounds().intersects(sprite.getGlobalBounds())){
-            return std::make_shared<CollideRes>(true, *entity);
+            return std::make_shared<CollideRes>(true, entity);
         }
     }
-    return std::make_shared<CollideRes>(false , Entity());
+    return std::make_shared<CollideRes>(false, shared_ptr<Entity>());
 }
 
-CollideRes::CollideRes(bool colide, Entity entity)
+CollideRes::CollideRes(bool colide, std::shared_ptr<Entity> entity)
         : collide(colide), entity(entity)
 {}
