@@ -311,7 +311,7 @@ Map Game::basicMap()
     addBlockLine(newMap, 20, 50, 350);
     addBlockLine(newMap, 20, 50, 450);
     addLadder(newMap, 4, 50, 410);
-
+    addLadder(newMap,4,90,305);
     //string bonusTab[3] = {"UmbrellaBonus", "HandbagBonus", "HatBonus"};
 
     int bonusX[3] = {50, 140, 180};

@@ -42,7 +42,6 @@ public:
 
 public:
     virtual void update(sf::Time,Map);
-
     const sf::Sprite &getSprite() const;
 
 public:
