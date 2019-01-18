@@ -1,3 +1,4 @@
+#include <map/Map.h>
 #include "pch.h"
 #include "Entity.h"
 
@@ -23,7 +24,7 @@ const sf::Sprite &Entity::getSprite() const
     return sprite;
 }
 
-void Entity::update(sf::Time)
+void Entity::update(sf::Time time,Map map)
 {
 }
 

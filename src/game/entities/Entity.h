@@ -1,6 +1,6 @@
 #pragma once
 
-
+class Map;
 enum Direction
 {
     UP,
@@ -41,7 +41,7 @@ public:
     virtual ~Entity() = default;
 
 public:
-    virtual void update(sf::Time);
+    virtual void update(sf::Time,Map);
 
     const sf::Sprite &getSprite() const;
 

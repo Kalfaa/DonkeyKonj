@@ -14,7 +14,7 @@
 #include "pch.h"
 
 
-#define BARREL_SPEED 35
+#define BARREL_SPEED 65
 
 class Barrel: public Entity {
 public:

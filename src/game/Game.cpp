@@ -85,7 +85,7 @@ void Game::update(sf::Time elapsedTime)
     EntityManager::player->update(elapsedTime, map);
     for(int k = 0; k<EntityManager::entities.size();k++){
        std::shared_ptr<Entity> entity = EntityManager::entities[k] ;
-       //entity.update(elapsedTime,map);
+       if(entity->type ==BARREL)entity->update(elapsedTime,map);
     }
     if(countElement){
         map.countElement();
@@ -346,7 +346,7 @@ Map Game::basicMap()
                     {Barrel::barrelVertical, sps.getPattern("BarrelVertical")},
             }
     };
-    sf::Vector2f posbarrel(4,  5);
+    sf::Vector2f posbarrel(32*15,32);
 
     std::shared_ptr<Entity> barrel = std::make_shared<Barrel>(spritesPatternsBarrel.at(Barrel::barrelHorizontal)[0], posbarrel,
                                                     EntityType::BARREL, spritesPatternsBarrel);

@@ -18,7 +18,9 @@ void Barrel::update(sf::Time elapsedTime,Map map) {
     sf::Vector2f moveUp(0.f, -BARREL_SPEED);
     sf::Vector2f moveRight(BARREL_SPEED, 0.f);
     sf::Vector2f moveLeft(-BARREL_SPEED, 0.f);
-    if(!map.collide(sprite,EntityType::PLATFORM,DOWN )){
+    sprite.move(moveDown * elapsedTime.asSeconds());
+    if(!map.collide(sprite,EntityType::PLATFORM,DOWN )->collide){
+
     }else{
         sprite.move(moveUp * elapsedTime.asSeconds());
     }
