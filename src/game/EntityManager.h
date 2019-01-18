@@ -12,6 +12,7 @@ public:
 
 public:
     //static std::unique<Entity> getPlayer();
+    static void removeFromEntities(std::shared_ptr<Entity> entity);
 public:
     static std::vector<std::shared_ptr<Entity>> entities;
     static std::shared_ptr<Player> player;

@@ -129,8 +129,9 @@ void Map::removeEntityToMatrix(const std::shared_ptr<Entity> &entity)
 
             if( pos1 != vec.end() )
             {
-                std::cout << "erase1" << std::endl;
                 vec.erase(pos1);
+                entity3DArray.at(mposy).at(mposx) = vec;
+                EntityManager::removeFromEntities(entity);
             }
         }
 
@@ -144,8 +145,9 @@ void Map::removeEntityToMatrix(const std::shared_ptr<Entity> &entity)
 
                 if( pos1 != vec.end() )
                 {
-                    std::cout << "erase1bis" << std::endl;
                     vec.erase(pos1);
+                    entity3DArray.at(mposy).at(mposx) = vec;
+                    EntityManager::removeFromEntities(entity);
                 }
             }
         }

@@ -385,7 +385,7 @@ void Game::addBonus(Map &map, int posx[3], int posy[3])
     string bonusTab[3] = {"UmbrellaBonus", "HandbagBonus", "HatBonus"};
     string bonusValue[3] = {"100Bonus", "300Bonus", "500Bonus"};
 
-    for (int cnt = 0; cnt < 3; cnt++)
+    for (int cnt = 0; cnt < 1; cnt++)
     {
         sf::Vector2f pos(posx[cnt], posy[cnt]);
         std::shared_ptr<Entity> bonus = std::make_shared<BonusItem>(sps.getSprite(bonusTab[cnt]),
