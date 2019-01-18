@@ -77,7 +77,7 @@ Map::Map(Matrix3d array3D)
     length = entity3DArray[0].size();
 }
 
-const Matrix3d &Map::getEntity3DArray() const
+const Map::Matrix3d &Map::getEntity3DArray() const
 {
     return entity3DArray;
 }
@@ -120,11 +120,27 @@ void Map::removeEntityToMatrix(const std::shared_ptr<Entity> &entity)
     {
         auto mposx = static_cast<unsigned int>((x + CASE_AREA * i) / CASE_AREA);
         auto mposy = static_cast<unsigned int>(y / CASE_AREA);
-        entity3DArray.at(mposy).at(mposx).pop_back();
+        std::vector<std::shared_ptr<Entity>> vec = entity3DArray.at(mposy).at(mposx);
+        for(size_t cnt = 0; cnt < vec.size(); cnt++)
+        {
+            if(vec[cnt]->type == entity->type)
+            {
+                std::cout << "erase" << std::endl;
+                vec.erase(vec.begin() + cnt);
+            }
+        }
+
         for (int j = 0; j <= s_height / CASE_AREA + 1; j++)
         {
             mposy = static_cast<unsigned int>((y + j * CASE_AREA) / CASE_AREA);
-            entity3DArray.at(mposy).at(mposx).pop_back();
+            for(size_t cnt = 0; cnt < vec.size(); cnt++)
+            {
+                if(vec[cnt]->type == entity->type)
+                {
+                    std::cout << "erase1" << std::endl;
+                    vec.erase(vec.begin() + cnt);
+                }
+            }
         }
     }
 }

@@ -8,9 +8,6 @@
 #include "pch.h"
 #include "StaticEntity.h"
 
-typedef std::vector<std::vector<std::shared_ptr<Entity>>> Matrix2d;
-typedef std::vector<Matrix2d> Matrix3d;
-
 struct CollideRes
 {
     inline CollideRes(bool collide, Entity entity);
@@ -21,6 +18,10 @@ struct CollideRes
 
 class Map
 {
+public:
+    typedef std::vector<std::vector<std::shared_ptr<Entity>>> Matrix2d;
+    typedef std::vector<Matrix2d> Matrix3d;
+
 public:
     Map();
 
