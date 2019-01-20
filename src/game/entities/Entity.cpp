@@ -24,7 +24,7 @@ const sf::Sprite &Entity::getSprite() const
     return sprite;
 }
 
-void Entity::update(sf::Time time,Map map)
+void Entity::update(sf::Time time, Map map)
 {
 }
 

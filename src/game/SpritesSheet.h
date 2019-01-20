@@ -25,10 +25,12 @@ private:
 class SpritesSheet
 {
 public:
-    static SpritesSheet &GetInstance() { return INSTANCE; };
+    static SpritesSheet &GetInstance()
+    { return INSTANCE; };
 
 public:
     friend std::ostream &operator<<(std::ostream &os, const SpritesSheet &sheet);
+
     friend std::ostream &operator<<(std::ostream &os, const sf::IntRect &sheet);
 
 public:
@@ -40,9 +42,13 @@ public:
     bool loadSprites(std::string file, float extendRatio = 0);
 
     sf::Sprite getSprite(const std::string &name);
+
     sf::Sprite getOppositeSprite(const std::string &name);
+
     std::vector<sf::Sprite> getPattern(const std::string &name);
+
     std::vector<sf::Sprite> getOppositePattern(const std::string &name);
+
     std::array<float, 2> getSpriteSize(const std::string &name);
 
 private:

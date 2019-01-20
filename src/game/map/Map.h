@@ -11,6 +11,7 @@
 struct CollideRes
 {
     inline CollideRes(bool collide, std::shared_ptr<Entity> entity);
+
     bool collide;
     std::shared_ptr<Entity> entity;
 };
@@ -38,18 +39,22 @@ public:
     const Matrix3d &getEntity3DArray() const;
 
     void setEntity3DArray(const Matrix3d &entity3DArray);
+
     void countElement();
+
     int width;
     int length;
     sf::Vector2f startpoint;
 public:
     void addEntityToMatrix(std::shared_ptr<Entity>);
+
     void removeEntityToMatrix(const std::shared_ptr<Entity> &);
 
     void print(const sf::RenderWindow &);
 
     void printElement();
-    std::shared_ptr<CollideRes> collide(sf::Sprite sprite,EntityType entityType,Direction direction);
+
+    std::shared_ptr<CollideRes> collide(sf::Sprite sprite, EntityType entityType, Direction direction);
 };
 
 

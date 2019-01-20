@@ -16,7 +16,8 @@
 
 #define BARREL_SPEED 65
 
-class Barrel: public Entity {
+class Barrel : public Entity
+{
 public:
     enum PatternType
     {
@@ -28,9 +29,11 @@ public:
     typedef std::map<Barrel::PatternType, std::vector<sf::Sprite>> SpritesPatterns;
 
 public:
-    Barrel(const sf::Sprite&, const sf::Vector2f& posPlayer, EntityType,const SpritesPatterns&);
+    Barrel(const sf::Sprite &, const sf::Vector2f &posPlayer, EntityType, const SpritesPatterns &);
+
     ~Barrel() override = default;
-    void update(sf::Time elapsedTime,Map map) ;
+
+    void update(sf::Time elapsedTime, Map map);
 
 
 };

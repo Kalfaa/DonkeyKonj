@@ -75,7 +75,8 @@ bool SpritesSheet::loadSprites(std::string file, float extendRatio)
             if (posPatterns.find(tab.first.substr(0, pos)) != posPatterns.end())
             {
                 posPatterns.at(tab.first.substr(0, pos)).push_back(make_shared<SpriteLoader>(mainImage, rect));
-            } else
+            }
+            else
             {
                 vector<std::shared_ptr<SpriteLoader>> vec;
                 vec.push_back(make_shared<SpriteLoader>(mainImage, rect));
