@@ -114,8 +114,6 @@ using namespace std;
 
 void Map::removeEntityToMatrix(const std::shared_ptr<Entity> &entity)
 {
-    std::cerr << "kesako??? entity=" << entity << std::endl;
-
     sf::Sprite sprite = entity->sprite;
     int x = static_cast<int>(sprite.getPosition().x);
     int y = static_cast<int>(sprite.getPosition().y);

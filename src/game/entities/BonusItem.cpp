@@ -10,3 +10,10 @@ BonusItem::BonusItem(const sf::Sprite &sprite, const sf::Vector2f &position, Ent
           value(valueBonus), valueSprite(spBonus)
 {
 }
+
+unsigned int BonusItem::catchBonus()
+{
+    valueSprite.setPosition(sprite.getPosition());
+    sprite = valueSprite;
+    return value;
+}

@@ -60,7 +60,10 @@ void Player::update(sf::Time elapsedTime, Map &map)
                                                    map.collide(sprite, EntityType::BONUS_ITEM, DOWN)};
     for (const auto &ite : collideBonus)
     {
-        if (ite->collide) map.removeEntityToMatrix(ite->entity);
+        if (ite->collide)
+        {
+            dynamic_cast<BonusItem*>(ite->entity.get())->catchBonus();
+        }
     }
 
     switch (direction)
@@ -78,27 +81,18 @@ void Player::update(sf::Time elapsedTime, Map &map)
             break;
         case LEFT:
         {
-            if (lastDirection != LEFT)
-            {
-                TimeAnimation = 0;
-            }
-            else
-            {
-                TimeAnimation += elapsedTime.asMilliseconds();
-            }
-            if (playerState != FALLING)
-            {
+            if (lastDirection != LEFT) TimeAnimation = 0;
+            else TimeAnimation += elapsedTime.asMilliseconds();
 
+            if (playerState != FALLING)
                 changeSprite(updateAnimation(&TimeAnimation, 100, spritesPtns.at(movePatternLeft)));
-            }
-            else
-            {
-                changeSprite(spritesPtns.at(movePatternLeft)[0]);
-            }
+            else changeSprite(spritesPtns.at(movePatternLeft)[0]);
+
             //printf("%d |",elapsedTime.asMilliseconds());
             sprite.move(moveLeft * elapsedTime.asSeconds());
             if (map.collide(sprite, EntityType::PLATFORM, RIGHT)->collide)
                 sprite.move(moveRight * elapsedTime.asSeconds());
+
             lastDirection = LEFT;
             break;
         }

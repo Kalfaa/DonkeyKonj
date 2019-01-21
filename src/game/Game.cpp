@@ -1,4 +1,3 @@
-#include <entities/Barrel.h>
 #include "Game.h"
 
 using namespace std;

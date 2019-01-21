@@ -10,6 +10,7 @@
 #include "Player.h"
 #include "Mario.h"
 #include "BonusItem.h"
+#include "Barrel.h"
 
 #define LADDER_COUNT 4
 #define BLOCK_COUNT_X 20//8
