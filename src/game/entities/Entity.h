@@ -1,4 +1,7 @@
-#pragma once
+#ifndef DONKEYKONG_ENTITY_H
+#define DONKEYKONG_ENTITY_H
+
+#include "pch.h"
 
 class Map;
 
@@ -43,7 +46,7 @@ public:
     virtual ~Entity() = default;
 
 public:
-    virtual void update(sf::Time, Map);
+    virtual void update(sf::Time, Map) = 0;
 
     const sf::Sprite &getSprite() const;
 
@@ -61,3 +64,4 @@ public:
     int times = 0;
 };
 
+#endif // DONKEYKONG_ENTITY

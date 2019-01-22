@@ -3,6 +3,7 @@
 //
 
 #include "Barrel.h"
+#include "Map.h"
 
 Barrel::Barrel(const sf::Sprite &sprite, const sf::Vector2f &posPlayer, EntityType type,
                const SpritesPatterns &patterns)

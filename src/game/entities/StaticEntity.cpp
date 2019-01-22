@@ -3,7 +3,12 @@
 //
 
 #include "StaticEntity.h"
+#include "Map.h"
 
 StaticEntity::StaticEntity(const sf::Sprite &sprite, const sf::Vector2f &position, EntityType type)
         : Entity(sprite, position, type)
 {}
+
+void StaticEntity::update(sf::Time time1, Map map)
+{
+}

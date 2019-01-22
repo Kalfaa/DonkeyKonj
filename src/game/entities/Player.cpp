@@ -1,11 +1,9 @@
-#include <utility>
-
 //
 // Created by user on 25/12/2018.
 //
 
-#include <map/Map.h>
-#include <Game.h>
+#include "Map.h"
+#include "Game.h"
 #include "Player.h"
 #include "Ladder.h"
 
@@ -20,7 +18,7 @@ Player::Player(const sf::Sprite &sprite, const sf::Vector2f &posPlayer, EntityTy
 
 }
 
-void Player::update(sf::Time elapsedTime, Map &map)
+void Player::update(sf::Time elapsedTime, Map map)
 {
 
     sf::Vector2f grindLadder(0.f, -playerSpeed * 2); // en attendant de trouver une maniere plus propre

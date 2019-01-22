@@ -1,12 +1,9 @@
-#include <utility>
-
-#include <utility>
-#include <Game.h>
-
 //
-// Created by user on 25/12/2018.
+// Created by Damso on 25/12/2018.
 //
 
+#include "Map.h"
+#include "Entity.h"
 #include "Map.h"
 
 

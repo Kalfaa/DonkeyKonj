@@ -3,6 +3,7 @@
 //
 
 #include "Mario.h"
+#include "Map.h"
 
 //const float playerSpeed = 100.f;
 
@@ -13,3 +14,8 @@ Mario::Mario(const sf::Sprite &sprite, const sf::Vector2f &posPlayer, EntityType
 
 void Mario::render()
 {}
+
+void Mario::update(sf::Time time, Map map)
+{
+
+}

@@ -8,6 +8,9 @@
 #include "pch.h"
 #include "StaticEntity.h"
 
+//class Map;
+
+
 class BonusItem : public StaticEntity
 {
 public:
@@ -16,6 +19,8 @@ public:
 
 public:
     unsigned int catchBonus();
+
+    void update(sf::Time time1, Map map) override;
 
 public:
     unsigned int value;

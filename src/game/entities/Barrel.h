@@ -5,14 +5,10 @@
 #ifndef DONKEYKONG_BARREL_H
 #define DONKEYKONG_BARREL_H
 
-
-#include <SFML/System.hpp>
-#include <SFML/Graphics/Sprite.hpp>
-#include <map>
-#include <map/Map.h>
 #include "Entity.h"
 #include "pch.h"
 
+class Map;
 
 #define BARREL_SPEED 65
 
@@ -33,7 +29,7 @@ public:
 
     ~Barrel() override = default;
 
-    void update(sf::Time elapsedTime, Map map);
+    void update(sf::Time elapsedTime, Map map) override;
 
 
 };

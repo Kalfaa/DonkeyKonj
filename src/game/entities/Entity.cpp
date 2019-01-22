@@ -1,6 +1,10 @@
-#include <map/Map.h>
-#include "pch.h"
+//
+// Created by Damso on 25/12/2018.
+//
+
 #include "Entity.h"
+#include "Map.h"
+
 
 Entity::Entity(const sf::Sprite &sprite, EntityType type)
         : sprite(sprite), type(type)
@@ -24,9 +28,9 @@ const sf::Sprite &Entity::getSprite() const
     return sprite;
 }
 
-void Entity::update(sf::Time time, Map map)
-{
-}
+//void Entity::update(sf::Time time, Map map)
+//{
+//}
 
 Entity::Entity(EntityType)
 {

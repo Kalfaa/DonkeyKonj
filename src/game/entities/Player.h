@@ -7,7 +7,8 @@
 
 #include "pch.h"
 #include "Entity.h"
-#include "map/Map.h"
+
+
 
 #define MARIO_JUMP_MAX 3500
 #define MARIO_JUMP_SPEED 700
@@ -41,7 +42,7 @@ public:
     int MARIO_HEIGHT;
     int MARIO_WIDTH;
 public:
-    void update(sf::Time, Map &map);
+    void update(sf::Time, Map map) override;
 
     void move(Direction elapsedTime);
 
