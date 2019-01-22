@@ -83,7 +83,23 @@ void Game::update(sf::Time elapsedTime)
 {
     sf::Vector2f movement(0.f, 0.f);
     EntityManager::player->update(elapsedTime, map);
-    for(auto entity : EntityManager::entities)
+
+    const sf::Sprite player = EntityManager::player->getSprite();
+    std::shared_ptr<CollideRes> collideBonus[4] = {
+            map.collide(player, EntityType::BONUS_ITEM, LEFT),
+            map.collide(player, EntityType::BONUS_ITEM, LEFT),
+            map.collide(player, EntityType::BONUS_ITEM, UP),
+            map.collide(player, EntityType::BONUS_ITEM, DOWN)
+    };
+    for (const auto &ite : collideBonus)
+    {
+        if (ite->collide)
+        {
+            ite->entity.get()->update(elapsedTime, map);
+        }
+    }
+
+    for(const auto &entity : EntityManager::entities)
     {
         if (entity->type == BARREL)entity->update(elapsedTime, map);
     }

@@ -22,4 +22,5 @@ unsigned int BonusItem::catchBonus()
 void BonusItem::update(sf::Time time1, Map map)
 {
     StaticEntity::update(time1, map);
+    this->catchBonus();
 }

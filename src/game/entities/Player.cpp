@@ -51,18 +51,6 @@ void Player::update(sf::Time elapsedTime, Map map)
         }
     }
 
-    std::shared_ptr<CollideRes> collideBonus[4] = {map.collide(sprite, EntityType::BONUS_ITEM, LEFT),
-                                                   map.collide(sprite, EntityType::BONUS_ITEM, LEFT),
-                                                   map.collide(sprite, EntityType::BONUS_ITEM, UP),
-                                                   map.collide(sprite, EntityType::BONUS_ITEM, DOWN)};
-    for (const auto &ite : collideBonus)
-    {
-        if (ite->collide)
-        {
-            dynamic_cast<BonusItem*>(ite->entity.get())->catchBonus();
-        }
-    }
-
     switch (direction)
     {
         case UP:
