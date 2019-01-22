@@ -17,5 +17,5 @@ void Mario::render()
 
 void Mario::update(sf::Time time, Map map)
 {
-
+    Player::update(time, map);
 }

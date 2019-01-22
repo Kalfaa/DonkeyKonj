@@ -82,11 +82,10 @@ void Game::processEvents()
 void Game::update(sf::Time elapsedTime)
 {
     sf::Vector2f movement(0.f, 0.f);
-    //EntityManager::player->update(elapsedTime, map);
-    for (int k = 0; k < EntityManager::entities.size(); k++)
+    EntityManager::player->update(elapsedTime, map);
+    for(auto entity : EntityManager::entities)
     {
-        std::shared_ptr<Entity> entity = EntityManager::entities[k];
-        //if (entity->type == BARREL)entity->update(elapsedTime, map);
+        if (entity->type == BARREL)entity->update(elapsedTime, map);
     }
     if (countElement)
     {
@@ -100,7 +99,7 @@ void Game::update(sf::Time elapsedTime)
         EntityManager::player->jump();
         mJump = false;
     }
-    if (mIsMovingDown)EntityManager::player->move(DOWN);
+    if (mIsMovingDown) EntityManager::player->move(DOWN);
     if (mIsMovingLeft) EntityManager::player->move(LEFT);
     for (const std::shared_ptr<Entity> &entity : EntityManager::entities)
     {

@@ -8,8 +8,6 @@
 #include "pch.h"
 #include "Entity.h"
 
-
-
 #define MARIO_JUMP_MAX 3500
 #define MARIO_JUMP_SPEED 700
 
