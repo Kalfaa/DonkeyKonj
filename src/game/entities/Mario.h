@@ -8,6 +8,7 @@
 #include "pch.h"
 #include "Player.h"
 
+
 class Mario : public Player
 {
 public:
@@ -16,7 +17,7 @@ public:
     ~Mario() override = default;
 
 public:
-    //void update(sf::Time time) override;
+    void update(sf::Time time, Map map) override;
     //void move(Direction direction);
     void render();
 

@@ -1,15 +1,14 @@
-#include <utility>
-
 //
 // Created by user on 25/12/2018.
 //
 
-#include <map/Map.h>
-#include <Game.h>
+#include "Map.h"
+#include "Game.h"
 #include "Player.h"
 #include "Ladder.h"
 
-Player::Player(const sf::Sprite& sprite, const sf::Vector2f& posPlayer, EntityType type, float playerSpeed, const SpritesPatterns& playerSprites)
+Player::Player(const sf::Sprite &sprite, const sf::Vector2f &posPlayer, EntityType type, float playerSpeed,
+               const SpritesPatterns &playerSprites)
         : Entity(sprite, posPlayer, type),
           playerSpeed(playerSpeed), spritesPtns(playerSprites)
 {
@@ -19,48 +18,44 @@ Player::Player(const sf::Sprite& sprite, const sf::Vector2f& posPlayer, EntityTy
 
 }
 
-void Player::update(sf::Time elapsedTime, Map &map)
+void Player::update(sf::Time elapsedTime, Map map)
 {
-
-    sf::Vector2f grindLadder(0.f, -playerSpeed*2); // en attendant de trouver une maniere plus propre
+    sf::Vector2f grindLadder(0.f, -playerSpeed * 2); // en attendant de trouver une maniere plus propre
     sf::Vector2f moveJump(0.f, -MARIO_JUMP_SPEED);
     sf::Vector2f moveNotJump(0.f, +MARIO_JUMP_SPEED);
-    sf::Vector2f movement(0.f,0.f);
+    sf::Vector2f movement(0.f, 0.f);
     sf::Vector2f moveDown(0.f, playerSpeed);
     sf::Vector2f moveUp(0.f, -playerSpeed);
     sf::Vector2f moveRight(playerSpeed, 0.f);
     sf::Vector2f moveLeft(-playerSpeed, 0.f);
-    if ( playerState != JUMP && playerState != STARTJUMP && playerState != GRINDING  ){
+    if (playerState != JUMP && playerState != STARTJUMP && playerState != GRINDING)
+    {
         sprite.move(moveDown * elapsedTime.asSeconds());
-        if(!map.collide(sprite,EntityType::PLATFORM,DOWN )->collide){
-            playerState=FALLING;
-        }else{
-            sprite.move(moveUp * elapsedTime.asSeconds());
-            playerState=IDLE;
-        }
-    }else{
-        //sprite.move(0.f,-playerSpeed);
-        if(playerState==STARTJUMP)
+        if (!map.collide(sprite, EntityType::PLATFORM, DOWN)->collide)
         {
-            printf("jump");
+            playerState = FALLING;
+        }
+        else
+        {
+            sprite.move(moveUp * elapsedTime.asSeconds());
+            playerState = IDLE;
+        }
+    }
+    else
+    {
+        //sprite.move(0.f,-playerSpeed);
+        if (playerState == STARTJUMP)
+        {
             playerState = JUMP;
             jumpValue = MARIO_JUMP_MAX;
         }
     }
 
-    std::shared_ptr<CollideRes> collideL = map.collide(sprite, EntityType::BONUS_ITEM, LEFT);
-    std::shared_ptr<CollideRes> collideR = map.collide(sprite, EntityType::BONUS_ITEM, RIGHT);
-    std::shared_ptr<CollideRes> collideU = map.collide(sprite, EntityType::BONUS_ITEM, UP);
-    std::shared_ptr<CollideRes> collideD = map.collide(sprite, EntityType::BONUS_ITEM, DOWN);
-    if(collideL->collide || collideR->collide || collideU->collide || collideD->collide)
+    switch (direction)
     {
-        std::cout << "Collide with bonus " << std::endl;
-        map.removeEntityToMatrix(collideL->entity);
-    }
-
-    switch (direction) {
         case UP:
-            if (map.collide(sprite, EntityType::LADDER, DOWN)->collide) {
+            if (map.collide(sprite, EntityType::LADDER, DOWN)->collide)
+            {
                 sprite.move(grindLadder * elapsedTime.asSeconds());
                 playerState = GRINDING;
             }
@@ -69,70 +64,88 @@ void Player::update(sf::Time elapsedTime, Map &map)
             /*if(!collide(map,EntityType::PLATFORM,DOWN))
                 movement.y += playerSpeed;*/
             break;
-        case LEFT: {
-            if (lastDirection != LEFT) {
-                TimeAnimation = 0;
-            } else {
-                TimeAnimation += elapsedTime.asMilliseconds();
-            }
-            if (playerState != FALLING) {
+        case LEFT:
+        {
+            if (lastDirection != LEFT) TimeAnimation = 0;
+            else TimeAnimation += elapsedTime.asMilliseconds();
 
+            if (playerState != FALLING)
                 changeSprite(updateAnimation(&TimeAnimation, 100, spritesPtns.at(movePatternLeft)));
-            } else {
-                changeSprite(spritesPtns.at(movePatternLeft)[0]);
-            }
+            else changeSprite(spritesPtns.at(movePatternLeft)[0]);
+
             //printf("%d |",elapsedTime.asMilliseconds());
             sprite.move(moveLeft * elapsedTime.asSeconds());
-            if (map.collide(sprite, EntityType::PLATFORM, RIGHT)->collide)sprite.move(moveRight * elapsedTime.asSeconds());
+            if (map.collide(sprite, EntityType::PLATFORM, RIGHT)->collide)
+                sprite.move(moveRight * elapsedTime.asSeconds());
+
             lastDirection = LEFT;
             break;
         }
         case RIGHT:
-            if (lastDirection != RIGHT) {
+            if (lastDirection != RIGHT)
+            {
                 TimeAnimation = 0;
-            } else {
+            }
+            else
+            {
                 TimeAnimation += elapsedTime.asMilliseconds();
             }
             //printf("%d |",elapsedTime.asMilliseconds());
-            if (playerState != FALLING) {
+            if (playerState != FALLING)
+            {
 
                 changeSprite(updateAnimation(&TimeAnimation, 100, spritesPtns.at(movePatternRight)));
-            } else {
+            }
+            else
+            {
                 changeSprite(spritesPtns.at(movePatternRight)[0]);
             }
             sprite.move(moveRight * elapsedTime.asSeconds());
-            if (map.collide(sprite, EntityType::PLATFORM, RIGHT)->collide)sprite.move(moveLeft * elapsedTime.asSeconds());
+            if (map.collide(sprite, EntityType::PLATFORM, RIGHT)->collide)
+                sprite.move(moveLeft * elapsedTime.asSeconds());
             lastDirection = RIGHT;
             break;
         default:
-            if (playerState != JUMP && playerState != STARTJUMP && playerState != FALLING){
-
-                if (lastDirection == LEFT) {
-
+            if (playerState != JUMP && playerState != STARTJUMP && playerState != FALLING)
+            {
+                if (lastDirection == LEFT)
+                {
+                    changeSprite(spritesPtns.at(movePatternLeft)[0]);
                 }
-                lastDirection = NONE;
+                else
+                {
+                    changeSprite(spritesPtns.at(movePatternRight)[0]);
+                }
+                //lastDirection = NONE;
             }
     }
-    switch(playerState){
-        case  GRINDING:
-            if(!map.collide(sprite, EntityType::LADDER, DOWN)->collide){
+    switch (playerState)
+    {
+        case GRINDING:
+            if (!map.collide(sprite, EntityType::LADDER, DOWN)->collide)
+            {
                 playerState = IDLE;
             }
         case JUMP:
             sprite.move(moveJump * elapsedTime.asSeconds());
-            if(!map.collide(sprite,EntityType::PLATFORM,RIGHT)->collide)
+            if (!map.collide(sprite, EntityType::PLATFORM, RIGHT)->collide)
             {
-                changeSprite(spritesPtns.at(jumpPatternLeft)[0]);
+                if (lastDirection == LEFT) changeSprite(spritesPtns.at(jumpPatternLeft)[0]);
+                else changeSprite(spritesPtns.at(jumpPatternRight)[0]);
                 jumpValue -= MARIO_JUMP_SPEED;
-            }else{
-                sprite.move(moveNotJump * elapsedTime.asSeconds());
-                jumpValue =0;
             }
-            if(jumpValue<=0){
-                playerState=IDLE;
+            else
+            {
+                sprite.move(moveNotJump * elapsedTime.asSeconds());
+                jumpValue = 0;
+            }
+            if (jumpValue <= 0)
+            {
+                playerState = IDLE;
             }
         case FALLING:
-            changeSprite(spritesPtns.at(jumpPatternLeft)[0]);
+            if (lastDirection == LEFT) changeSprite(spritesPtns.at(jumpPatternLeft)[0]);
+            else changeSprite(spritesPtns.at(jumpPatternRight)[0]);
         case IDLE:
             //changeSprite(spritesPtns.at(movePatternLeft)[0]);
         default:;
@@ -141,7 +154,8 @@ void Player::update(sf::Time elapsedTime, Map &map)
     direction = NONE;
 }
 
-void Player::changeSprite(sf::Sprite newSprite) {
+void Player::changeSprite(sf::Sprite newSprite)
+{
     sf::Vector2f tempos = sprite.getPosition();
     sprite = std::move(newSprite);
     sprite.setPosition(tempos);
@@ -155,12 +169,13 @@ void Player::move(Direction direction)
 
 void Player::jump()
 {
-    if(FALLING != playerState)playerState= STARTJUMP;
+    if (FALLING != playerState)playerState = STARTJUMP;
 }
 
-sf::Sprite Player::updateAnimation(int *now, int frequency, std::vector<sf::Sprite> animation) {
-    if(*now/frequency >= animation.size()) *now=0;
-    return animation[*now/frequency] ;
+sf::Sprite Player::updateAnimation(int *now, int frequency, std::vector<sf::Sprite> animation)
+{
+    if (*now / frequency >= animation.size()) *now = 0;
+    return animation[*now / frequency];
 }
 
 

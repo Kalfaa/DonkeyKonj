@@ -3,11 +3,14 @@
 //
 
 #include "Barrel.h"
+#include "Map.h"
 
-Barrel::Barrel(const sf::Sprite& sprite, const sf::Vector2f& posPlayer, EntityType type,
-               const SpritesPatterns& patterns) : Entity(sprite, posPlayer, type) {
-        barrelState = NONE;
-        countBeforeGrind =0;
+Barrel::Barrel(const sf::Sprite &sprite, const sf::Vector2f &posPlayer, EntityType type,
+               const SpritesPatterns &patterns)
+        : Entity(sprite, posPlayer, type)
+{
+    barrelState = NONE;
+    countBeforeGrind =0;
 }
 
 void Barrel::update(sf::Time elapsedTime,Map map) {

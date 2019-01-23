@@ -1,0 +1,32 @@
+@startuml
+
+'enum EntityType {
+'    PLAYER,
+'    PLATFORM,
+'    LADDER,
+'    BONUS_ITEM,
+'    BARREL,
+'    UNKNOWN
+'}
+
+abstract class Entity
+'Entity -- EntityType
+
+class Player
+Player <|-- Entity
+
+class EntityManager
+EntityManager o-- Entity
+EntityManager o-- Player
+
+class Map
+Map *-- Entity
+Map <-- EntityManager
+Entity <-- Map
+
+class Game
+Game *-- Map
+Game <-- Player
+Game <-- EntityManager
+
+@enduml

@@ -1,10 +1,9 @@
-#include <utility>
-#include <Game.h>
-
 //
-// Created by user on 25/12/2018.
+// Created by Damso on 25/12/2018.
 //
 
+#include "Map.h"
+#include "Entity.h"
 #include "Map.h"
 
 
@@ -109,6 +108,7 @@ void Map::addEntityToMatrix(std::shared_ptr<Entity> entity)
 }
 
 using namespace std;
+
 void Map::removeEntityToMatrix(const std::shared_ptr<Entity> &entity)
 {
     sf::Sprite sprite = entity->sprite;
@@ -116,6 +116,7 @@ void Map::removeEntityToMatrix(const std::shared_ptr<Entity> &entity)
     int y = static_cast<int>(sprite.getPosition().y);
     int s_width = sprite.getTextureRect().width;
     int s_height = sprite.getTextureRect().height;
+
     //@todo REFACTOR CETTE ALGO PETER QUI CREER DES DUPPLICAT DOBJET DANS LA MATRICE
     for (int i = 0; i <= (s_width / CASE_AREA) + 1; i++)
     {
@@ -123,11 +124,11 @@ void Map::removeEntityToMatrix(const std::shared_ptr<Entity> &entity)
         auto mposy = static_cast<unsigned int>(y / CASE_AREA);
         std::vector<std::shared_ptr<Entity>> vec = entity3DArray.at(mposy).at(mposx);
 
-        for(size_t cnt = 0; cnt < vec.size(); cnt++)
+        for (size_t cnt = 0; cnt < vec.size(); cnt++)
         {
             auto pos1 = find(vec.begin(), vec.end(), entity);
 
-            if( pos1 != vec.end() )
+            if (pos1 != vec.end())
             {
                 vec.erase(pos1);
                 entity3DArray.at(mposy).at(mposx) = vec;
@@ -139,11 +140,11 @@ void Map::removeEntityToMatrix(const std::shared_ptr<Entity> &entity)
         {
             mposy = static_cast<unsigned int>((y + j * CASE_AREA) / CASE_AREA);
             vec = entity3DArray.at(mposy).at(mposx);
-            for(size_t cnt = 0; cnt < vec.size(); cnt++)
+            for (size_t cnt = 0; cnt < vec.size(); cnt++)
             {
                 auto pos1 = find(vec.begin(), vec.end(), entity);
 
-                if( pos1 != vec.end() )
+                if (pos1 != vec.end())
                 {
                     vec.erase(pos1);
                     entity3DArray.at(mposy).at(mposx) = vec;
@@ -167,7 +168,8 @@ void Map::printElement()
                 if (entity->type == LADDER)
                 {
                     type = "ladder";
-                } else if (entity->type == PLATFORM)
+                }
+                else if (entity->type == PLATFORM)
                 {
                     type = "platform";
                 }
@@ -193,24 +195,28 @@ void Map::countElement()
                 if (entity->type == LADDER)
                 {
                     countLadder++;
-                } else if (entity->type == PLATFORM)
+                }
+                else if (entity->type == PLATFORM)
                 {
                     countPlatform++;
-                }else if(entity->type == BONUS_ITEM){
+                }
+                else if (entity->type == BONUS_ITEM)
+                {
                     countBonus++;
                 }
             }
         }
     }
-    printf("Nombre d'echelle : %d \n Nombre de Platforme %d \n Nombre de Bonus ITEM %d", countLadder, countPlatform, countBonus);
+    printf("Nombre d'echelle : %d \n Nombre de Platforme %d \n Nombre de Bonus ITEM %d", countLadder, countPlatform,
+           countBonus);
 }
 
 
 std::shared_ptr<CollideRes> Map::collide(sf::Sprite sprite, EntityType entityType, Direction direction)
 {
     std::vector<std::shared_ptr<Entity>> list_entity;
-    auto left = static_cast<unsigned int>(sprite.getPosition().x / CASE_AREA) ;
-    auto right =  static_cast<unsigned int>((sprite.getPosition().x + sprite.getGlobalBounds().width ) / CASE_AREA );
+    auto left = static_cast<unsigned int>(sprite.getPosition().x / CASE_AREA);
+    auto right = static_cast<unsigned int>((sprite.getPosition().x + sprite.getGlobalBounds().width) / CASE_AREA);
     auto bottom = static_cast<unsigned int>((sprite.getPosition().y + sprite.getGlobalBounds().height) / CASE_AREA);
     auto top = static_cast<unsigned int>(sprite.getPosition().y / CASE_AREA);
     unsigned y1;
@@ -221,33 +227,33 @@ std::shared_ptr<CollideRes> Map::collide(sf::Sprite sprite, EntityType entityTyp
     {
         case UP:
             y1 = top;
-            x1 =left ;
-            y2 =top ;
-            x2 = right ;
+            x1 = left;
+            y2 = top;
+            x2 = right;
             break;
         case DOWN:
             y1 = bottom;
-            x1 = left ;
-            y2 = bottom ;
-            x2 = right ;
+            x1 = left;
+            y2 = bottom;
+            x2 = right;
             break;
         case LEFT:
             y1 = top;
-            x1 = left ;
-            y2 = bottom ;
-            x2 = left ;
+            x1 = left;
+            y2 = bottom;
+            x2 = left;
             break;
         case RIGHT:
-            y1 =top ;
-            x1 = right ;
-            y2 = bottom ;
-            x2 = right ;
+            y1 = top;
+            x1 = right;
+            y2 = bottom;
+            x2 = right;
             break;
-        default: ;
+        default:;
     }
     for (const auto &i : entity3DArray.at(y1).at(x1))
     {
-        if(i->type == entityType)list_entity.push_back(i) ;
+        if (i->type == entityType)list_entity.push_back(i);
     }
 
     for (const auto &i : entity3DArray.at(y2).at(x2))
@@ -255,12 +261,14 @@ std::shared_ptr<CollideRes> Map::collide(sf::Sprite sprite, EntityType entityTyp
         if (i->type == entityType)list_entity.push_back(i);
     }
 
-    for (const auto &i : entity3DArray.at(y2-1).at(x2))
+    for (const auto &i : entity3DArray.at(y2 - 1).at(x2))
     {
         if (i->type == entityType)list_entity.push_back(i);
     }
-    for(auto &entity : list_entity){
-        if(entity->sprite.getGlobalBounds().intersects(sprite.getGlobalBounds())){
+    for (auto &entity : list_entity)
+    {
+        if (entity->sprite.getGlobalBounds().intersects(sprite.getGlobalBounds()))
+        {
             return std::make_shared<CollideRes>(true, entity);
         }
     }
@@ -330,6 +338,7 @@ std::shared_ptr<CollideRes> Map::collide(sf::Sprite sprite, EntityType entityTyp
 
 
 
-CollideRes::CollideRes(bool colide, std::shared_ptr<Entity> entity)
-        : collide(colide), entity(entity)
+
+CollideRes::CollideRes(bool collide, std::shared_ptr<Entity> entity)
+        : collide(collide), entity(std::move(entity))
 {}

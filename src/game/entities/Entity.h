@@ -1,6 +1,10 @@
-#pragma once
+#ifndef DONKEYKONG_ENTITY_H
+#define DONKEYKONG_ENTITY_H
+
+#include "pch.h"
 
 class Map;
+
 enum Direction
 {
     UP,
@@ -33,6 +37,7 @@ class Entity
 {
 public:
     Entity(EntityType = EntityType::UNKNOWN);
+
     Entity(const sf::Sprite &, EntityType);
 
     Entity(const sf::Sprite &, const sf::Vector2f &pos, EntityType);
@@ -41,7 +46,8 @@ public:
     virtual ~Entity() = default;
 
 public:
-    virtual void update(sf::Time,Map);
+    virtual void update(sf::Time, Map) = 0;
+
     const sf::Sprite &getSprite() const;
 
 public:
@@ -58,3 +64,4 @@ public:
     int times = 0;
 };
 
+#endif // DONKEYKONG_ENTITY

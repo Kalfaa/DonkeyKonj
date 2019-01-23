@@ -5,18 +5,16 @@
 #ifndef DONKEYKONG_BARREL_H
 #define DONKEYKONG_BARREL_H
 
-
-#include <SFML/System.hpp>
-#include <SFML/Graphics/Sprite.hpp>
-#include <map>
-#include <map/Map.h>
 #include "Entity.h"
 #include "pch.h"
-
+#include <map>
+#include <map/Map.h>
+class Map;
 
 #define BARREL_SPEED 65
 
-class Barrel: public Entity {
+class Barrel : public Entity
+{
 public:
     enum PatternType
     {

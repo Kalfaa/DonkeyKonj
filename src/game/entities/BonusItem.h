@@ -8,18 +8,26 @@
 #include "pch.h"
 #include "StaticEntity.h"
 
+//class Map;
+
+
 class BonusItem : public StaticEntity
 {
 public:
     BonusItem(const sf::Sprite &sprite, const sf::Vector2f &position, EntityType type, unsigned int valueBonus,
               const sf::Sprite &valueSprite);
 
+public:
+    unsigned int catchBonus();
+
+    void update(sf::Time time1, Map map) override;
 
 public:
     unsigned int value;
 
 private:
     sf::Sprite valueSprite;
+    bool isCatch = false;
 };
 
 

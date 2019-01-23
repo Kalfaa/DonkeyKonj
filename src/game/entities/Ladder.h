@@ -8,6 +8,7 @@
 #include "pch.h"
 #include "StaticEntity.h"
 
+//class Map;
 
 class Ladder : public StaticEntity
 {

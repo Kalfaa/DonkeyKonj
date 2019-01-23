@@ -8,12 +8,16 @@
 #include "pch.h"
 #include "StaticEntity.h"
 
+//class Map;
+
+
 class Platform : public StaticEntity
 {
 public:
     Platform();
 
     Platform(const sf::Sprite &, const sf::Vector2f &position, EntityType type);
+
 };
 
 

@@ -1,4 +1,3 @@
-#include <entities/Barrel.h>
 #include "Game.h"
 
 using namespace std;
@@ -9,7 +8,7 @@ const int CASE_PIXEL_VALUE = 32;
 Game::Game()
         : mWindow(sf::VideoMode(840, 600), "Donkey Kong 1981", sf::Style::Close), mTexture(), mPlayer(), mFont(),
           mStatisticsText(), mStatisticsUpdateTime(), mStatisticsNumFrames(0), mIsMovingUp(false), mIsMovingDown(false),
-          mIsMovingRight(false), mIsMovingLeft(false), debug(false), mJump(false),countElement(false)
+          mIsMovingRight(false), mIsMovingLeft(false), debug(false), mJump(false), countElement(false)
 {
     mWindow.setFramerateLimit(160);
 
@@ -30,7 +29,8 @@ Game::Game()
     if (icon.loadFromFile(EntityManager::TEXTURES_PATH + "/icon.png"))
     {
         mWindow.setIcon(281, 210, icon.getPixelsPtr());
-    } else std::cerr << "Error when load " + EntityManager::TEXTURES_PATH + "/icon.png" << std::endl;
+    }
+    else std::cerr << "Error when load " + EntityManager::TEXTURES_PATH + "/icon.png" << std::endl;
     //map.printElement();
 }
 
@@ -83,13 +83,30 @@ void Game::update(sf::Time elapsedTime)
 {
     sf::Vector2f movement(0.f, 0.f);
     EntityManager::player->update(elapsedTime, map);
-    for(int k = 0; k<EntityManager::entities.size();k++){
-       std::shared_ptr<Entity> entity = EntityManager::entities[k] ;
-       if(entity->type ==BARREL)entity->update(elapsedTime,map);
+
+    const sf::Sprite player = EntityManager::player->getSprite();
+    std::shared_ptr<CollideRes> collideBonus[4] = {
+            map.collide(player, EntityType::BONUS_ITEM, LEFT),
+            map.collide(player, EntityType::BONUS_ITEM, LEFT),
+            map.collide(player, EntityType::BONUS_ITEM, UP),
+            map.collide(player, EntityType::BONUS_ITEM, DOWN)
+    };
+    for (const auto &ite : collideBonus)
+    {
+        if (ite->collide)
+        {
+            ite->entity.get()->update(elapsedTime, map);
+        }
     }
-    if(countElement){
+
+    for(const auto &entity : EntityManager::entities)
+    {
+        if (entity->type == BARREL)entity->update(elapsedTime, map);
+    }
+    if (countElement)
+    {
         map.countElement();
-        countElement = false ;
+        countElement = false;
     }
     if (mIsMovingUp)EntityManager::player->move(UP);
     if (mIsMovingRight)EntityManager::player->move(RIGHT);
@@ -98,7 +115,7 @@ void Game::update(sf::Time elapsedTime)
         EntityManager::player->jump();
         mJump = false;
     }
-    if (mIsMovingDown)EntityManager::player->move(DOWN);
+    if (mIsMovingDown) EntityManager::player->move(DOWN);
     if (mIsMovingLeft) EntityManager::player->move(LEFT);
     for (const std::shared_ptr<Entity> &entity : EntityManager::entities)
     {
@@ -156,7 +173,6 @@ void Game::render()
     }
 
     mWindow.display();
-
 }
 
 void Game::updateStatistics(sf::Time elapsedTime)
@@ -207,7 +223,7 @@ void Game::handlePlayerInput(sf::Keyboard::Key key, bool isPressed)
             if (isPressed && EntityManager::player->playerState != JUMP)mJump = true;
             break;
         case sf::Keyboard::M:
-            countElement = true ;
+            countElement = true;
         default:
             EntityManager::player->move(NONE);
     }
@@ -315,7 +331,9 @@ Map Game::basicMap()
     //string bonusTab[3] = {"UmbrellaBonus", "HandbagBonus", "HatBonus"};
 
     int bonusX[3] = {50, 140, 180};
-    int bonusY[3] = {static_cast<int>(250 - sps.getSpriteSize("UmbrellaBonus")[0]), 0, 0};
+    int bonusY[3] = {static_cast<int>(250 - sps.getSpriteSize("UmbrellaBonus")[0]),
+                     static_cast<int>(350 - sps.getSpriteSize("HandbagBonus")[0]),
+                     static_cast<int>(450 - sps.getSpriteSize("HatBonus")[0])};
     addBonus(newMap, bonusX, bonusY);
 
     sf::Vector2f posmario(5 * 32, 3 * 32);
@@ -332,24 +350,25 @@ Map Game::basicMap()
                     {Player::fightPatternRight,     sps.getOppositePattern("MarioMoveLeftArm")},
                     {Player::moveFightPatternLeft,  sps.getPattern("MarioLeftArm")},
                     {Player::moveFightPatternRight, sps.getOppositePattern("MarioLeftArm")},
-                    {Player::movePatternLeft, sps.getPattern("MarioLeft")},
-                    {Player::movePatternRight, sps.getOppositePattern("MarioLeft")},
-                    {Player::jumpPatternLeft, std::vector<sf::Sprite>(1, sps.getSprite("MarioLeftJump"))},
-                    {Player::jumpPatternRight, std::vector<sf::Sprite>(1, sps.getOppositeSprite("MarioLeftJump"))}
+                    {Player::movePatternLeft,       sps.getPattern("MarioLeft")},
+                    {Player::movePatternRight,      sps.getOppositePattern("MarioLeft")},
+                    {Player::jumpPatternLeft,       std::vector<sf::Sprite>(1, sps.getSprite("MarioLeftJump"))},
+                    {Player::jumpPatternRight,      std::vector<sf::Sprite>(1, sps.getOppositeSprite("MarioLeftJump"))}
             };
 
 
-    Barrel::SpritesPatterns spritesPatternsBarrel {
+    Barrel::SpritesPatterns spritesPatternsBarrel{
             {
-                    {Barrel::barrel, std::vector<sf::Sprite>(1,sps.getSprite("Barrel"))},
+                    {Barrel::barrel, std::vector<sf::Sprite>(1, sps.getSprite("Barrel"))},
                     {Barrel::barrelHorizontal, sps.getPattern("BarrelHorizontal")},
                     {Barrel::barrelVertical, sps.getPattern("BarrelVertical")},
             }
     };
-    sf::Vector2f posbarrel(32*15,32);
+    sf::Vector2f posbarrel(32 * 15, 32);
 
-    std::shared_ptr<Entity> barrel = std::make_shared<Barrel>(spritesPatternsBarrel.at(Barrel::barrelHorizontal)[0], posbarrel,
-                                                    EntityType::BARREL, spritesPatternsBarrel);
+    std::shared_ptr<Entity> barrel = std::make_shared<Barrel>(spritesPatternsBarrel.at(Barrel::barrelHorizontal)[0],
+                                                              posbarrel,
+                                                              EntityType::BARREL, spritesPatternsBarrel);
     EntityManager::entities.push_back(barrel);
     map.addEntityToMatrix(barrel);
     EntityManager::player = std::make_shared<Mario>(spritesPatterns.at(Player::movePatternLeft)[0], posmario,
@@ -394,7 +413,7 @@ void Game::addBonus(Map &map, int posx[3], int posy[3])
     string bonusTab[3] = {"UmbrellaBonus", "HandbagBonus", "HatBonus"};
     string bonusValue[3] = {"100Bonus", "300Bonus", "500Bonus"};
 
-    for (int cnt = 0; cnt < 1; cnt++)
+    for (int cnt = 0; cnt < 3; cnt++)
     {
         sf::Vector2f pos(posx[cnt], posy[cnt]);
         std::shared_ptr<Entity> bonus = std::make_shared<BonusItem>(sps.getSprite(bonusTab[cnt]),

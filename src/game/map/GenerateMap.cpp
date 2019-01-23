@@ -7,7 +7,8 @@
 using namespace std;
 
 GenerateMap::GenerateMap(const std::map<char, StaticEntity> &staticObjects)
-        : staticObjects(staticObjects) {}
+        : staticObjects(staticObjects)
+{}
 
 shared_ptr<Map> GenerateMap::createMap(std::string mapFile)
 {
