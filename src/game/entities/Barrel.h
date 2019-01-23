@@ -7,8 +7,8 @@
 
 #include "Entity.h"
 #include "pch.h"
-#include <map>
-#include <map/Map.h>
+#include "Map.h"
+
 class Map;
 
 #define BARREL_SPEED 65

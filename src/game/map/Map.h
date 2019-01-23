@@ -21,8 +21,7 @@ class Entity;
 
 struct CollideRes
 {
-    inline CollideRes(bool collide, std::shared_ptr<Entity> entity);
-
+    CollideRes(bool collide, std::shared_ptr<Entity> entity);
     bool collide;
     std::shared_ptr<Entity> entity;
 };
