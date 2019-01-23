@@ -38,12 +38,16 @@ void Barrel::update(sf::Time elapsedTime,Map map) {
             sprite.move(moveRight * elapsedTime.asSeconds());
         }
     }else{
+
         if(barrelState==RIGHT){
+            printf("ECHELLE DROITE");
             barrelState = SOONRIGHT;
+
              countBeforeGrind =0;
         }
         else if(barrelState==LEFT){
             barrelState = SOONLEFT;
+            printf("ECHELLE GAUCHE");
             countBeforeGrind =0;
         }
         if(barrelState==SOONRIGHT) {
