@@ -29,6 +29,7 @@ enum EntityType
     PLATFORM,
     LADDER,
     BONUS_ITEM,
+    SCORE_TAB,
     UNKNOWN,
     BARREL
 };
@@ -46,7 +47,7 @@ public:
     virtual ~Entity() = default;
 
 public:
-    virtual void update(sf::Time, Map) = 0;
+    virtual void update(sf::Time, Map);
 
     const sf::Sprite &getSprite() const;
 

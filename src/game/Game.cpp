@@ -25,6 +25,20 @@ Game::Game()
     mStatisticsText.setPosition(5.f, 5.f);
     mStatisticsText.setCharacterSize(10);
 
+    /* MAP GENERATOR
+
+    std::map<string, Entity> mapElement {
+            {"PLATFORM", Platform(sps.getSprite("PlatformRed"), sf::Vector2f(0, 0), EntityType::PLATFORM)},
+            {"LADDER", Platform(sps.getSprite("Ladder"), sf::Vector2f(0, 0), EntityType::LADDER)}
+    };
+
+    GenerateMap gMap(mapElement);
+    shared_ptr<Map> map = gMap.createMap(400, 400, "map_donkeykong2");
+
+    sf::sleep(sf::seconds(1000));
+
+    */// MAP ROTARENEG
+
     sf::Image icon;
     if (icon.loadFromFile(EntityManager::TEXTURES_PATH + "/icon.png"))
     {
@@ -321,11 +335,11 @@ Map Game::createMap(std::ifstream mapFile)
 
 Map Game::basicMap()
 {
-
     Map newMap = Map(100, 100);
-    addBlockLine(newMap, 20, 50, 250);
-    addBlockLine(newMap, 20, 50, 350);
-    addBlockLine(newMap, 20, 50, 450);
+
+    addBlockLine(newMap, 30, 50, 250);
+    addBlockLine(newMap, 30, 50, 350);
+    addBlockLine(newMap, 30, 50, 450);
     addLadder(newMap, 4, 50, 410);
 
     //string bonusTab[3] = {"UmbrellaBonus", "HandbagBonus", "HatBonus"};
@@ -335,6 +349,8 @@ Map Game::basicMap()
                      static_cast<int>(350 - sps.getSpriteSize("HandbagBonus")[0]),
                      static_cast<int>(450 - sps.getSpriteSize("HatBonus")[0])};
     addBonus(newMap, bonusX, bonusY);
+
+    addScoreTab(newMap, static_cast<int>(mWindow.getSize().x - sps.getSpriteSize("BonusPanel0")[1]), 0);
 
     sf::Vector2f posmario(5 * 32, 3 * 32);
     newMap.startpoint.x = posmario.x;
@@ -427,3 +443,12 @@ void Game::addBonus(Map &map, int posx[3], int posy[3])
     }
 }
 
+void Game::addScoreTab(Map &map, int posx, int posy)
+{
+    std::shared_ptr<Entity> scoreTab = std::make_shared<ScoreTab>(sps.getSprite("BonusPanel0"),
+             sf::Vector2f(posx, posy),
+             EntityType::SCORE_TAB);
+
+    EntityManager::entities.push_back(scoreTab);
+    map.addEntityToMatrix(scoreTab);
+}

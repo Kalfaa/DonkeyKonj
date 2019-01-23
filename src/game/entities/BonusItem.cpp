@@ -14,6 +14,7 @@ BonusItem::BonusItem(const sf::Sprite &sprite, const sf::Vector2f &position, Ent
 
 unsigned int BonusItem::catchBonus()
 {
+    isCatch = true;
     valueSprite.setPosition(sprite.getPosition());
     sprite = valueSprite;
     return value;
@@ -22,5 +23,6 @@ unsigned int BonusItem::catchBonus()
 void BonusItem::update(sf::Time time1, Map map)
 {
     StaticEntity::update(time1, map);
-    this->catchBonus();
+    if(!isCatch) this->catchBonus();
+    //else map.removeEntityToMatrix(this);
 }

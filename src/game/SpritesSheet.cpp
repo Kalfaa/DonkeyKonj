@@ -109,13 +109,12 @@ std::map<std::string, std::array<int, 4>> SpritesSheet::loadSpriteSetting(std::s
 
         array<int, 4> tab{};
         for_each(tab.begin(), tab.end(), [&flux](int &n)
-            {
+        {
             flux >> n;
-            });
+        });
 
         mapSettings.insert(pair<string, array<int, 4>>(spriteName, tab));
     }
-
     return mapSettings;
 }
 

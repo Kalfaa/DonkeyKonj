@@ -24,6 +24,8 @@ set(CMAKE_MODULE_PATH "${CMAKE_CURRENT_LIST_DIR}/library/cmake_modules")
 
 project(${PROJECT_NAME} CXX)
 
+set(CMAKE_CXX_STANDARD 11)
+
 # Definition of Macros
 #add_definitions(
 #        -D_DEBUG
@@ -56,7 +58,7 @@ include(${CMAKE_CURRENT_SOURCE_DIR}/src/CMakeLists.txt)
 
 # Add executable to build.
 add_executable(${PROJECT_NAME}
-        ${SOURCES} src/game/entities/Barrel.cpp src/game/entities/Barrel.h)
+        ${SOURCES})
 
 # Include directory 
 target_include_directories(${PROJECT_NAME} PRIVATE ${INCLUDE_DIR})

@@ -12,8 +12,8 @@ Player::Player(const sf::Sprite &sprite, const sf::Vector2f &posPlayer, EntityTy
         : Entity(sprite, posPlayer, type),
           playerSpeed(playerSpeed), spritesPtns(playerSprites)
 {
-    MARIO_WIDTH = sprite.getGlobalBounds().width;
-    MARIO_HEIGHT = sprite.getGlobalBounds().height;
+    MARIO_WIDTH = static_cast<int>(sprite.getGlobalBounds().width);
+    MARIO_HEIGHT = static_cast<int>(sprite.getGlobalBounds().height);
     TimeAnimation = 0;
 
 }

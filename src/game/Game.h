@@ -11,9 +11,11 @@
 #include "Player.h"
 #include "Mario.h"
 #include "BonusItem.h"
+#include "ScoreTab.h"
 #include "Barrel.h"
-#include "Map.h"
 
+#include "Map.h"
+#include "GenerateMap.h"
 
 #define MARIO_SPEED 100.f
 
@@ -49,6 +51,7 @@ private:
     void addLadder(Map &map, int height, int posx, int posy);
 
     void addBonus(Map &map, int posx[3], int posy[3]);
+    void addScoreTab(Map &map, int posx, int posy);
 
 private:
 

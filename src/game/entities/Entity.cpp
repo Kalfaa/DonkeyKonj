@@ -28,10 +28,11 @@ const sf::Sprite &Entity::getSprite() const
     return sprite;
 }
 
-//void Entity::update(sf::Time time, Map map)
-//{
-//}
-
 Entity::Entity(EntityType)
 {
+}
+
+void Entity::update(sf::Time, Map)
+{
+
 }

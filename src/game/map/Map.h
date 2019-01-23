@@ -56,6 +56,7 @@ public:
     void addEntityToMatrix(std::shared_ptr<Entity>);
 
     void removeEntityToMatrix(const std::shared_ptr<Entity> &);
+    void removeEntityToMatrix(Entity*);
 
     void print(const sf::RenderWindow &);
 

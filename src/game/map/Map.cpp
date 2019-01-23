@@ -155,6 +155,11 @@ void Map::removeEntityToMatrix(const std::shared_ptr<Entity> &entity)
     }
 }
 
+void Map::removeEntityToMatrix(Entity * entity)
+{
+    removeEntityToMatrix(std::shared_ptr<Entity>(entity));
+}
+
 void Map::printElement()
 {
     for (int i = 0; i < entity3DArray.size() - 1; i++)
@@ -178,6 +183,7 @@ void Map::printElement()
         }
     }
 }
+
 
 void Map::countElement()
 {
@@ -210,7 +216,6 @@ void Map::countElement()
     printf("Nombre d'echelle : %d \n Nombre de Platforme %d \n Nombre de Bonus ITEM %d", countLadder, countPlatform,
            countBonus);
 }
-
 
 std::shared_ptr<CollideRes> Map::collide(sf::Sprite sprite, EntityType entityType, Direction direction)
 {
