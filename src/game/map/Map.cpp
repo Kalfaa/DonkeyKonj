@@ -280,6 +280,70 @@ std::shared_ptr<CollideRes> Map::collide(sf::Sprite sprite, EntityType entityTyp
     return std::make_shared<CollideRes>(false, shared_ptr<Entity>());
 }
 
+std::shared_ptr<CollideRes> Map::collide(sf::Sprite sprite, EntityType entityType, Direction direction,std::shared_ptr<Entity> ent)
+{
+    std::vector<std::shared_ptr<Entity>> list_entity;
+    auto left = static_cast<unsigned int>(sprite.getPosition().x / CASE_AREA) ;
+    auto right =  static_cast<unsigned int>((sprite.getPosition().x + sprite.getGlobalBounds().width ) / CASE_AREA );
+    auto bottom = static_cast<unsigned int>((sprite.getPosition().y + sprite.getGlobalBounds().height) / CASE_AREA);
+    auto top = static_cast<unsigned int>(sprite.getPosition().y / CASE_AREA);
+    unsigned y1;
+    unsigned x1;
+    unsigned y2;
+    unsigned x2;
+    switch (direction)
+    {
+        case UP:
+            y1 = top;
+            x1 =left ;
+            y2 =top ;
+            x2 = right ;
+            break;
+        case DOWN:
+            y1 = bottom;
+            x1 = left ;
+            y2 = bottom ;
+            x2 = right ;
+            break;
+        case LEFT:
+            y1 = top;
+            x1 = left ;
+            y2 = bottom ;
+            x2 = left ;
+            break;
+        case RIGHT:
+            y1 =top ;
+            x1 = right ;
+            y2 = bottom ;
+            x2 = right ;
+            break;
+        default: ;
+    }
+    for (const auto &i : entity3DArray.at(y1).at(x1))
+    {
+        if(i->type == entityType && ent != i)list_entity.push_back(i) ;
+    }
+
+    for (const auto &i : entity3DArray.at(y2).at(x2))
+    {
+        if (i->type == entityType && ent != i)list_entity.push_back(i);
+    }
+
+    for (const auto &i : entity3DArray.at(y2-1).at(x2))
+    {
+        if (i->type == entityType && ent != i)list_entity.push_back(i);
+    }
+    for(auto &entity : list_entity){
+        if(entity->sprite.getGlobalBounds().intersects(sprite.getGlobalBounds())){
+            return std::make_shared<CollideRes>(true, entity);
+        }
+    }
+    return std::make_shared<CollideRes>(false, shared_ptr<Entity>());
+}
+
+
+
+
 CollideRes::CollideRes(bool collide, std::shared_ptr<Entity> entity)
         : collide(collide), entity(std::move(entity))
 {}

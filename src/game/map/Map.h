@@ -59,10 +59,11 @@ public:
     void removeEntityToMatrix(Entity*);
 
     void print(const sf::RenderWindow &);
-
     void printElement();
+    std::shared_ptr<CollideRes> collide(sf::Sprite sprite,EntityType entityType,Direction direction);
+    std::shared_ptr<CollideRes> collide(sf::Sprite sprite,EntityType entityType,Direction direction,std::shared_ptr<Entity> entity);
 
-    std::shared_ptr<CollideRes> collide(sf::Sprite sprite, EntityType entityType, Direction direction);
+
 
 public:
     int width;
