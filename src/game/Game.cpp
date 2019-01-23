@@ -99,12 +99,14 @@ void Game::update(sf::Time elapsedTime)
     EntityManager::player->update(elapsedTime, map);
 
     const sf::Sprite player = EntityManager::player->getSprite();
+
     std::shared_ptr<CollideRes> collideBonus[4] = {
             map.collide(player, EntityType::BONUS_ITEM, LEFT),
             map.collide(player, EntityType::BONUS_ITEM, LEFT),
             map.collide(player, EntityType::BONUS_ITEM, UP),
             map.collide(player, EntityType::BONUS_ITEM, DOWN)
     };
+
     for (const auto &ite : collideBonus)
     {
         if (ite->collide)

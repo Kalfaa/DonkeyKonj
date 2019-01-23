@@ -22,7 +22,6 @@ unsigned int BonusItem::catchBonus()
 
 void BonusItem::update(sf::Time time1, Map map)
 {
-    StaticEntity::update(time1, map);
     if(!isCatch) this->catchBonus();
     //else map.removeEntityToMatrix(this);
 }

@@ -23,6 +23,7 @@ enum PlayerState
     FALLING,
     GRINDING
 };
+
 enum EntityType
 {
     PLAYER,
