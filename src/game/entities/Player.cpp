@@ -15,7 +15,7 @@ Player::Player(const sf::Sprite &sprite, const sf::Vector2f &posPlayer, EntityTy
     MARIO_WIDTH = static_cast<int>(sprite.getGlobalBounds().width);
     MARIO_HEIGHT = static_cast<int>(sprite.getGlobalBounds().height);
     TimeAnimation = 0;
-
+    hitboxUseForCollision = sprite;
 }
 
 void Player::update(sf::Time elapsedTime, Map map)
@@ -31,7 +31,7 @@ void Player::update(sf::Time elapsedTime, Map map)
     if (playerState != JUMP && playerState != STARTJUMP && playerState != GRINDING)
     {
         sprite.move(moveDown * elapsedTime.asSeconds());
-        if (!map.collide(sprite, EntityType::PLATFORM, DOWN)->collide)
+        if (!collide(map, EntityType::PLATFORM, DOWN))
         {
             playerState = FALLING;
         }
@@ -54,7 +54,7 @@ void Player::update(sf::Time elapsedTime, Map map)
     switch (direction)
     {
         case UP:
-            if (map.collide(sprite, EntityType::LADDER, DOWN)->collide)
+            if (collide(map, EntityType::LADDER, DOWN))
             {
                 sprite.move(grindLadder * elapsedTime.asSeconds());
                 playerState = GRINDING;
@@ -75,7 +75,7 @@ void Player::update(sf::Time elapsedTime, Map map)
 
             //printf("%d |",elapsedTime.asMilliseconds());
             sprite.move(moveLeft * elapsedTime.asSeconds());
-            if (map.collide(sprite, EntityType::PLATFORM, RIGHT)->collide)
+            if (collide(map, EntityType::PLATFORM, RIGHT))
                 sprite.move(moveRight * elapsedTime.asSeconds());
 
             lastDirection = LEFT;
@@ -101,7 +101,7 @@ void Player::update(sf::Time elapsedTime, Map map)
                 changeSprite(spritesPtns.at(movePatternRight)[0]);
             }
             sprite.move(moveRight * elapsedTime.asSeconds());
-            if (map.collide(sprite, EntityType::PLATFORM, RIGHT)->collide)
+            if (collide(map, EntityType::PLATFORM, RIGHT))
                 sprite.move(moveLeft * elapsedTime.asSeconds());
             lastDirection = RIGHT;
             break;
@@ -122,13 +122,13 @@ void Player::update(sf::Time elapsedTime, Map map)
     switch (playerState)
     {
         case GRINDING:
-            if (!map.collide(sprite, EntityType::LADDER, DOWN)->collide)
+            if (!collide(map, EntityType::LADDER, DOWN))
             {
                 playerState = IDLE;
             }
         case JUMP:
             sprite.move(moveJump * elapsedTime.asSeconds());
-            if (!map.collide(sprite, EntityType::PLATFORM, RIGHT)->collide)
+            if (!collide(map, EntityType::PLATFORM, RIGHT))
             {
                 if (lastDirection == LEFT) changeSprite(spritesPtns.at(jumpPatternLeft)[0]);
                 else changeSprite(spritesPtns.at(jumpPatternRight)[0]);
@@ -176,6 +176,13 @@ sf::Sprite Player::updateAnimation(int *now, int frequency, std::vector<sf::Spri
 {
     if (*now / frequency >= animation.size()) *now = 0;
     return animation[*now / frequency];
+}
+
+bool Player::collide(Map map, EntityType entityType, Direction direction)
+{
+    hitboxUseForCollision.setPosition(sprite.getPosition());
+    return map.collide(hitboxUseForCollision,entityType,direction)->collide;
+
 }
 
 

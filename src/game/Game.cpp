@@ -177,15 +177,26 @@ void Game::render()
     mWindow.draw(EntityManager::player->getSprite());
     mWindow.draw(mStatisticsText);
 
-    if (debug)
+
+
+   if (debug)
     {
         sf::RectangleShape rectangle(sf::Vector2f(EntityManager::player->getSprite().getGlobalBounds().width,
                                                   EntityManager::player->getSprite().getGlobalBounds().height));
         rectangle.setPosition(EntityManager::player->getSprite().getPosition());
-        rectangle.setFillColor(sf::Color(100, 250, 50));
+        rectangle.setFillColor(sf::Color(250, 150, 100));
         mWindow.draw(rectangle);
     }
 
+
+    if (debug)
+    {
+        sf::RectangleShape rectangle(sf::Vector2f(EntityManager::player->hitboxUseForCollision.getGlobalBounds().width,
+                                                  EntityManager::player->hitboxUseForCollision.getGlobalBounds().height));
+        rectangle.setPosition(EntityManager::player->getSprite().getPosition());
+        rectangle.setFillColor(sf::Color(100, 250, 50));
+        mWindow.draw(rectangle);
+    }
     mWindow.display();
 }
 
