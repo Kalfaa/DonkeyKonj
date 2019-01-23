@@ -13,7 +13,7 @@ Barrel::Barrel(const sf::Sprite &sprite, const sf::Vector2f &posPlayer, EntityTy
     countBeforeGrind =0;
 }
 
-void Barrel::update(sf::Time elapsedTime,Map map) {
+void Barrel::update(sf::Time elapsedTime, Map map) {
     sf::Vector2f grindLadder(0.f, -BARREL_SPEED*2); // en attendant de trouver une maniere plus propre
     sf::Vector2f moveJump(0.f, -BARREL_SPEED);
     sf::Vector2f moveNotJump(0.f, +BARREL_SPEED);

@@ -1,10 +1,10 @@
-#include "pch.h"
 #include "EntityManager.h"
 
 
 const std::string EntityManager::MEDIA_PATH = "../Media";
 const std::string EntityManager::TEXTURES_PATH = MEDIA_PATH + "/Textures";
 const std::string EntityManager::MAP_PATH = MEDIA_PATH + "/Maps";
+
 
 void EntityManager::removeFromEntities(std::shared_ptr<Entity> entity)
 {
@@ -14,7 +14,6 @@ void EntityManager::removeFromEntities(std::shared_ptr<Entity> entity)
 
         if (pos1 != EntityManager::entities.end())
         {
-            std::cout << "erase1bis" << std::endl;
             EntityManager::entities.erase(pos1);
         }
     }
@@ -23,20 +22,27 @@ void EntityManager::removeFromEntities(std::shared_ptr<Entity> entity)
 std::vector<std::shared_ptr<Entity>> EntityManager::entities;
 std::shared_ptr<Player> EntityManager::player;
 
-/*std::shared_ptr<Entity> EntityManager::getPlayer()
+
+std::shared_ptr<Entity> EntityManager::createPlatform(const sf::Vector2f& pos, long wight, long height)
 {
-    for (auto* entity : EntityManager::entities)
+    if(wight < 0 || height < 0) return std::make_shared<Platform>(
+            SpritesSheet::GetInstance().getSprite("PlatformRed"),
+            pos,
+            EntityType::PLATFORM);
+    else
     {
-        if (!entity->enabled)
-        {
-            continue;
-        }
-
-        if (entity->type == EntityType::PLAYER)
-        {
-            return entity;
-        }
+        // for new sized Platform
     }
+}
 
-    return nullptr;
-}*/
+std::shared_ptr<Entity> EntityManager::createLadder(const sf::Vector2f& pos, long wight, long height)
+{
+    if(wight < 0 || height < 0) return std::make_shared<Ladder>(
+                SpritesSheet::GetInstance().getSprite("Ladder"),
+                pos,
+                EntityType::LADDER);
+    else
+    {
+        // for new sized Ladder
+    }
+}

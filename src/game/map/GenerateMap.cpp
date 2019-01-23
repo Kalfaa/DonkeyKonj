@@ -7,15 +7,13 @@
 
 using namespace std;
 
-GenerateMap::GenerateMap(const std::map<string, Entity> &mapEntity)
+GenerateMap::GenerateMap(const std::map<string, EntityManager::FunctionPtrCreateEntity> &mapEntity)
         : mapEntity(mapEntity)
 {
 }
 
 shared_ptr<Map> GenerateMap::createMap(unsigned int sizeX, unsigned int sizeY, std::string mapFile)
 {
-    cerr << "GenerateMap::createMap BEG" << endl;
-
     string fileName = EntityManager::MAP_PATH + "/" + mapFile;
     ifstream mapF(fileName.c_str());
     if (!mapF) throw std::runtime_error("Could not open file");
@@ -23,19 +21,17 @@ shared_ptr<Map> GenerateMap::createMap(unsigned int sizeX, unsigned int sizeY, s
     shared_ptr<Map> map = make_shared<Map>();
 
     string entityName;
-    Entity entity;
+    //Entity entity;
     string bracket;
     while (!mapF.eof())
     {
         mapF >> entityName;
-        cerr << entityName << endl;
 
         if(entityName.empty()) break;
         if(mapEntity.find(entityName) == mapEntity.end())
             throw std::runtime_error("Generation of Map fail : \"" + entityName + "\" is not a valid key");
 
         mapF >> bracket;
-        cerr << bracket << endl;
 
         unsigned int tabPos[4] = {'\0', '\0', '\0', '\0'};
 
@@ -49,36 +45,25 @@ shared_ptr<Map> GenerateMap::createMap(unsigned int sizeX, unsigned int sizeY, s
             {
                 pos = mapF.tellg();
                 mapF >> next;
-                cerr << "next:" << next << endl;
 
                 if(next == ";") break;
 
                 mapF.seekg(pos);
                 mapF >> tabPos[cnt];
-                cerr << tabPos[cnt] << endl;
             }
-            if(cnt == 2) addSprite(tabPos[0], tabPos[1]);
+            if(cnt == 2) addSprite(tabPos[0], tabPos[1], mapEntity[entityName],  map);
             else
             {
-                addResizedSprite(tabPos);
+                addResizedSprite(tabPos, mapEntity[entityName], map);
                 mapF >> next;            /// To pass the ';' forgive
-                cerr << next << endl;
             }
 
             pos = mapF.tellg();
             mapF >> bracket;
-            cerr << bracket << endl;
-
             mapF.seekg(pos);
         }
-
         mapF >> bracket;
-        cerr << bracket << endl;
-
-        //return map;
     }
-
-    cerr << "GenerateMap::createMap END" << endl;
 
     return map;
 }
@@ -93,31 +78,32 @@ void GenerateMap::addElementToMap(const std::vector<std::shared_ptr<Entity>> &en
 
 }
 
-void GenerateMap::addSprite(unsigned int posX, unsigned int posY)
+void GenerateMap::addSprite(unsigned int posX, unsigned int posY, EntityManager::FunctionPtrCreateEntity generateEntity, shared_ptr<Map>& map)
 {
-
+//    entity.position.x = posX;
+//    entity.position.y = posY;
+//    entity.sprite.setPosition(entity.position);
+//
+//    shared_ptr<Entity> entityPtr = make_shared<Entity>(entity);
+//    EntityManager::entities.push_back(entityPtr);
+//    map->addEntityToMatrix(entityPtr);
 }
 
-void GenerateMap::addResizedSprite(unsigned int *pos)
+void GenerateMap::addResizedSprite(unsigned int pos[4], EntityManager::FunctionPtrCreateEntity generateEntity, shared_ptr<Map>& map)
 {
-
+//    entity.position.x = pos[0];
+//    entity.position.y = pos[1];
+//    entity.sprite.setPosition(entity.position);
+//
+//    auto sizeX = static_cast<unsigned int>(std::abs(static_cast<double>(pos[2]) - static_cast<double>(pos[0])));
+//    auto sizeY = static_cast<unsigned int>(std::abs(static_cast<double>(pos[3]) - static_cast<double>(pos[1])));
+//    entity.sprite.setTextureRect(sf::IntRect(pos[0], pos[1], sizeX, sizeY));
+//
+//    shared_ptr<Entity> entityPtr = make_shared<Entity>(entity);
+//    EntityManager::entities.push_back(entityPtr);
+//    map->addEntityToMatrix(entityPtr);
 }
 
-// TODO : Exception CharNotFound
-// TODO : Size of StaticEntity generated ?
 
-//while (!flux.eof())
-//{
-//string spriteName;
-//flux >> spriteName;
-//// flux.eof() doesn't work... :(
-//if (spriteName.empty()) break;
-//
-//array<int, 4> tab{};
-//for_each(tab.begin(), tab.end(), [&flux](int &n)
-//{
-//flux >> n;
-//});
-//
-//mapSettings.insert(pair<string, array<int, 4>>(spriteName, tab));
-//}
+
+

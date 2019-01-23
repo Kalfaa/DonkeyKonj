@@ -8,6 +8,8 @@
 #include "pch.h"
 #include "Entity.h"
 
+class Map;
+
 #define MARIO_JUMP_MAX 3500
 #define MARIO_JUMP_SPEED 700
 
@@ -43,7 +45,6 @@ public:
     void update(sf::Time, Map map) override;
 
     void move(Direction elapsedTime);
-
     void jump();
 
     PlayerState playerState = IDLE;

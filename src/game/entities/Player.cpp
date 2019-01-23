@@ -2,7 +2,6 @@
 // Created by user on 25/12/2018.
 //
 
-#include "Map.h"
 #include "Game.h"
 #include "Player.h"
 #include "Ladder.h"

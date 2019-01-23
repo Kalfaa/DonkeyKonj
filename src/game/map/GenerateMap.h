@@ -7,14 +7,14 @@
 
 #include "pch.h"
 #include "Map.h"
-
+#include "EntityManager.h"
 
 class Entity;
 
 class GenerateMap
 {
 public:
-    explicit GenerateMap(const std::map<std::string, Entity> & mapEntity);
+    explicit GenerateMap(const std::map<std::string, EntityManager::FunctionPtrCreateEntity> & mapEntity);
 
     virtual ~GenerateMap() = default;
 
@@ -24,11 +24,11 @@ public:
     void addElementToMap(const std::vector<std::shared_ptr<Entity>>& entityList, Map&);
 
 private:
-    void addSprite(unsigned int posX, unsigned int posY);
-    void addResizedSprite(unsigned int pos[4]);
+    void addSprite(unsigned int posX, unsigned int posY, EntityManager::FunctionPtrCreateEntity generateEntity, std::shared_ptr<Map>&);
+    void addResizedSprite(unsigned int pos[4], EntityManager::FunctionPtrCreateEntity generateEntity, std::shared_ptr<Map>&);
 
 private:
-    std::map<std::string, Entity> mapEntity;
+    std::map<std::string, EntityManager::FunctionPtrCreateEntity> mapEntity;
 };
 
 
