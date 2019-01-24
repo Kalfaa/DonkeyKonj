@@ -6,8 +6,9 @@
 #include "Map.h"
 
 Barrel::Barrel(const sf::Sprite &sprite, const sf::Vector2f &posPlayer, EntityType type,
-               const SpritesPatterns &patterns)
-        : Entity(sprite, posPlayer, type)
+               const SpritesPatterns &barrelSprites)
+        : Entity(sprite, posPlayer, type),
+         patterns(barrelSprites)
 {
     barrelState = NONE;
     countBeforeGrind =0;
@@ -23,6 +24,9 @@ void Barrel::update(sf::Time elapsedTime,Map map) {
     sf::Vector2f moveUp(0.f, -BARREL_SPEED);
     sf::Vector2f moveRight(BARREL_SPEED, 0.f);
     sf::Vector2f moveLeft(-BARREL_SPEED, 0.f);
+
+    timeAnimation += elapsedTime.asMilliseconds();
+
     sprite.move(moveDown * elapsedTime.asSeconds());
     if(!map.collide(sprite,EntityType::PLATFORM,DOWN )->collide ||  barrelState == GRINDING){
     }else{
@@ -37,12 +41,11 @@ void Barrel::update(sf::Time elapsedTime,Map map) {
 
     if(map.collide(sprite,LADDER,DOWN,getHitboxLadder())->collide){
         countBeforeGrind++;
+
         if(countBeforeGrind>15){
-            sprite.move(moveDown*elapsedTime.asSeconds());
-            timeAnimation += elapsedTime.asMilliseconds();
-            changeSprite(patterns.at(barrelVertical)[0]);
+            sprite.move(-grindLadder*elapsedTime.asSeconds());
+            changeSprite(updateAnimation(&timeAnimation,200,patterns.at(barrelVertical)));
         }else{
-            countBeforeGrind=0;
             if(barrelState==LEFT){
                 sprite.move(moveLeft * elapsedTime.asSeconds());
                 changeSprite(updateAnimation(&timeAnimation,200,patterns.at(barrelHorizontal)));
@@ -54,6 +57,7 @@ void Barrel::update(sf::Time elapsedTime,Map map) {
     }else{
         countBeforeGrind=0;
         if(barrelState==LEFT){
+
             sprite.move(moveLeft * elapsedTime.asSeconds());
             changeSprite(updateAnimation(&timeAnimation,200,patterns.at(barrelHorizontal)));
         }
