@@ -180,8 +180,8 @@ void Game::render()
     if (debug)
     {
         mWindow.draw(getRectangleToDraw(EntityManager::player->getSprite().getGlobalBounds(),sf::Color(250, 150, 100)));
-        mWindow.draw(getRectangleToDraw(EntityManager::player->getRectUnderMario(),sf::Color::Red));
         mWindow.draw(getRectangleToDraw(EntityManager::player->hitboxUseForCollision.getGlobalBounds(),sf::Color(100, 250, 50)));
+        mWindow.draw(getRectangleToDraw(EntityManager::player->getUpHitboxLadder(),sf::Color::Red));
     }
     mWindow.display();
 }

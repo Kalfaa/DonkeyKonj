@@ -48,6 +48,7 @@ public:
     void jump();
     sf::FloatRect getRectUnderMario();
     sf::FloatRect getHitboxLadder();
+    sf::FloatRect getUpHitboxLadder();
     PlayerState playerState = IDLE;
 
 protected:
