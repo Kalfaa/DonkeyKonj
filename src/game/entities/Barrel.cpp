@@ -11,6 +11,7 @@ Barrel::Barrel(const sf::Sprite &sprite, const sf::Vector2f &posPlayer, EntityTy
 {
     barrelState = NONE;
     countBeforeGrind =0;
+    timeAnimation = 0 ;
 }
 
 void Barrel::update(sf::Time elapsedTime,Map map) {
@@ -34,21 +35,27 @@ void Barrel::update(sf::Time elapsedTime,Map map) {
         barrelState=LEFT;
     }
 
-    if(map.collide(sprite,LADDER,DOWN,getHitboxLadder())->collide && barrelState != GRINDING){
+    if(map.collide(sprite,LADDER,DOWN,getHitboxLadder())->collide){
         countBeforeGrind++;
         if(countBeforeGrind>15){
             sprite.move(moveDown*elapsedTime.asSeconds());
+            timeAnimation += elapsedTime.asMilliseconds();
+            changeSprite(patterns.at(barrelVertical)[0]);
         }else{
+            countBeforeGrind=0;
             if(barrelState==LEFT){
                 sprite.move(moveLeft * elapsedTime.asSeconds());
+                changeSprite(updateAnimation(&timeAnimation,200,patterns.at(barrelHorizontal)));
             }
             if(barrelState == RIGHT){
                 sprite.move(moveRight * elapsedTime.asSeconds());
             }
         }
     }else{
+        countBeforeGrind=0;
         if(barrelState==LEFT){
             sprite.move(moveLeft * elapsedTime.asSeconds());
+            changeSprite(updateAnimation(&timeAnimation,200,patterns.at(barrelHorizontal)));
         }
         if(barrelState == RIGHT){
             sprite.move(moveRight * elapsedTime.asSeconds());
