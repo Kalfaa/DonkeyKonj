@@ -46,7 +46,8 @@ public:
     void move(Direction elapsedTime);
 
     void jump();
-
+    sf::FloatRect getRectUnderMario();
+    sf::FloatRect getHitboxLadder();
     PlayerState playerState = IDLE;
 
 protected:
@@ -56,6 +57,8 @@ protected:
 
     sf::Sprite updateAnimation(int *now, int frequency, std::vector<sf::Sprite> sprite);
     bool collide(Map map,EntityType entityType,Direction direction);
+    bool collide(Map map,EntityType entityType,Direction direction,sf::FloatRect rect);
+
 protected:
     float playerSpeed;
     Direction direction;

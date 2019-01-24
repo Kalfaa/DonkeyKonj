@@ -61,8 +61,15 @@ void Player::update(sf::Time elapsedTime, Map map)
             }
             break;
         case DOWN:
-            /*if(!collide(map,EntityType::PLATFORM,DOWN))
-                movement.y += playerSpeed;*/
+            if(playerState==IDLE || playerState ==GRINDING)
+            {
+
+                if (collide(map, EntityType::LADDER, DOWN,getRectUnderMario()))
+                {
+                    sprite.move(moveDown * elapsedTime.asSeconds());
+                }
+
+            }
             break;
         case LEFT:
         {
@@ -183,6 +190,36 @@ bool Player::collide(Map map, EntityType entityType, Direction direction)
     hitboxUseForCollision.setPosition(sprite.getPosition());
     return map.collide(hitboxUseForCollision,entityType,direction)->collide;
 
+}
+
+
+
+sf::FloatRect Player::getRectUnderMario()
+{
+    sf::RectangleShape rectangle(sf::Vector2f(EntityManager::player->hitboxUseForCollision.getGlobalBounds().width,
+                                              EntityManager::player->hitboxUseForCollision.getGlobalBounds().height-30));
+    sf::Vector2f pos=EntityManager::player->getSprite().getPosition();
+    pos.y = pos.y+EntityManager::player->getSprite().getGlobalBounds().height;
+    rectangle.setPosition(pos);
+    return rectangle.getGlobalBounds();;
+}
+
+sf::FloatRect Player::getHitboxLadder()
+{
+    sf::RectangleShape rectangle(sf::Vector2f(EntityManager::player->hitboxUseForCollision.getGlobalBounds().width-20,
+                                              EntityManager::player->hitboxUseForCollision.getGlobalBounds().height-30));
+    sf::Vector2f pos=EntityManager::player->getSprite().getPosition();
+    pos.y = pos.y+EntityManager::player->getSprite().getGlobalBounds().height;
+    pos.x = pos.x+EntityManager::player->getSprite().getGlobalBounds().width*0.25;
+    rectangle.setPosition(pos);
+    return rectangle.getGlobalBounds();
+}
+
+
+bool Player::collide(Map map, EntityType entityType, Direction direction, sf::FloatRect rect)
+{
+    hitboxUseForCollision.setPosition(sprite.getPosition());
+    return map.collide(hitboxUseForCollision,entityType,direction,rect)->collide;
 }
 
 

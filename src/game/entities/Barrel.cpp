@@ -33,7 +33,9 @@ void Barrel::update(sf::Time elapsedTime,Map map) {
     if(barrelState==NONE){
         barrelState=LEFT;
     }
+    sprite.move(moveDown*elapsedTime.asSeconds());
     if(!map.collide(sprite,LADDER,DOWN)->collide && barrelState != GRINDING){
+        sprite.move(moveUp*elapsedTime.asSeconds());
         if(barrelState==LEFT){
             sprite.move(moveLeft * elapsedTime.asSeconds());
         }
@@ -41,7 +43,7 @@ void Barrel::update(sf::Time elapsedTime,Map map) {
             sprite.move(moveRight * elapsedTime.asSeconds());
         }
     }else{
-
+        sprite.move(moveUp*elapsedTime.asSeconds());
         if(barrelState==RIGHT){
             printf("ECHELLE DROITE");
             barrelState = SOONRIGHT;

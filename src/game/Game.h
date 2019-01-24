@@ -53,6 +53,8 @@ private:
     void addBonus(Map &map, int posx[3], int posy[3]);
     void addScoreTab(Map &map, int posx, int posy);
 
+    sf::RectangleShape getRectangleToDraw(sf::FloatRect rectFloat ,sf::Color color);
+
 private:
 
     static const float PlayerSpeed;

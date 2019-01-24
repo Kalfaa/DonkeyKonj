@@ -158,11 +158,7 @@ void Game::render()
         mWindow.draw(entity->sprite);
         if (debug)
         {
-            sf::RectangleShape rectangle(sf::Vector2f(entity->getSprite().getGlobalBounds().width,
-                                                      entity->getSprite().getGlobalBounds().height));
-            rectangle.setPosition(entity->getSprite().getPosition());
-            rectangle.setFillColor(sf::Color(100, 250, 50));
-            mWindow.draw(rectangle);
+            mWindow.draw(getRectangleToDraw(entity->sprite.getGlobalBounds(),sf::Color::Green));
         }
 
     }
@@ -181,23 +177,11 @@ void Game::render()
 
 
 
-   if (debug)
-    {
-        sf::RectangleShape rectangle(sf::Vector2f(EntityManager::player->getSprite().getGlobalBounds().width,
-                                                  EntityManager::player->getSprite().getGlobalBounds().height));
-        rectangle.setPosition(EntityManager::player->getSprite().getPosition());
-        rectangle.setFillColor(sf::Color(250, 150, 100));
-        mWindow.draw(rectangle);
-    }
-
-
     if (debug)
     {
-        sf::RectangleShape rectangle(sf::Vector2f(EntityManager::player->hitboxUseForCollision.getGlobalBounds().width,
-                                                  EntityManager::player->hitboxUseForCollision.getGlobalBounds().height));
-        rectangle.setPosition(EntityManager::player->getSprite().getPosition());
-        rectangle.setFillColor(sf::Color(100, 250, 50));
-        mWindow.draw(rectangle);
+        mWindow.draw(getRectangleToDraw(EntityManager::player->getSprite().getGlobalBounds(),sf::Color(250, 150, 100)));
+        mWindow.draw(getRectangleToDraw(EntityManager::player->getRectUnderMario(),sf::Color::Red));
+        mWindow.draw(getRectangleToDraw(EntityManager::player->hitboxUseForCollision.getGlobalBounds(),sf::Color(100, 250, 50)));
     }
     mWindow.display();
 }
@@ -354,7 +338,7 @@ Map Game::basicMap()
     addBlockLine(newMap, 30, 50, 350);
     addBlockLine(newMap, 30, 50, 450);
     addLadder(newMap, 4, 50, 410);
-    addLadder(newMap,4,90,305);
+    addLadder(newMap,4,90,310);
     //string bonusTab[3] = {"UmbrellaBonus", "HandbagBonus", "HatBonus"};
 
     int bonusX[3] = {50, 140, 180};
@@ -393,13 +377,13 @@ Map Game::basicMap()
                     {Barrel::barrelVertical, sps.getPattern("BarrelVertical")},
             }
     };
-    sf::Vector2f posbarrel(32 * 15, 32);
+    /*sf::Vector2f posbarrel(32 * 15, 32);
 
     std::shared_ptr<Entity> barrel = std::make_shared<Barrel>(spritesPatternsBarrel.at(Barrel::barrelHorizontal)[0],
                                                               posbarrel,
                                                               EntityType::BARREL, spritesPatternsBarrel);
     EntityManager::entities.push_back(barrel);
-    map.addEntityToMatrix(barrel);
+    map.addEntityToMatrix(barrel);*/
     EntityManager::player = std::make_shared<Mario>(spritesPatterns.at(Player::movePatternLeft)[0], posmario,
                                                     EntityType::PLAYER, MARIO_SPEED, spritesPatterns);
 
@@ -465,3 +449,14 @@ void Game::addScoreTab(Map &map, int posx, int posy)
     EntityManager::entities.push_back(scoreTab);
     map.addEntityToMatrix(scoreTab);
 }
+
+sf::RectangleShape Game::getRectangleToDraw(sf::FloatRect rectFloat,sf::Color color)
+{
+    sf::RectangleShape rectangle(sf::Vector2f(rectFloat.width,
+                                              rectFloat.height));
+    sf::Vector2f pos(rectFloat.left, rectFloat.top);
+    rectangle.setPosition(pos);
+    rectangle.setFillColor(color);
+    return rectangle;
+}
+
