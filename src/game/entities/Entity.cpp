@@ -36,3 +36,19 @@ void Entity::update(sf::Time, Map)
 {
 
 }
+
+void Entity::changeSprite(sf::Sprite newSprite)
+{
+    sf::Vector2f tempos = sprite.getPosition();
+    sprite = std::move(newSprite);
+    sprite.setPosition(tempos);
+
+}
+
+
+
+sf::Sprite Entity::updateAnimation(int *now, int frequency, std::vector<sf::Sprite> animation)
+{
+    if (*now / frequency >= animation.size()) *now = 0;
+    return animation[*now / frequency];
+}

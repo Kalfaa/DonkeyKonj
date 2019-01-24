@@ -159,6 +159,15 @@ void Game::render()
         if (debug)
         {
             mWindow.draw(getRectangleToDraw(entity->sprite.getGlobalBounds(),sf::Color::Green));
+            if(entity->type == BARREL){
+                sf::RectangleShape rectangle(sf::Vector2f(entity->sprite.getGlobalBounds().width-20,
+                                                          entity->sprite.getGlobalBounds().height-30));
+                sf::Vector2f pos=entity->sprite.getPosition();
+                pos.y = pos.y+entity->sprite.getGlobalBounds().height+2;
+                pos.x = 3+pos.x+entity->sprite.getGlobalBounds().width*0.25;
+                rectangle.setPosition(pos);
+                mWindow.draw(getRectangleToDraw(rectangle.getGlobalBounds(),sf::Color::Red));
+            }
         }
 
     }
@@ -377,13 +386,13 @@ Map Game::basicMap()
                     {Barrel::barrelVertical, sps.getPattern("BarrelVertical")},
             }
     };
-    /*sf::Vector2f posbarrel(32 * 15, 32);
+    sf::Vector2f posbarrel(32 * 15, 32);
 
     std::shared_ptr<Entity> barrel = std::make_shared<Barrel>(spritesPatternsBarrel.at(Barrel::barrelHorizontal)[0],
                                                               posbarrel,
                                                               EntityType::BARREL, spritesPatternsBarrel);
     EntityManager::entities.push_back(barrel);
-    map.addEntityToMatrix(barrel);*/
+    map.addEntityToMatrix(barrel);
     EntityManager::player = std::make_shared<Mario>(spritesPatterns.at(Player::movePatternLeft)[0], posmario,
                                                     EntityType::PLAYER, MARIO_SPEED, spritesPatterns);
 

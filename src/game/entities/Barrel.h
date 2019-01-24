@@ -35,6 +35,7 @@ public:
         NONE,
     };
 public:
+    sf::FloatRect getHitboxLadder();
     Barrel(const sf::Sprite&, const sf::Vector2f& posPlayer, EntityType,const SpritesPatterns&);
     ~Barrel() override = default;
     void update(sf::Time elapsedTime,Map map) ;

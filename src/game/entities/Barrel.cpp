@@ -33,53 +33,36 @@ void Barrel::update(sf::Time elapsedTime,Map map) {
     if(barrelState==NONE){
         barrelState=LEFT;
     }
-    sprite.move(moveDown*elapsedTime.asSeconds());
-    if(!map.collide(sprite,LADDER,DOWN)->collide && barrelState != GRINDING){
-        sprite.move(moveUp*elapsedTime.asSeconds());
+
+    if(map.collide(sprite,LADDER,DOWN,getHitboxLadder())->collide && barrelState != GRINDING){
+        countBeforeGrind++;
+        if(countBeforeGrind>15){
+            sprite.move(moveDown*elapsedTime.asSeconds());
+        }else{
+            if(barrelState==LEFT){
+                sprite.move(moveLeft * elapsedTime.asSeconds());
+            }
+            if(barrelState == RIGHT){
+                sprite.move(moveRight * elapsedTime.asSeconds());
+            }
+        }
+    }else{
         if(barrelState==LEFT){
             sprite.move(moveLeft * elapsedTime.asSeconds());
         }
         if(barrelState == RIGHT){
             sprite.move(moveRight * elapsedTime.asSeconds());
         }
-    }else{
-        sprite.move(moveUp*elapsedTime.asSeconds());
-        if(barrelState==RIGHT){
-            printf("ECHELLE DROITE");
-            barrelState = SOONRIGHT;
-
-             countBeforeGrind =0;
-        }
-        else if(barrelState==LEFT){
-            barrelState = SOONLEFT;
-            printf("ECHELLE GAUCHE");
-            countBeforeGrind =0;
-        }
-        if(barrelState==SOONRIGHT) {
-            if (countBeforeGrind < 30) {
-                sprite.move(moveRight * elapsedTime.asSeconds());
-                countBeforeGrind++;
-            } else {
-                countBeforeGrind = 0;
-                barrelState = GRINDING;
-                grindingLadder = map.collide(sprite,LADDER,DOWN);
-            }
-        }else if(barrelState==SOONLEFT){
-            if (countBeforeGrind<30){
-                sprite.move(moveLeft * elapsedTime.asSeconds());
-                countBeforeGrind++;
-            }else{
-                countBeforeGrind =0;
-                barrelState = GRINDING;
-                grindingLadder = map.collide(sprite,LADDER,DOWN);
-            }
-        }
-        if(barrelState==GRINDING) {
-            countBeforeGrind++;
-            if (countBeforeGrind>60){
-                countBeforeGrind =0;
-                barrelState = FALL;
-            }
-        }
     }
 }
+
+sf::FloatRect Barrel::getHitboxLadder() {
+    sf::RectangleShape rectangle(sf::Vector2f(sprite.getGlobalBounds().width-20,
+                                              sprite.getGlobalBounds().height-30));
+    sf::Vector2f pos=sprite.getPosition();
+    pos.y = pos.y+sprite.getGlobalBounds().height+2;
+    pos.x = 3+pos.x+sprite.getGlobalBounds().width*0.25;
+    rectangle.setPosition(pos);
+    return rectangle.getGlobalBounds();
+}
+

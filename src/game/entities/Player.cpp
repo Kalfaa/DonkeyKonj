@@ -180,13 +180,6 @@ void Player::update(sf::Time elapsedTime, Map map)
     direction = NONE;
 }
 
-void Player::changeSprite(sf::Sprite newSprite)
-{
-    sf::Vector2f tempos = sprite.getPosition();
-    sprite = std::move(newSprite);
-    sprite.setPosition(tempos);
-
-}
 
 void Player::move(Direction direction)
 {
@@ -196,12 +189,6 @@ void Player::move(Direction direction)
 void Player::jump()
 {
     if (FALLING != playerState)playerState = STARTJUMP;
-}
-
-sf::Sprite Player::updateAnimation(int *now, int frequency, std::vector<sf::Sprite> animation)
-{
-    if (*now / frequency >= animation.size()) *now = 0;
-    return animation[*now / frequency];
 }
 
 bool Player::collide(Map map, EntityType entityType, Direction direction)

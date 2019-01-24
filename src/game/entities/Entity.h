@@ -49,9 +49,9 @@ public:
 
 public:
     virtual void update(sf::Time, Map);
-
+    void changeSprite(sf::Sprite newSprite);
     const sf::Sprite &getSprite() const;
-
+    sf::Sprite updateAnimation(int *now, int frequency, std::vector<sf::Sprite> sprite);
 public:
     sf::Vector2u size;
     sf::Vector2f position;

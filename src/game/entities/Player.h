@@ -54,9 +54,8 @@ public:
 protected:
     //bool collide(Map map, EntityType entityType, Direction direction);
 
-    void changeSprite(sf::Sprite newSprite);
 
-    sf::Sprite updateAnimation(int *now, int frequency, std::vector<sf::Sprite> sprite);
+
     bool collide(Map map,EntityType entityType,Direction direction);
     bool collide(Map map,EntityType entityType,Direction direction,sf::FloatRect rect);
 
