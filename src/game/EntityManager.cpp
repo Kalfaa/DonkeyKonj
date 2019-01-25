@@ -1,5 +1,5 @@
 #include "EntityManager.h"
-
+#include "SpritesSheet.h"
 
 const std::string EntityManager::MEDIA_PATH = "../Media";
 const std::string EntityManager::TEXTURES_PATH = MEDIA_PATH + "/Textures";
@@ -21,28 +21,3 @@ void EntityManager::removeFromEntities(std::shared_ptr<Entity> entity)
 
 std::vector<std::shared_ptr<Entity>> EntityManager::entities;
 std::shared_ptr<Player> EntityManager::player;
-
-
-std::shared_ptr<Entity> EntityManager::createPlatform(const sf::Vector2f& pos, long wight, long height)
-{
-    if(wight < 0 || height < 0) return std::make_shared<Platform>(
-            SpritesSheet::GetInstance().getSprite("PlatformRed"),
-            pos,
-            EntityType::PLATFORM);
-    else
-    {
-        // for new sized Platform
-    }
-}
-
-std::shared_ptr<Entity> EntityManager::createLadder(const sf::Vector2f& pos, long wight, long height)
-{
-    if(wight < 0 || height < 0) return std::make_shared<Ladder>(
-                SpritesSheet::GetInstance().getSprite("Ladder"),
-                pos,
-                EntityType::LADDER);
-    else
-    {
-        // for new sized Ladder
-    }
-}

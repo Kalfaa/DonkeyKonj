@@ -20,9 +20,20 @@ unsigned int BonusItem::catchBonus()
     return value;
 }
 
-void BonusItem::update(sf::Time time1, Map map)
+void BonusItem::update(sf::Time elapsedTime, Map map)
 {
-    StaticEntity::update(time1, map);
-    if(!isCatch) this->catchBonus();
-    //else map->removeEntityToMatrix(this);
+    std::shared_ptr<CollideRes> collideBonus[4] = {
+            map.collide(sprite, EntityType::PLAYER, RIGHT),
+            map.collide(sprite, EntityType::PLAYER, LEFT),
+            map.collide(sprite, EntityType::PLAYER, UP),
+            map.collide(sprite, EntityType::PLAYER, DOWN)
+    };
+    for (const auto &ite : collideBonus)
+    {
+        if (ite->collide)
+        {
+            if(!isCatch) this->catchBonus();
+        }
+    }
+    //else map.removeEntityToMatrix(this);
 }

@@ -8,6 +8,7 @@
 
 #include "SpritesSheet.h"
 
+
 using namespace std;
 
 std::shared_ptr<sf::Texture> SpriteLoader::getTexture(const sf::Image &spriteSheet)
@@ -19,6 +20,7 @@ SpriteLoader::SpriteLoader(const sf::Image &spriteSheet, const sf::IntRect &pos)
 {
     texture = make_shared<sf::Texture>();
     texture->loadFromImage(spriteSheet, pos);
+    texture->setRepeated(true);
 }
 
 SpriteLoader::~SpriteLoader()

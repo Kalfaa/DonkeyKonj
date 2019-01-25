@@ -14,11 +14,12 @@
 #include "ScoreTab.h"
 #include "Barrel.h"
 
-#include "Map.h"
+//#include "Map.h"
 #include "GenerateMap.h"
 
 #define MARIO_SPEED 100.f
 
+class Map;
 
 class Game
 {
@@ -44,7 +45,7 @@ private:
 
     void handlePlayerInput(sf::Keyboard::Key key, bool isPressed);
 
-    Map basicMap();
+    std::shared_ptr<Map> basicMap();
 
     void addBlockLine(Map &map, int number, int posx, int posy);
 

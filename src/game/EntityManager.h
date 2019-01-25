@@ -1,17 +1,15 @@
 #pragma once
 
 #include "pch.h"
-#include "SpritesSheet.h"
 
 #include "Entity.h"
 #include "Player.h"
 #include "Ladder.h"
 #include "Platform.h"
 
+
 class EntityManager
 {
-public:
-    typedef std::function<std::shared_ptr<Entity> (const sf::Vector2f&, long, long)> FunctionPtrCreateEntity;
 public:
     EntityManager() = default;
 

@@ -17,7 +17,7 @@ class Entity;
 #define BLOCK_COUNT_Y 5
 #define BLOCK_SPACE 110.f
 #define CASE_AREA 32
-#define ZOOM_SPRITE 2.5f
+#define SCALE_SPRITES 2.5f
 
 struct CollideRes
 {

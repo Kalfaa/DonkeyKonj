@@ -7,8 +7,8 @@
 
 using namespace std;
 
-GenerateMap::GenerateMap(const std::map<string, EntityManager::FunctionPtrCreateEntity> &mapEntity)
-        : mapEntity(mapEntity)
+GenerateMap::GenerateMap(const SpritesSheet& spritesSheet, const std::map<string, EntityGenerator::FunctionPtrCreateEntity> &mapEntity)
+        : spritesSheet(spritesSheet), mapEntity(mapEntity)
 {
 }
 
@@ -33,7 +33,7 @@ shared_ptr<Map> GenerateMap::createMap(unsigned int sizeX, unsigned int sizeY, s
 
         mapF >> bracket;
 
-        unsigned int tabPos[4] = {'\0', '\0', '\0', '\0'};
+        long tabPos[4] = {0, 0, 0, 0};
 
         while(bracket != "}")
         {
@@ -47,11 +47,17 @@ shared_ptr<Map> GenerateMap::createMap(unsigned int sizeX, unsigned int sizeY, s
                 mapF >> next;
 
                 if(next == ";") break;
+                else if(next == "D")
+                {
+                    tabPos[cnt] = -1;
+                    continue;
+                }
 
                 mapF.seekg(pos);
                 mapF >> tabPos[cnt];
             }
-            if(cnt == 2) addSprite(tabPos[0], tabPos[1], mapEntity[entityName],  map);
+            if(cnt == 2) addSprite(static_cast<unsigned int>(tabPos[0]), static_cast<unsigned int>(tabPos[1]),
+                    mapEntity[entityName], map);
             else
             {
                 addResizedSprite(tabPos, mapEntity[entityName], map);
@@ -78,30 +84,18 @@ void GenerateMap::addElementToMap(const std::vector<std::shared_ptr<Entity>> &en
 
 }
 
-void GenerateMap::addSprite(unsigned int posX, unsigned int posY, EntityManager::FunctionPtrCreateEntity generateEntity, shared_ptr<Map>& map)
+void GenerateMap::addSprite(unsigned int posX, unsigned int posY, EntityGenerator::FunctionPtrCreateEntity generateEntity, shared_ptr<Map>& map)
 {
-//    entity.position.x = posX;
-//    entity.position.y = posY;
-//    entity.sprite.setPosition(entity.position);
-//
-//    shared_ptr<Entity> entityPtr = make_shared<Entity>(entity);
-//    EntityManager::entities.push_back(entityPtr);
-//    map->addEntityToMatrix(entityPtr);
+    shared_ptr<Entity> entityPtr = generateEntity(spritesSheet, sf::Vector2f(posX, posY), sf::Vector2f(-1, -1));
+
+    //EntityManager::entities.push_back(entityPtr);
+    map->addEntityToMatrix(entityPtr);
 }
 
-void GenerateMap::addResizedSprite(unsigned int pos[4], EntityManager::FunctionPtrCreateEntity generateEntity, shared_ptr<Map>& map)
+void GenerateMap::addResizedSprite(long pos[4], EntityGenerator::FunctionPtrCreateEntity generateEntity, shared_ptr<Map>& map)
 {
-//    entity.position.x = pos[0];
-//    entity.position.y = pos[1];
-//    entity.sprite.setPosition(entity.position);
-//
-//    auto sizeX = static_cast<unsigned int>(std::abs(static_cast<double>(pos[2]) - static_cast<double>(pos[0])));
-//    auto sizeY = static_cast<unsigned int>(std::abs(static_cast<double>(pos[3]) - static_cast<double>(pos[1])));
-//    entity.sprite.setTextureRect(sf::IntRect(pos[0], pos[1], sizeX, sizeY));
-//
-//    shared_ptr<Entity> entityPtr = make_shared<Entity>(entity);
-//    EntityManager::entities.push_back(entityPtr);
-//    map->addEntityToMatrix(entityPtr);
+    shared_ptr<Entity> entityPtr = generateEntity(spritesSheet, sf::Vector2f(pos[0], pos[1]), sf::Vector2f(pos[2], pos[3]));
+    map->addEntityToMatrix(entityPtr);
 }
 
 

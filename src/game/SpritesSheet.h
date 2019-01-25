@@ -8,6 +8,7 @@
 #include "pch.h"
 #include "EntityManager.h"
 
+
 class SpriteLoader
 {
 public:
