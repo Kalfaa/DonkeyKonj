@@ -35,13 +35,16 @@ public:
         NONE,
     };
 public:
-    Barrel(const sf::Sprite&, const sf::Vector2f& posPlayer, EntityType,const SpritesPatterns&);
+    SpritesPatterns patterns;
+    sf::FloatRect getHitboxLadder();
+    Barrel(const sf::Sprite&, const sf::Vector2f& posPlayer, EntityType,const SpritesPatterns &);
     ~Barrel() override = default;
     void update(sf::Time elapsedTime,Map map) ;
     BarrelState barrelState;
     int countBeforeGrind;
     std::shared_ptr<CollideRes>  grindingLadder = std::make_shared<CollideRes>(false,std::shared_ptr<Entity>());
 private:
+    int timeAnimation;
 
 };
 

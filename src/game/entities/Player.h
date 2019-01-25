@@ -38,23 +38,27 @@ public:
     Player(const sf::Sprite &, const sf::Vector2f &posPlayer, EntityType, float playerSpeed, const SpritesPatterns &);
 
     ~Player() override = default;
-
+    sf::Sprite hitboxUseForCollision ;
     int MARIO_HEIGHT;
     int MARIO_WIDTH;
 public:
     void update(sf::Time, Map map) override;
 
+
     void move(Direction elapsedTime);
     void jump();
-
+    sf::FloatRect getRectUnderMario();
+    sf::FloatRect getHitboxLadder();
+    sf::FloatRect getUpHitboxLadder();
     PlayerState playerState = IDLE;
 
 protected:
     //bool collide(Map map, EntityType entityType, Direction direction);
 
-    void changeSprite(sf::Sprite newSprite);
 
-    sf::Sprite updateAnimation(int *now, int frequency, std::vector<sf::Sprite> sprite);
+
+    bool collide(Map map,EntityType entityType,Direction direction);
+    bool collide(Map map,EntityType entityType,Direction direction,sf::FloatRect rect);
 
 protected:
     float playerSpeed;

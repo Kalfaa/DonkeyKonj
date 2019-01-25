@@ -14,7 +14,7 @@ Player::Player(const sf::Sprite &sprite, const sf::Vector2f &posPlayer, EntityTy
     MARIO_WIDTH = static_cast<int>(sprite.getGlobalBounds().width);
     MARIO_HEIGHT = static_cast<int>(sprite.getGlobalBounds().height);
     TimeAnimation = 0;
-
+    hitboxUseForCollision = sprite;
 }
 
 void Player::update(sf::Time elapsedTime, Map map)
@@ -30,9 +30,10 @@ void Player::update(sf::Time elapsedTime, Map map)
     if (playerState != JUMP && playerState != STARTJUMP && playerState != GRINDING)
     {
         sprite.move(moveDown * elapsedTime.asSeconds());
-        if (!map.collide(sprite, EntityType::PLATFORM, DOWN)->collide)
+        if (!collide(map, EntityType::PLATFORM, DOWN))
         {
             playerState = FALLING;
+            //printf("gravity");
         }
         else
         {
@@ -53,15 +54,28 @@ void Player::update(sf::Time elapsedTime, Map map)
     switch (direction)
     {
         case UP:
-            if (map.collide(sprite, EntityType::LADDER, DOWN)->collide)
+            if (collide(map, EntityType::LADDER, DOWN,getUpHitboxLadder()))
             {
-                sprite.move(grindLadder * elapsedTime.asSeconds());
+                if(playerState==IDLE)TimeAnimation=0;
+                sprite.move(moveUp * elapsedTime.asSeconds());
                 playerState = GRINDING;
+                TimeAnimation+=elapsedTime.asMilliseconds();
             }
             break;
         case DOWN:
-            /*if(!collide(map,EntityType::PLATFORM,DOWN))
-                movement.y += playerSpeed;*/
+            if(playerState==IDLE || playerState ==GRINDING)
+            {
+
+                if (collide(map, EntityType::LADDER, DOWN,getHitboxLadder()))
+                {
+                    sprite.move(moveDown * elapsedTime.asSeconds());
+                    if(playerState==IDLE)TimeAnimation=0;
+                    playerState = GRINDING;
+                    TimeAnimation+=elapsedTime.asMilliseconds();
+
+                }
+
+            }
             break;
         case LEFT:
         {
@@ -74,7 +88,7 @@ void Player::update(sf::Time elapsedTime, Map map)
 
             //printf("%d |",elapsedTime.asMilliseconds());
             sprite.move(moveLeft * elapsedTime.asSeconds());
-            if (map.collide(sprite, EntityType::PLATFORM, RIGHT)->collide)
+            if (collide(map, EntityType::PLATFORM, RIGHT))
                 sprite.move(moveRight * elapsedTime.asSeconds());
 
             lastDirection = LEFT;
@@ -100,7 +114,7 @@ void Player::update(sf::Time elapsedTime, Map map)
                 changeSprite(spritesPtns.at(movePatternRight)[0]);
             }
             sprite.move(moveRight * elapsedTime.asSeconds());
-            if (map.collide(sprite, EntityType::PLATFORM, RIGHT)->collide)
+            if (collide(map, EntityType::PLATFORM, RIGHT))
                 sprite.move(moveLeft * elapsedTime.asSeconds());
             lastDirection = RIGHT;
             break;
@@ -121,13 +135,23 @@ void Player::update(sf::Time elapsedTime, Map map)
     switch (playerState)
     {
         case GRINDING:
-            if (!map.collide(sprite, EntityType::LADDER, DOWN)->collide)
+            if (!collide(map, EntityType::LADDER, DOWN,getUpHitboxLadder()))
             {
                 playerState = IDLE;
+
+            }else{
+                std::vector<sf::Sprite> grindAnimation;
+                printf("%d",TimeAnimation);
+                grindAnimation.push_back(spritesPtns.at(climbPatternRight)[0]);
+                grindAnimation.push_back(spritesPtns.at(climbPatternLeft)[0]);
+                changeSprite(updateAnimation(&TimeAnimation, 200, grindAnimation));
+                printf("grinding");
+
             }
+            break;
         case JUMP:
             sprite.move(moveJump * elapsedTime.asSeconds());
-            if (!map.collide(sprite, EntityType::PLATFORM, RIGHT)->collide)
+            if (!collide(map, EntityType::PLATFORM, RIGHT))
             {
                 if (lastDirection == LEFT) changeSprite(spritesPtns.at(jumpPatternLeft)[0]);
                 else changeSprite(spritesPtns.at(jumpPatternRight)[0]);
@@ -142,9 +166,11 @@ void Player::update(sf::Time elapsedTime, Map map)
             {
                 playerState = IDLE;
             }
+            break;
         case FALLING:
             if (lastDirection == LEFT) changeSprite(spritesPtns.at(jumpPatternLeft)[0]);
             else changeSprite(spritesPtns.at(jumpPatternRight)[0]);
+            break;
         case IDLE:
             //changeSprite(spritesPtns.at(movePatternLeft)[0]);
         default:;
@@ -153,13 +179,6 @@ void Player::update(sf::Time elapsedTime, Map map)
     direction = NONE;
 }
 
-void Player::changeSprite(sf::Sprite newSprite)
-{
-    sf::Vector2f tempos = sprite.getPosition();
-    sprite = std::move(newSprite);
-    sprite.setPosition(tempos);
-
-}
 
 void Player::move(Direction direction)
 {
@@ -171,10 +190,53 @@ void Player::jump()
     if (FALLING != playerState)playerState = STARTJUMP;
 }
 
-sf::Sprite Player::updateAnimation(int *now, int frequency, std::vector<sf::Sprite> animation)
+bool Player::collide(Map map, EntityType entityType, Direction direction)
 {
-    if (*now / frequency >= animation.size()) *now = 0;
-    return animation[*now / frequency];
+    hitboxUseForCollision.setPosition(sprite.getPosition());
+    return map.collide(hitboxUseForCollision,entityType,direction)->collide;
+
+}
+
+
+
+sf::FloatRect Player::getRectUnderMario()
+{
+    sf::RectangleShape rectangle(sf::Vector2f(hitboxUseForCollision.getGlobalBounds().width,
+                                              hitboxUseForCollision.getGlobalBounds().height-30));
+    sf::Vector2f pos=hitboxUseForCollision.getPosition();
+    pos.y = pos.y+hitboxUseForCollision.getGlobalBounds().height;
+    rectangle.setPosition(pos);
+    return rectangle.getGlobalBounds();;
+}
+
+sf::FloatRect Player::getHitboxLadder()
+{
+    sf::RectangleShape rectangle(sf::Vector2f(hitboxUseForCollision.getGlobalBounds().width-20,
+                                              hitboxUseForCollision.getGlobalBounds().height-30));
+    sf::Vector2f pos=hitboxUseForCollision.getPosition();
+    pos.y = pos.y+hitboxUseForCollision.getGlobalBounds().height+2;
+    pos.x = 3+pos.x+hitboxUseForCollision.getGlobalBounds().width*0.25;
+    rectangle.setPosition(pos);
+    return rectangle.getGlobalBounds();
+}
+
+
+
+bool Player::collide(Map map, EntityType entityType, Direction direction, sf::FloatRect rect)
+{
+    hitboxUseForCollision.setPosition(sprite.getPosition());
+    return map.collide(hitboxUseForCollision,entityType,direction,rect)->collide;
+}
+
+sf::FloatRect Player::getUpHitboxLadder()
+{
+    sf::RectangleShape rectangle(sf::Vector2f(hitboxUseForCollision.getGlobalBounds().width-20,
+                                              hitboxUseForCollision.getGlobalBounds().height-30));
+    sf::Vector2f pos=hitboxUseForCollision.getPosition();
+    pos.y = pos.y+hitboxUseForCollision.getGlobalBounds().height-11;
+    pos.x = 3+pos.x+hitboxUseForCollision.getGlobalBounds().width*0.25;
+    rectangle.setPosition(pos);
+    return rectangle.getGlobalBounds();
 }
 
 
