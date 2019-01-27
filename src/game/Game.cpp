@@ -112,8 +112,8 @@ void Game::update(sf::Time elapsedTime)
 
     for(const auto &entity : EntityManager::entities)
     {
-        if (entity->type == BARREL) entity->update(elapsedTime, *(map.get()));
-        if (entity->type == BONUS_ITEM) entity->update(elapsedTime, *(map.get()));
+        if (entity->type == BARREL) entity->update(elapsedTime, map);
+        if (entity->type == BONUS_ITEM) entity->update(elapsedTime, map);
     }
     if (countElement)
     {

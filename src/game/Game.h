@@ -45,7 +45,7 @@ private:
 
     void handlePlayerInput(sf::Keyboard::Key key, bool isPressed);
 
-    std::shared_ptr<Map> basicMap();
+    Map basicMap();
 
     void addBlockLine(Map &map, int number, int posx, int posy);
 
@@ -61,7 +61,7 @@ private:
     static const float PlayerSpeed;
     static const sf::Time timePerFrame;
 
-    std::shared_ptr<Map> map;
+    Map map;
     SpritesSheet sps;
 
     sf::RenderWindow mWindow;
