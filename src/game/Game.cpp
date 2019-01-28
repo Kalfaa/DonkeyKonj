@@ -17,37 +17,24 @@ Game::Game()
     sps.loadSprites(EntityManager::TEXTURES_PATH + "/DonkeyKong_SpritesSheet.png", SCALE_SPRITES);
 
     std::string filename = EntityManager::MAP_PATH + "/" + "map_donkeykong";
-    map = basicMap();
+    //shared_ptr<Map> map = basicMap();
 
     ///MAP GENERATOR
-//    std::map<string, EntityGenerator::FunctionPtrCreateEntity> mapElement {
-//            {"PLATFORM", &EntityGenerator::createPlatform},
-//            {"LADDER", &EntityGenerator::createLadder},
-//            {"MARIO", &EntityGenerator::createMario}
-//    };
-//
-//    GenerateMap gMap(sps, mapElement);
-//    map = gMap.createMap(600, 600, "map_donkeykong2");
+    std::map<string, EntityGenerator::FunctionPtrCreateEntity> mapElement {
+            {"PLATFORM", &EntityGenerator::createPlatform},
+            {"LADDER", &EntityGenerator::createLadder},
+            {"MARIO", &EntityGenerator::createMario}
+    };
+
+    GenerateMap gMap(sps, mapElement);
+    map = gMap.createMap(600, 600, "map_donkeykong2");
+    /// MAP ROTARENEG
 
     mFont.loadFromFile(EntityManager::MEDIA_PATH + "/Sansation.ttf");
     mStatisticsText.setString("Welcome to Donkey Kong 1981");
     mStatisticsText.setFont(mFont);
     mStatisticsText.setPosition(5.f, 5.f);
     mStatisticsText.setCharacterSize(10);
-
-    /* MAP GENERATOR
-
-    std::map<string, Entity> mapElement {
-            {"PLATFORM", Platform(sps.getSprite("PlatformRed"), sf::Vector2f(0, 0), EntityType::PLATFORM)},
-            {"LADDER", Platform(sps.getSprite("Ladder"), sf::Vector2f(0, 0), EntityType::LADDER)}
-    };
-
-    GenerateMap gMap(mapElement);
-    shared_ptr<Map> map = gMap.createMap(400, 400, "map_donkeykong2");
-
-    sf::sleep(sf::seconds(1000));
-
-    */// MAP ROTARENEG
 
     sf::Image icon;
     if (icon.loadFromFile(EntityManager::TEXTURES_PATH + "/icon.png"))
@@ -106,18 +93,18 @@ void Game::processEvents()
 void Game::update(sf::Time elapsedTime)
 {
     sf::Vector2f movement(0.f, 0.f);
-    EntityManager::player->update(elapsedTime, map);
+    EntityManager::player->update(elapsedTime, *map);
 
     const sf::Sprite player = EntityManager::player->getSprite();
 
     for(const auto &entity : EntityManager::entities)
     {
-        if (entity->type == BARREL) entity->update(elapsedTime, map);
-        if (entity->type == BONUS_ITEM) entity->update(elapsedTime, map);
+        if (entity->type == BARREL) entity->update(elapsedTime, *map);
+        if (entity->type == BONUS_ITEM) entity->update(elapsedTime, *map);
     }
     if (countElement)
     {
-        map.countElement();
+        map->countElement();
         countElement = false;
     }
     if (mIsMovingUp)EntityManager::player->move(UP);
@@ -382,7 +369,7 @@ Map Game::basicMap()
                                                               posbarrel,
                                                               EntityType::BARREL, spritesPatternsBarrel);
     EntityManager::entities.push_back(barrel);
-    map.addEntityToMatrix(barrel);
+    map->addEntityToMatrix(barrel);
     EntityManager::player = std::make_shared<Mario>(spritesPatterns.at(Player::movePatternLeft)[0], posmario,
                                                     EntityType::PLAYER, MARIO_SPEED, spritesPatterns);
 
