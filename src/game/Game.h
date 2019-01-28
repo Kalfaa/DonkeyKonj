@@ -61,7 +61,7 @@ private:
     static const float PlayerSpeed;
     static const sf::Time timePerFrame;
 
-    std::shared_ptr<Map> map;
+    Map map;
     SpritesSheet sps;
 
     sf::RenderWindow mWindow;

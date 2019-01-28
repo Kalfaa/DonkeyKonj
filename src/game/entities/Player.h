@@ -10,8 +10,8 @@
 
 class Map;
 
-#define MARIO_JUMP_MAX 3500
-#define MARIO_JUMP_SPEED 700
+#define MARIO_JUMP_MAX 4000
+#define MARIO_JUMP_SPEED 750
 
 class Player : public Entity
 {

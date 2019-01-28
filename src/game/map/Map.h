@@ -68,6 +68,9 @@ public:
     int width;
     int length;
     sf::Vector2f startpoint;
+    std::vector<std::shared_ptr<Entity>> moovingObject;
+
+
 };
 
 
