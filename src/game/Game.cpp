@@ -27,7 +27,8 @@ Game::Game()
     };
 
     GenerateMap gMap(sps, mapElement);
-    map = gMap.createMap(600, 600, "map_donkeykong2");
+    //map = gMap.createMap(600, 600, "map_donkeykong2");
+    map = basicMap();
     /// MAP ROTARENEG
 
     mFont.loadFromFile(EntityManager::MEDIA_PATH + "/Sansation.ttf");
@@ -93,18 +94,18 @@ void Game::processEvents()
 void Game::update(sf::Time elapsedTime)
 {
     sf::Vector2f movement(0.f, 0.f);
-    EntityManager::player->update(elapsedTime, *map);
+    EntityManager::player->update(elapsedTime, map);
 
     const sf::Sprite player = EntityManager::player->getSprite();
 
     for(const auto &entity : EntityManager::entities)
     {
-        if (entity->type == BARREL) entity->update(elapsedTime, *map);
-        if (entity->type == BONUS_ITEM) entity->update(elapsedTime, *map);
+        if (entity->type == BARREL) entity->update(elapsedTime, map);
+        if (entity->type == BONUS_ITEM) entity->update(elapsedTime, map);
     }
     if (countElement)
     {
-        map->countElement();
+        map.countElement();
         countElement = false;
     }
     if (mIsMovingUp)EntityManager::player->move(UP);
@@ -369,9 +370,11 @@ Map Game::basicMap()
                                                               posbarrel,
                                                               EntityType::BARREL, spritesPatternsBarrel);
     EntityManager::entities.push_back(barrel);
-    map->addEntityToMatrix(barrel);
+    newMap.addEntityToMatrix(barrel);
+    newMap.moovingObject.push_back(barrel);
     EntityManager::player = std::make_shared<Mario>(spritesPatterns.at(Player::movePatternLeft)[0], posmario,
                                                     EntityType::PLAYER, MARIO_SPEED, spritesPatterns);
+
 
     return newMap;
 }

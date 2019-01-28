@@ -10,6 +10,7 @@
 Map::Map()
 {
     entity3DArray = Matrix3d(100, std::vector<std::vector<std::shared_ptr<Entity>>>(100));
+
 }
 
 Map::Map(unsigned int x, unsigned int y)
@@ -222,6 +223,20 @@ std::shared_ptr<CollideRes> Map::collide(sf::Sprite sprite, EntityType entityTyp
     if(entityType == PLAYER){
         if (EntityManager::player->hitboxUseForCollision.getGlobalBounds().intersects(sprite.getGlobalBounds())) return std::make_shared<CollideRes>(true, EntityManager::player);
     }
+
+    if(entityType == BARREL){
+        printf("%d",moovingObject.size());
+        for (const auto &i : moovingObject)
+        {
+
+            if (i->sprite.getGlobalBounds().intersects(sprite.getGlobalBounds()))
+            {
+                return std::make_shared<CollideRes>(true, i);
+            }
+        }
+    }
+
+
     std::vector<std::shared_ptr<Entity>> list_entity;
     auto left = static_cast<unsigned int>(sprite.getPosition().x / CASE_AREA);
     auto right = static_cast<unsigned int>((sprite.getPosition().x + sprite.getGlobalBounds().width) / CASE_AREA);

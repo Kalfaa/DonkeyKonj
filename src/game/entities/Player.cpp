@@ -27,6 +27,9 @@ void Player::update(sf::Time elapsedTime, Map map)
     sf::Vector2f moveUp(0.f, -playerSpeed);
     sf::Vector2f moveRight(playerSpeed, 0.f);
     sf::Vector2f moveLeft(-playerSpeed, 0.f);
+    if(collide(map,EntityType::BARREL,DOWN)){
+        sprite.setPosition(map.startpoint);
+    }
     if (playerState != JUMP && playerState != STARTJUMP && playerState != GRINDING)
     {
         sprite.move(moveDown * elapsedTime.asSeconds());

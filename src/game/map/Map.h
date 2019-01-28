@@ -70,6 +70,7 @@ public:
     sf::Vector2f startpoint;
     std::vector<std::shared_ptr<Entity>> moovingObject;
 
+
 };
 
 
