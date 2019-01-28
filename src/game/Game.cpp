@@ -1,3 +1,4 @@
+#include <entities/DonkeyKong.h>
 #include "Game.h"
 
 using namespace std;
@@ -364,6 +365,18 @@ Map Game::basicMap()
                     {Barrel::barrelVertical, sps.getPattern("BarrelVertical")},
             }
     };
+
+
+
+
+    DonkeyKong::SpritesPatterns spritesPatternDk{
+            {
+                    {DonkeyKong::donkeyFace,  sps.getPattern("DonkeyKongFace")}
+            }
+    };
+
+
+
     sf::Vector2f posbarrel(32 * 15, 32);
 
     std::shared_ptr<Entity> barrel = std::make_shared<Barrel>(spritesPatternsBarrel.at(Barrel::barrelHorizontal)[0],
@@ -374,6 +387,7 @@ Map Game::basicMap()
     newMap.moovingObject.push_back(barrel);
     EntityManager::player = std::make_shared<Mario>(spritesPatterns.at(Player::movePatternLeft)[0], posmario,
                                                     EntityType::PLAYER, MARIO_SPEED, spritesPatterns);
+   // std::shared_ptr<Entity> dk = std::make_shared<DonkeyKong>(spritesPatternDk.at(DonkeyKong::donkeyFace),posbarrel,EntityType::DONKEYKONG,spritesPatternDk);
 
 
     return newMap;
