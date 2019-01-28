@@ -219,6 +219,9 @@ void Map::countElement()
 
 std::shared_ptr<CollideRes> Map::collide(sf::Sprite sprite, EntityType entityType, Direction direction)
 {
+    if(entityType == PLAYER){
+        if (EntityManager::player->hitboxUseForCollision.getGlobalBounds().intersects(sprite.getGlobalBounds())) return std::make_shared<CollideRes>(true, EntityManager::player);
+    }
     std::vector<std::shared_ptr<Entity>> list_entity;
     auto left = static_cast<unsigned int>(sprite.getPosition().x / CASE_AREA);
     auto right = static_cast<unsigned int>((sprite.getPosition().x + sprite.getGlobalBounds().width) / CASE_AREA);
