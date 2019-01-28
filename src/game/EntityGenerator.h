@@ -10,6 +10,8 @@
 #include "Entity.h"
 #include "SpritesSheet.h"
 #include "Mario.h"
+#include "BonusItem.h"
+#include "ScoreTab.h"
 
 
 class EntityGenerator
@@ -21,6 +23,10 @@ public:
     static std::shared_ptr<Entity> createPlatform(SpritesSheet&, const sf::Vector2f& pos, const sf::Vector2f& size);
     static std::shared_ptr<Entity> createLadder(SpritesSheet&, const sf::Vector2f& pos, const sf::Vector2f& size);
     static std::shared_ptr<Entity> createMario(SpritesSheet&, const sf::Vector2f& pos, const sf::Vector2f& size);
+    static std::shared_ptr<Entity> createUmbrellaBonus(SpritesSheet&, const sf::Vector2f& pos, const sf::Vector2f& size);
+    static std::shared_ptr<Entity> createHandbagBonus(SpritesSheet&, const sf::Vector2f& pos, const sf::Vector2f& size);
+    static std::shared_ptr<Entity> createHatBonus(SpritesSheet&, const sf::Vector2f& pos, const sf::Vector2f& size);
+    static std::shared_ptr<Entity> createTabScore(SpritesSheet&, const sf::Vector2f& pos, const sf::Vector2f& size);
 };
 
 #endif //DONKEYKONG_ENTITYGENERATOR_H

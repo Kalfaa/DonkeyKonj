@@ -45,7 +45,7 @@ std::shared_ptr<Entity> EntityGenerator::createLadder(SpritesSheet& spritesSheet
         sf::Sprite sp = spritesSheet.getSprite("Ladder");
 
         int sizeX = static_cast<int>((size.x < 0) ? sp.getTextureRect().width : size.x / sp.getScale().x);
-        int sizeY = static_cast<int>((size.y < 0) ? sp.getTextureRect().height : size.x / sp.getScale().x);
+        int sizeY = static_cast<int>((size.y < 0) ? sp.getTextureRect().height : size.y / sp.getScale().y);
 
         sp.setTextureRect(sf::IntRect(0, 0, sizeX, sizeY));
         ladder = std::make_shared<Ladder>(sp, pos, EntityType::LADDER);
@@ -82,4 +82,51 @@ std::shared_ptr<Entity> EntityGenerator::createMario(SpritesSheet& spritesSheet,
     EntityManager::player = mario;
     return mario;
 
+}
+
+std::shared_ptr<Entity>
+EntityGenerator::createUmbrellaBonus(SpritesSheet & sps, const sf::Vector2f &pos, const sf::Vector2f &size)
+{
+    std::shared_ptr<BonusItem> bonus = std::make_shared<BonusItem>(sps.getSprite("UmbrellaBonus"),
+                                                                   pos,
+                                                                   EntityType::BONUS_ITEM,
+                                                                   100,
+                                                                   sps.getSprite("100Bonus"));
+    EntityManager::entities.push_back(bonus);
+    return bonus;
+}
+
+std::shared_ptr<Entity>
+EntityGenerator::createHandbagBonus(SpritesSheet & sps, const sf::Vector2f &pos, const sf::Vector2f &size)
+{
+    std::shared_ptr<BonusItem> bonus = std::make_shared<BonusItem>(sps.getSprite("HandbagBonus"),
+                                pos,
+                                EntityType::BONUS_ITEM,
+                                300,
+                                sps.getSprite("300Bonus"));
+    EntityManager::entities.push_back(bonus);
+    return bonus;
+}
+
+std::shared_ptr<Entity>
+EntityGenerator::createHatBonus(SpritesSheet & sps, const sf::Vector2f &pos, const sf::Vector2f &size)
+{
+    std::shared_ptr<BonusItem> bonus = std::make_shared<BonusItem>(sps.getSprite("HatBonus"),
+                                                                   pos,
+                                                                   EntityType::BONUS_ITEM,
+                                                                   500,
+                                                                   sps.getSprite("500Bonus"));
+    EntityManager::entities.push_back(bonus);
+    return bonus;
+}
+
+std::shared_ptr<Entity>
+EntityGenerator::createTabScore(SpritesSheet& sps, const sf::Vector2f& pos, const sf::Vector2f& size)
+{
+    std::shared_ptr<Entity> scoreTab = std::make_shared<ScoreTab>(sps.getSprite("BonusPanel0"),
+                                                                  pos,
+                                                                  EntityType::SCORE_TAB);
+
+    EntityManager::entities.push_back(scoreTab);
+    return scoreTab;
 }

@@ -53,6 +53,7 @@ shared_ptr<Map> GenerateMap::createMap(unsigned int sizeX, unsigned int sizeY, s
                     continue;
                 }
 
+                //mapF.clear();
                 mapF.seekg(pos);
                 mapF >> tabPos[cnt];
             }
@@ -66,6 +67,8 @@ shared_ptr<Map> GenerateMap::createMap(unsigned int sizeX, unsigned int sizeY, s
 
             pos = mapF.tellg();
             mapF >> bracket;
+
+            //mapF.clear();
             mapF.seekg(pos);
         }
         mapF >> bracket;

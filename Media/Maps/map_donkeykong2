@@ -1,6 +1,35 @@
 PLATFORM
 {
 0 100 400 D ;
+0 200 400 D ;
+0 300 400 D ;
+0 400 400 D ;
+}
+
+LADDER
+{
+0 100 D 300 ;
+200 200 D 400 ;
+}
+
+BONUS_UMBRELLA
+{
+150 63 ;
+}
+
+BONUS_HANDBAG
+{
+50 177 ;
+}
+
+BONUS_HAT
+{
+100 280 ;
+}
+
+SCORE_TAB
+{
+156 0 ;
 }
 
 MARIO
