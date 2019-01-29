@@ -18,7 +18,7 @@ Game::Game()
     sps.loadSprites(EntityManager::TEXTURES_PATH + "/DonkeyKong_SpritesSheet.png", SCALE_SPRITES);
 
     std::string filename = EntityManager::MAP_PATH + "/" + "map_donkeykong";
-    //shared_ptr<Map> map = basicMap();
+    map = basicMap();
 
     ///MAP GENERATOR
 //    std::map<string, EntityGenerator::FunctionPtrCreateEntity> mapElement {
@@ -105,6 +105,7 @@ void Game::update(sf::Time elapsedTime)
     for(const auto &entity : EntityManager::entities)
     {
         if (entity->type == BARREL) entity->update(elapsedTime, map);
+        if (entity->type == DONKEYKONG) entity->update(elapsedTime,map);
         if (entity->type == BONUS_ITEM) entity->update(elapsedTime, map);
     }
     if (countElement)
@@ -390,8 +391,8 @@ Map Game::basicMap()
     newMap.moovingObject.push_back(barrel);
     EntityManager::player = std::make_shared<Mario>(spritesPatterns.at(Player::movePatternLeft)[0], posmario,
                                                     EntityType::PLAYER, MARIO_SPEED, spritesPatterns);
-   // std::shared_ptr<Entity> dk = std::make_shared<DonkeyKong>(spritesPatternDk.at(DonkeyKong::donkeyFace),posbarrel,EntityType::DONKEYKONG,spritesPatternDk);
-
+    std::shared_ptr<Entity> dk = std::make_shared<DonkeyKong>(spritesPatternDk.at(DonkeyKong::donkeyFace)[0],posbarrel,EntityType::DONKEYKONG,spritesPatternDk);
+    EntityManager::entities.push_back(dk);
 
     return newMap;
 }

@@ -7,7 +7,12 @@
 
 
 #include "StaticEntity.h"
+#include "Map.h"
 
+
+#define DK_SPEED 65
+
+class Map;
 class DonkeyKong : public Entity
 {
 
@@ -19,8 +24,9 @@ public:
         barrelHorizontal,
 
     };
+
     typedef std::map<DonkeyKong::PatternType, std::vector<sf::Sprite>> SpritesPatterns;
-    enum BarrelState
+    enum DonkeyState
     {
         LEFT,
         RIGHT,
@@ -32,6 +38,12 @@ public:
     };
     DonkeyKong(const sf::Sprite&, const sf::Vector2f& posPlayer, EntityType,const SpritesPatterns &);
     SpritesPatterns patterns;
+    int HP;
+    DonkeyState state ;
+    bool invulnerable;
+    void update(sf::Time elapsedTime, Map map );
+    int timeAnimation;
+
 };
 
 
