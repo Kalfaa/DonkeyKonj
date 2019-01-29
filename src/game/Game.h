@@ -33,19 +33,19 @@ public:
 
 private:
 
-    Map createMap(std::ifstream mapFile);
+    Map* createMap(std::ifstream mapFile);
 
     void processEvents();
 
     void update(sf::Time elapsedTime);
 
-    void render();
+    void draw();
 
     void updateStatistics(sf::Time elapsedTime);
 
     void handlePlayerInput(sf::Keyboard::Key key, bool isPressed);
 
-    Map basicMap();
+    Map* basicMap();
 
     void addBlockLine(Map &map, int number, int posx, int posy);
 
@@ -61,7 +61,7 @@ private:
     static const float PlayerSpeed;
     static const sf::Time timePerFrame;
 
-    Map map;
+    std::shared_ptr<Map> map;
     SpritesSheet sps;
 
     sf::RenderWindow mWindow;

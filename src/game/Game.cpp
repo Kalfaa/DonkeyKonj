@@ -18,7 +18,8 @@ Game::Game()
     sps.loadSprites(EntityManager::TEXTURES_PATH + "/DonkeyKong_SpritesSheet.png", SCALE_SPRITES);
 
     std::string filename = EntityManager::MAP_PATH + "/" + "map_donkeykong";
-    map = basicMap();
+
+    map = std::shared_ptr<Map>(basicMap());
 
     ///MAP GENERATOR
 //    std::map<string, EntityGenerator::FunctionPtrCreateEntity> mapElement {
@@ -32,7 +33,7 @@ Game::Game()
 //    };
 //
 //    GenerateMap gMap(sps, mapElement);
-//    map = gMap.createMap(600, 600, "map_donkeykong2");map = basicMap();
+//    map = gMap.createMap(600, 600, "map_donkeykong2");
     /// MAP ROTARENEG
 
     mFont.loadFromFile(EntityManager::MEDIA_PATH + "/Sansation.ttf");
@@ -67,7 +68,7 @@ void Game::run()
         }
 
         updateStatistics(elapsedTime);
-        render();
+        draw();
     }
 }
 
@@ -98,19 +99,19 @@ void Game::processEvents()
 void Game::update(sf::Time elapsedTime)
 {
     sf::Vector2f movement(0.f, 0.f);
-    EntityManager::player->update(elapsedTime, map);
+    EntityManager::player->update(elapsedTime, *map);
 
     const sf::Sprite player = EntityManager::player->getSprite();
 
     for(const auto &entity : EntityManager::entities)
     {
-        if (entity->type == BARREL) entity->update(elapsedTime, map);
-        if (entity->type == DONKEYKONG) entity->update(elapsedTime,map);
-        if (entity->type == BONUS_ITEM) entity->update(elapsedTime, map);
+        if (entity->type == BARREL) entity->update(elapsedTime, *map);
+        if (entity->type == DONKEYKONG) entity->update(elapsedTime, *map);
+        if (entity->type == BONUS_ITEM) entity->update(elapsedTime, *map);
     }
     if (countElement)
     {
-        map.countElement();
+        map->countElement();
         countElement = false;
     }
     if (mIsMovingUp)EntityManager::player->move(UP);
@@ -133,7 +134,7 @@ void Game::update(sf::Time elapsedTime)
     }
 }
 
-void Game::render()
+void Game::draw()
 {
     mWindow.clear();
 
@@ -233,14 +234,14 @@ void Game::handlePlayerInput(sf::Keyboard::Key key, bool isPressed)
 
 }
 
-Map Game::createMap(std::ifstream mapFile)
+Map* Game::createMap(std::ifstream mapFile)
 {
 
     std::string str((std::istreambuf_iterator<char>(mapFile)),
                     std::istreambuf_iterator<char>());
     auto x = static_cast<unsigned int>(str.find('\n'));
     auto y = static_cast<unsigned int>(str.begin(), str.end(), '\n');
-    Map newMap = Map(x, y);
+    Map* newMap = new Map(x, y);
     //map.entity3DArray = Matrix3d(x, std::vector<std::vector<std::shared_ptr<Entity>>>(y));
     std::vector<std::string> list_string;
     std::stringstream ss(str);
@@ -273,7 +274,7 @@ Map Game::createMap(std::ifstream mapFile)
                     std::shared_ptr<Entity> plat = std::make_shared<Platform>(sps.getSprite("PlatformRed"), pos,
                                                                               EntityType::PLATFORM);
                     EntityManager::entities.push_back(plat);
-                    newMap.addEntityToMatrix(plat);
+                    newMap->addEntityToMatrix(plat);
                     break;
                 }
                 case 'H':
@@ -281,7 +282,7 @@ Map Game::createMap(std::ifstream mapFile)
                     std::shared_ptr<Entity> ladder = std::make_shared<Ladder>(sps.getSprite("Ladder"), pos,
                                                                               EntityType::LADDER);
                     EntityManager::entities.push_back(ladder);
-                    newMap.addEntityToMatrix(ladder);
+                    newMap->addEntityToMatrix(ladder);
                     break;
                 }
                 case 'X':
@@ -310,8 +311,8 @@ Map Game::createMap(std::ifstream mapFile)
                                                                     EntityType::PLAYER,
                                                                     MARIO_SPEED,
                                                                     spritesPatterns);
-                    newMap.startpoint.x = j;
-                    newMap.startpoint.y = i;
+                    newMap->startpoint.x = j;
+                    newMap->startpoint.y = i;
                 }
                 default:
                     break;
@@ -319,31 +320,30 @@ Map Game::createMap(std::ifstream mapFile)
         }
     }
     return newMap;
-
 }
 
-Map Game::basicMap()
+Map* Game::basicMap()
 {
-    Map newMap = Map(100, 100);
+    Map* newMap = new Map(100, 100);
 
-    addBlockLine(newMap, 30, 50, 250);
-    addBlockLine(newMap, 30, 50, 350);
-    addBlockLine(newMap, 30, 50, 450);
-    addLadder(newMap, 4, 50, 410);
-    addLadder(newMap,4,90,310);
+    addBlockLine(*newMap, 30, 50, 250);
+    addBlockLine(*newMap, 30, 50, 350);
+    addBlockLine(*newMap, 30, 50, 450);
+    addLadder(*newMap, 4, 50, 410);
+    addLadder(*newMap,4,90,310);
     //string bonusTab[3] = {"UmbrellaBonus", "HandbagBonus", "HatBonus"};
 
     int bonusX[3] = {50, 140, 180};
     int bonusY[3] = {static_cast<int>(250 - sps.getSpriteSize("UmbrellaBonus")[0]),
                      static_cast<int>(350 - sps.getSpriteSize("HandbagBonus")[0]),
                      static_cast<int>(450 - sps.getSpriteSize("HatBonus")[0])};
-    addBonus(newMap, bonusX, bonusY);
+    addBonus(*newMap, bonusX, bonusY);
 
-    addScoreTab(newMap, static_cast<int>(mWindow.getSize().x - sps.getSpriteSize("BonusPanel0")[1]), 0);
+    addScoreTab(*newMap, static_cast<int>(mWindow.getSize().x - sps.getSpriteSize("BonusPanel0")[1]), 0);
 
     sf::Vector2f posmario(5 * 32, 3 * 32);
-    newMap.startpoint.x = posmario.x;
-    newMap.startpoint.y = posmario.y;
+    newMap->startpoint.x = posmario.x;
+    newMap->startpoint.y = posmario.y;
 
     Mario::SpritesPatterns spritesPatterns
             {
@@ -387,8 +387,8 @@ Map Game::basicMap()
                                                               posbarrel,
                                                               EntityType::BARREL, spritesPatternsBarrel);
     EntityManager::entities.push_back(barrel);
-    newMap.addEntityToMatrix(barrel);
-    newMap.moovingObject.push_back(barrel);
+    newMap->addEntityToMatrix(barrel);
+    newMap->moovingObject.push_back(barrel);
     EntityManager::player = std::make_shared<Mario>(spritesPatterns.at(Player::movePatternLeft)[0], posmario,
                                                     EntityType::PLAYER, MARIO_SPEED, spritesPatterns);
     std::shared_ptr<Entity> dk = std::make_shared<DonkeyKong>(spritesPatternDk.at(DonkeyKong::donkeyFace)[0],posbarrel,EntityType::DONKEYKONG,spritesPatternDk);

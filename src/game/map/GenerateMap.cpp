@@ -15,7 +15,7 @@ GenerateMap::GenerateMap(const SpritesSheet& spritesSheet, const std::map<string
 shared_ptr<Map> GenerateMap::createMap(unsigned int sizeX, unsigned int sizeY, std::string mapFile)
 {
     string fileName = EntityManager::MAP_PATH + "/" + mapFile;
-    ifstream mapF(fileName.c_str());
+    ifstream mapF(fileName.c_str(), std::ifstream::binary);
     if (!mapF) throw std::runtime_error("Could not open file");
 
     shared_ptr<Map> map = make_shared<Map>();
