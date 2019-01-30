@@ -20,10 +20,14 @@ std::shared_ptr<Entity> EntityGenerator::createPlatform(SpritesSheet& spritesShe
     {
         sf::Sprite sp = spritesSheet.getSprite("PlatformRed");
 
-        int sizeX = static_cast<int>((size.x < 0) ? sp.getTextureRect().width : size.x / sp.getScale().x);
-        int sizeY = static_cast<int>((size.y < 0) ? sp.getTextureRect().height : size.y / sp.getScale().y);
+        int sizeX = static_cast<int>((size.x < 0) ? sp.getTextureRect().width : size.x);
+        int sizeY = static_cast<int>((size.y < 0) ? sp.getTextureRect().height : size.y);
+
+        cerr << " YO " << sp.getTextureRect().width << "  " << sp.getTextureRect().height << endl;
 
         sp.setTextureRect(sf::IntRect(0, 0, sizeX, sizeY));
+        sp.setScale(2.5f, 2.5f);
+        cerr << sp.getGlobalBounds().height << "  " << sp.getGlobalBounds().width << endl;
         platform = std::make_shared<Platform>(sp, pos, EntityType::PLATFORM);
     }
 
@@ -129,4 +133,16 @@ EntityGenerator::createTabScore(SpritesSheet& sps, const sf::Vector2f& pos, cons
 
     EntityManager::entities.push_back(scoreTab);
     return scoreTab;
+}
+
+std::shared_ptr<Entity>
+EntityGenerator::createBarrel(SpritesSheet &, const sf::Vector2f &pos, const sf::Vector2f &size)
+{
+    return shared_ptr<Entity>();
+}
+
+std::shared_ptr<Entity>
+EntityGenerator::createDonkeyKong(SpritesSheet &, const sf::Vector2f &pos, const sf::Vector2f &size)
+{
+    return shared_ptr<Entity>();
 }

@@ -27,6 +27,8 @@ public:
     static std::shared_ptr<Entity> createHandbagBonus(SpritesSheet&, const sf::Vector2f& pos, const sf::Vector2f& size);
     static std::shared_ptr<Entity> createHatBonus(SpritesSheet&, const sf::Vector2f& pos, const sf::Vector2f& size);
     static std::shared_ptr<Entity> createTabScore(SpritesSheet&, const sf::Vector2f& pos, const sf::Vector2f& size);
+    static std::shared_ptr<Entity> createBarrel(SpritesSheet&, const sf::Vector2f& pos, const sf::Vector2f& size);
+    static std::shared_ptr<Entity> createDonkeyKong(SpritesSheet&, const sf::Vector2f& pos, const sf::Vector2f& size);
 };
 
 #endif //DONKEYKONG_ENTITYGENERATOR_H

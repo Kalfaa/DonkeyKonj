@@ -19,21 +19,22 @@ Game::Game()
 
     std::string filename = EntityManager::MAP_PATH + "/" + "map_donkeykong";
 
-    map = std::shared_ptr<Map>(basicMap());
+//    map = std::shared_ptr<Map>(basicMap());
 
     ///MAP GENERATOR
-//    std::map<string, EntityGenerator::FunctionPtrCreateEntity> mapElement {
-//            {"PLATFORM", &EntityGenerator::createPlatform},
-//            {"LADDER", &EntityGenerator::createLadder},
-//            {"MARIO", &EntityGenerator::createMario},
-//            {"BONUS_UMBRELLA", &EntityGenerator::createUmbrellaBonus},
-//            {"BONUS_HANDBAG", &EntityGenerator::createHandbagBonus},
-//            {"BONUS_HAT", &EntityGenerator::createHatBonus},
-//            {"SCORE_TAB", &EntityGenerator::createTabScore}
-//    };
-//
-//    GenerateMap gMap(sps, mapElement);
-//    map = gMap.createMap(600, 600, "map_donkeykong2");
+    std::map<string, EntityGenerator::FunctionPtrCreateEntity> mapElement {
+            {"PLATFORM", &EntityGenerator::createPlatform},
+            {"LADDER", &EntityGenerator::createLadder},
+            {"MARIO", &EntityGenerator::createMario},
+            {"BONUS_UMBRELLA", &EntityGenerator::createUmbrellaBonus},
+            {"BONUS_HANDBAG", &EntityGenerator::createHandbagBonus},
+            {"BONUS_HAT", &EntityGenerator::createHatBonus},
+            {"SCORE_TAB", &EntityGenerator::createTabScore},
+            {}
+    };
+
+    GenerateMap gMap(sps, mapElement);
+    map = gMap.createMap(600, 600, "map_donkeykong2");
     /// MAP ROTARENEG
 
     mFont.loadFromFile(EntityManager::MEDIA_PATH + "/Sansation.ttf");
