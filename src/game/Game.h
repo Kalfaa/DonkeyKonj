@@ -33,7 +33,7 @@ public:
 
 private:
 
-    Map* createMap(std::ifstream mapFile);
+    Map *createMap(std::ifstream mapFile);
 
     void processEvents();
 
@@ -45,16 +45,17 @@ private:
 
     void handlePlayerInput(sf::Keyboard::Key key, bool isPressed);
 
-    Map* basicMap();
+    Map *basicMap();
 
     void addBlockLine(Map &map, int number, int posx, int posy);
 
     void addLadder(Map &map, int height, int posx, int posy);
 
     void addBonus(Map &map, int posx[3], int posy[3]);
+
     void addScoreTab(Map &map, int posx, int posy);
 
-    sf::RectangleShape getRectangleToDraw(sf::FloatRect rectFloat ,sf::Color color);
+    sf::RectangleShape getRectangleToDraw(sf::FloatRect rectFloat, sf::Color color);
 
 private:
 

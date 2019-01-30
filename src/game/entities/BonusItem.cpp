@@ -12,20 +12,25 @@ BonusItem::BonusItem(const sf::Sprite &sprite, const sf::Vector2f &position, Ent
 {
 }
 
-unsigned int BonusItem::catchBonus()
+unsigned int BonusItem::catchBonus(sf::Time elapsedTime)
 {
     isCatch = true;
     valueSprite.setPosition(sprite.getPosition());
     sprite = valueSprite;
+    //timeValueAppear = elapsedTime;
     return value;
 }
 
-void BonusItem::update(sf::Time elapsedTime, Map map)
+void BonusItem::update(sf::Time elapsedTime, std::shared_ptr<Map> map)
 {
-        if (map.collide(sprite, EntityType::PLAYER, RIGHT)->collide)
+    if (map->collide(sprite, EntityType::PLAYER, RIGHT)->collide)
+    {
+        if (!isCatch)
         {
-            if(!isCatch) this->catchBonus();
+            map->removeEntityToMatrix(this);
+            //this->catchBonus(elapsedTime);
         }
-    
+    }
+    //if(elapsedTime - timeValueAppear >= timeValueStay) map.removeEntityToMatrix(this);
     //else map.removeEntityToMatrix(this);
 }

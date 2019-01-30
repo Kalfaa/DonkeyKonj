@@ -14,6 +14,7 @@
 #define DK_SPEED 65
 
 class Map;
+
 class DonkeyKong : public Entity
 {
 
@@ -38,19 +39,26 @@ public:
         NONE,
         LAUNCHBARREL,
     };
-    DonkeyKong(const sf::Sprite&, const sf::Vector2f& posPlayer, EntityType,const SpritesPatterns &,const Barrel::SpritesPatterns &);
-    SpritesPatterns patterns;
+
+public:
+    DonkeyKong(const sf::Sprite &, const sf::Vector2f &posPlayer, EntityType, const SpritesPatterns &,
+               const Barrel::SpritesPatterns &);
+
+public:
     int HP;
     int timeBarrelLaunch;
-    DonkeyState state ;
     bool invulnerable;
-    void update(sf::Time elapsedTime, Map map );
     int timeAnimation;
-    void createBarrel(Map map ,sf::Vector2f pos );
+
+    SpritesPatterns patterns;
+    DonkeyState state;
     Barrel::SpritesPatterns barrelPattern;
+
+public:
+    void update(sf::Time elapsedTime, std::shared_ptr<Map> map) override;
+
+    void createBarrel(Map map, sf::Vector2f pos);
 };
-
-
 
 
 #endif //DONKEYKONG_DONKEYKONG_H

@@ -11,6 +11,7 @@
 #include <list>
 #include <regex>
 #include <functional>
+#include <random>
 
 #include <cassert>
 

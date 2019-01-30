@@ -7,7 +7,8 @@
 
 using namespace std;
 
-GenerateMap::GenerateMap(const SpritesSheet& spritesSheet, const std::map<string, EntityGenerator::FunctionPtrCreateEntity> &mapEntity)
+GenerateMap::GenerateMap(const SpritesSheet &spritesSheet,
+                         const std::map<string, EntityGenerator::FunctionPtrCreateEntity> &mapEntity)
         : spritesSheet(spritesSheet), mapEntity(mapEntity)
 {
 }
@@ -27,27 +28,27 @@ shared_ptr<Map> GenerateMap::createMap(unsigned int sizeX, unsigned int sizeY, s
     {
         mapF >> entityName;
 
-        if(entityName.empty()) break;
-        if(mapEntity.find(entityName) == mapEntity.end())
+        if (entityName.empty()) break;
+        if (mapEntity.find(entityName) == mapEntity.end())
             throw std::runtime_error("Generation of Map fail : \"" + entityName + "\" is not a valid key");
 
         mapF >> bracket;
 
         long tabPos[4] = {0, 0, 0, 0};
 
-        while(bracket != "}")
+        while (bracket != "}")
         {
             fpos<mbstate_t> pos;
             unsigned int cnt;
             string next;
 
-            for(cnt = 0; cnt < 4; cnt++)
+            for (cnt = 0; cnt < 4; cnt++)
             {
                 pos = mapF.tellg();
                 mapF >> next;
 
-                if(next == ";") break;
-                else if(next == "D")
+                if (next == ";") break;
+                else if (next == "D")
                 {
                     tabPos[cnt] = -1;
                     continue;
@@ -56,8 +57,9 @@ shared_ptr<Map> GenerateMap::createMap(unsigned int sizeX, unsigned int sizeY, s
                 mapF.seekg(pos);
                 mapF >> tabPos[cnt];
             }
-            if(cnt == 2) addSprite(static_cast<unsigned int>(tabPos[0]), static_cast<unsigned int>(tabPos[1]),
-                    mapEntity[entityName], map);
+            if (cnt == 2)
+                addSprite(static_cast<unsigned int>(tabPos[0]), static_cast<unsigned int>(tabPos[1]),
+                          mapEntity[entityName], map);
             else
             {
                 addResizedSprite(tabPos, mapEntity[entityName], map);
@@ -85,7 +87,9 @@ void GenerateMap::addElementToMap(const std::vector<std::shared_ptr<Entity>> &en
 
 }
 
-void GenerateMap::addSprite(unsigned int posX, unsigned int posY, EntityGenerator::FunctionPtrCreateEntity generateEntity, shared_ptr<Map>& map)
+void
+GenerateMap::addSprite(unsigned int posX, unsigned int posY, EntityGenerator::FunctionPtrCreateEntity generateEntity,
+                       shared_ptr<Map> &map)
 {
     shared_ptr<Entity> entityPtr = generateEntity(spritesSheet, sf::Vector2f(posX, posY), sf::Vector2f(-1, -1));
 
@@ -93,9 +97,11 @@ void GenerateMap::addSprite(unsigned int posX, unsigned int posY, EntityGenerato
     map->addEntityToMatrix(entityPtr);
 }
 
-void GenerateMap::addResizedSprite(long pos[4], EntityGenerator::FunctionPtrCreateEntity generateEntity, shared_ptr<Map>& map)
+void GenerateMap::addResizedSprite(long pos[4], EntityGenerator::FunctionPtrCreateEntity generateEntity,
+                                   shared_ptr<Map> &map)
 {
-    shared_ptr<Entity> entityPtr = generateEntity(spritesSheet, sf::Vector2f(pos[0], pos[1]), sf::Vector2f(pos[2], pos[3]));
+    shared_ptr<Entity> entityPtr = generateEntity(spritesSheet, sf::Vector2f(pos[0], pos[1]),
+                                                  sf::Vector2f(pos[2], pos[3]));
     map->addEntityToMatrix(entityPtr);
 }
 

@@ -18,15 +18,17 @@ public:
               const sf::Sprite &valueSprite);
 
 public:
-    unsigned int catchBonus();
+    unsigned int catchBonus(sf::Time elapsedTime);
 
-    void update(sf::Time time1, Map map) override;
+    void update(sf::Time time1, std::shared_ptr<Map> map) override;
 
 public:
     unsigned int value;
 
 private:
     sf::Sprite valueSprite;
+    //sf::Time timeValueStay;
+    //sf::Time timeValueAppear;
     bool isCatch = false;
 };
 

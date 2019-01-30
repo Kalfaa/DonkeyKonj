@@ -15,7 +15,7 @@ Mario::Mario(const sf::Sprite &sprite, const sf::Vector2f &posPlayer, EntityType
 void Mario::render()
 {}
 
-void Mario::update(sf::Time time, Map map)
+void Mario::update(sf::Time time, std::shared_ptr<Map> map)
 {
     Player::update(time, map);
 }

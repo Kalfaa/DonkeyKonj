@@ -22,6 +22,7 @@ class Entity;
 struct CollideRes
 {
     CollideRes(bool collide, std::shared_ptr<Entity> entity);
+
     bool collide;
     std::shared_ptr<Entity> entity;
 };
@@ -55,14 +56,22 @@ public:
     void addEntityToMatrix(std::shared_ptr<Entity>);
 
     void removeEntityToMatrix(const std::shared_ptr<Entity> &);
-    void removeEntityToMatrix(Entity*);
+
+    void removeEntityToMatrix(Entity *);
 
     void print(const sf::RenderWindow &);
+
     void printElement();
+
     void addMoovingObject(std::shared_ptr<Entity> ent);
-    std::shared_ptr<CollideRes> collide(sf::Sprite sprite,EntityType entityType,Direction direction);
-    std::shared_ptr<CollideRes> collide(sf::Sprite sprite,EntityType entityType,Direction direction,std::shared_ptr<Entity> entity);
-    std::shared_ptr<CollideRes> collide(sf::Sprite sprite,EntityType entityType,Direction direction,sf::FloatRect rect);
+
+    std::shared_ptr<CollideRes> collide(sf::Sprite sprite, EntityType entityType, Direction direction);
+
+    std::shared_ptr<CollideRes>
+    collide(sf::Sprite sprite, EntityType entityType, Direction direction, std::shared_ptr<Entity> entity);
+
+    std::shared_ptr<CollideRes>
+    collide(sf::Sprite sprite, EntityType entityType, Direction direction, sf::FloatRect rect);
 
 
 public:

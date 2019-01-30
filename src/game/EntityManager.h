@@ -18,8 +18,10 @@ public:
 public:
     //static std::unique<Entity> getPlayer();
     static void removeFromEntities(std::shared_ptr<Entity> entity);
-    static std::shared_ptr<Entity> createPlatform(const sf::Vector2f& pos, long wight, long height);
-    static std::shared_ptr<Entity> createLadder(const sf::Vector2f& pos, long wight, long height);
+
+    static std::shared_ptr<Entity> createPlatform(const sf::Vector2f &pos, long wight, long height);
+
+    static std::shared_ptr<Entity> createLadder(const sf::Vector2f &pos, long wight, long height);
 
 public:
     static std::vector<std::shared_ptr<Entity>> entities;

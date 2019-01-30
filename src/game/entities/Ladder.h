@@ -14,7 +14,6 @@ class Ladder : public StaticEntity
 {
 public:
     Ladder(const sf::Sprite &, const sf::Vector2f &position, EntityType type);
-
 };
 
 
