@@ -7,7 +7,7 @@ const sf::Time Game::timePerFrame = sf::seconds(1.f / 60.f);
 const int CASE_PIXEL_VALUE = 32;
 
 Game::Game()
-        : mWindow(sf::VideoMode(840, 600), "Donkey Kong 1981", sf::Style::Close), mTexture(), mPlayer(), mFont(),
+        : mWindow(sf::VideoMode(410, 600), "Donkey Kong 1981", sf::Style::Close), mTexture(), mPlayer(), mFont(),
           mStatisticsText(), mStatisticsUpdateTime(), mStatisticsNumFrames(0), mIsMovingUp(false), mIsMovingDown(false),
           mIsMovingRight(false), mIsMovingLeft(false), debug(false), mJump(false), countElement(false)
 {
@@ -19,21 +19,21 @@ Game::Game()
 
     std::string filename = EntityManager::MAP_PATH + "/" + "map_donkeykong";
 
-    map = std::shared_ptr<Map>(basicMap());
+   // map = std::shared_ptr<Map>(basicMap());
 
     ///MAP GENERATOR
-//    std::map<string, EntityGenerator::FunctionPtrCreateEntity> mapElement {
-//            {"PLATFORM", &EntityGenerator::createPlatform},
-//            {"LADDER", &EntityGenerator::createLadder},
-//            {"MARIO", &EntityGenerator::createMario},
-//            {"BONUS_UMBRELLA", &EntityGenerator::createUmbrellaBonus},
-//            {"BONUS_HANDBAG", &EntityGenerator::createHandbagBonus},
-//            {"BONUS_HAT", &EntityGenerator::createHatBonus},
-//            {"SCORE_TAB", &EntityGenerator::createTabScore}
-//    };
-//
-//    GenerateMap gMap(sps, mapElement);
-//    map = gMap.createMap(600, 600, "map_donkeykong2");
+    std::map<string, EntityGenerator::FunctionPtrCreateEntity> mapElement {
+            {"PLATFORM", &EntityGenerator::createPlatform},
+            {"LADDER", &EntityGenerator::createLadder},
+            {"MARIO", &EntityGenerator::createMario},
+            {"BONUS_UMBRELLA", &EntityGenerator::createUmbrellaBonus},
+            {"BONUS_HANDBAG", &EntityGenerator::createHandbagBonus},
+            {"BONUS_HAT", &EntityGenerator::createHatBonus},
+            {"SCORE_TAB", &EntityGenerator::createTabScore}
+    };
+
+    GenerateMap gMap(sps, mapElement);
+    map = gMap.createMap(600, 600, "map_donkeykong2");
     /// MAP ROTARENEG
 
     mFont.loadFromFile(EntityManager::MEDIA_PATH + "/Sansation.ttf");
@@ -148,6 +148,7 @@ void Game::draw()
         mWindow.draw(entity->sprite);
         if (debug)
         {
+
             sf::RectangleShape rectangle(sf::Vector2f(entity->getSprite().getGlobalBounds().width,
                                                       entity->getSprite().getGlobalBounds().height));
             rectangle.setPosition(entity->getSprite().getPosition());

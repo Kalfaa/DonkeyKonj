@@ -92,8 +92,8 @@ void Map::addEntityToMatrix(std::shared_ptr<Entity> entity)
     sf::Sprite sprite = entity->sprite;
     int x = static_cast<int>(sprite.getPosition().x);
     int y = static_cast<int>(sprite.getPosition().y);
-    int s_width = sprite.getTextureRect().width;
-    int s_height = sprite.getTextureRect().height;
+    int  s_width = static_cast<int> (sprite.getGlobalBounds().width);
+    int s_height = static_cast<int> (sprite.getGlobalBounds().height);
     //@todo REFACTOR CETTE ALGO PETER QUI CREER DES DUPPLICAT DOBJET DANS LA MATRICE
     for (int i = 0; i <= (s_width / CASE_AREA) + 1; i++)
     {
@@ -115,8 +115,8 @@ void Map::removeEntityToMatrix(const std::shared_ptr<Entity> &entity)
     sf::Sprite sprite = entity->sprite;
     int x = static_cast<int>(sprite.getPosition().x);
     int y = static_cast<int>(sprite.getPosition().y);
-    int s_width = sprite.getTextureRect().width;
-    int s_height = sprite.getTextureRect().height;
+    int  s_width = static_cast<int> (sprite.getGlobalBounds().width);
+    int s_height = static_cast<int> (sprite.getGlobalBounds().height);
 
     //@todo REFACTOR CETTE ALGO PETER QUI CREER DES DUPPLICAT DOBJET DANS LA MATRICE
     for (int i = 0; i <= (s_width / CASE_AREA) + 1; i++)
@@ -225,7 +225,6 @@ std::shared_ptr<CollideRes> Map::collide(sf::Sprite sprite, EntityType entityTyp
     }
 
     if(entityType == BARREL){
-        printf("%d",moovingObject.size());
         for (const auto &i : moovingObject)
         {
 
