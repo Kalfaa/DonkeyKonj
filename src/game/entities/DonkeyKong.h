@@ -8,6 +8,7 @@
 
 #include "StaticEntity.h"
 #include "Map.h"
+#include "Barrel.h"
 
 
 #define DK_SPEED 65
@@ -35,15 +36,18 @@ public:
         GRINDING,
         FALL,
         NONE,
+        LAUNCHBARREL,
     };
-    DonkeyKong(const sf::Sprite&, const sf::Vector2f& posPlayer, EntityType,const SpritesPatterns &);
+    DonkeyKong(const sf::Sprite&, const sf::Vector2f& posPlayer, EntityType,const SpritesPatterns &,const Barrel::SpritesPatterns &);
     SpritesPatterns patterns;
     int HP;
+    int timeBarrelLaunch;
     DonkeyState state ;
     bool invulnerable;
     void update(sf::Time elapsedTime, Map map );
     int timeAnimation;
-
+    void createBarrel(Map map ,sf::Vector2f pos );
+    Barrel::SpritesPatterns barrelPattern;
 };
 
 
