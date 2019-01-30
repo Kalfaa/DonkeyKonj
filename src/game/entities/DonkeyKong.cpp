@@ -3,15 +3,19 @@
 //
 
 #include "DonkeyKong.h"
+#include "Barrel.h"
 
 DonkeyKong::DonkeyKong(const sf::Sprite &sprite, const sf::Vector2f &posPlayer, EntityType type,
-               const SpritesPatterns &donkeyKong)
+               const SpritesPatterns &donkeyKong, const Barrel::SpritesPatterns &barrel)
         : Entity(sprite, posPlayer, type),
-          patterns(donkeyKong)
+          patterns(donkeyKong),
+          barrelPattern(barrel)
 {
     HP =3;
     state =GRINDING;
     timeAnimation =0;
+    state = NONE;
+    timeBarrelLaunch = 0;
 }
 
 void DonkeyKong::update(sf::Time elapsedTime, Map map) {
@@ -27,10 +31,38 @@ void DonkeyKong::update(sf::Time elapsedTime, Map map) {
 
 
     timeAnimation += elapsedTime.asMilliseconds();
-
+    timeBarrelLaunch += elapsedTime.asMilliseconds();
     sprite.move(moveDown * elapsedTime.asSeconds());
     if(!map.collide(sprite,EntityType::PLATFORM,DOWN )->collide ){
     }else{
         sprite.move(moveUp * elapsedTime.asSeconds());
     }
+    //if(state == NONE) state = RIGHT ;
+    if( state == RIGHT){
+        sprite.move(moveRight*elapsedTime.asSeconds());
+    }else if (state == LEFT) {
+        sprite.move(moveLeft*elapsedTime.asSeconds());
+
+    }
+    if(state==LAUNCHBARREL){
+        int random = rand() % 1;
+        changeSprite(updateAnimation(&timeAnimation,400,patterns.at(donkeyFace)));
+        if (timeAnimation==0){
+            sf::Vector2f posbarrel(sprite.getPosition().x-30,sprite.getPosition().y);
+            createBarrel(map,posbarrel);
+        }
+
+    }
+    else if(timeBarrelLaunch>5000){
+        state = LAUNCHBARREL;
+    }
+
+}
+
+void DonkeyKong::createBarrel(Map map, sf::Vector2f pos) {
+    std::shared_ptr<Entity> barrel = std::make_shared<Barrel>(barrelPattern.at(Barrel::barrelHorizontal)[0],
+                                                            pos,
+                                                              EntityType::BARREL, barrelPattern);
+    EntityManager::entities.push_back(barrel);
+    //newMap->addEntityToMatrix(barrel);
 }

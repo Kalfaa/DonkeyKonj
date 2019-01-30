@@ -59,6 +59,7 @@ public:
 
     void print(const sf::RenderWindow &);
     void printElement();
+    void addMoovingObject(std::shared_ptr<Entity> ent);
     std::shared_ptr<CollideRes> collide(sf::Sprite sprite,EntityType entityType,Direction direction);
     std::shared_ptr<CollideRes> collide(sf::Sprite sprite,EntityType entityType,Direction direction,std::shared_ptr<Entity> entity);
     std::shared_ptr<CollideRes> collide(sf::Sprite sprite,EntityType entityType,Direction direction,sf::FloatRect rect);

@@ -52,3 +52,7 @@ sf::Sprite Entity::updateAnimation(int *now, int frequency, std::vector<sf::Spri
     if (*now / frequency >= animation.size()) *now = 0;
     return animation[*now / frequency];
 }
+
+void Entity::update(sf::Time, Map *map) {
+
+}

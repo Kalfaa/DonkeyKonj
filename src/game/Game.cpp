@@ -7,7 +7,7 @@ const sf::Time Game::timePerFrame = sf::seconds(1.f / 60.f);
 const int CASE_PIXEL_VALUE = 32;
 
 Game::Game()
-        : mWindow(sf::VideoMode(410, 600), "Donkey Kong 1981", sf::Style::Close), mTexture(), mPlayer(), mFont(),
+        : mWindow(sf::VideoMode(860, 600), "Donkey Kong 1981", sf::Style::Close), mTexture(), mPlayer(), mFont(),
           mStatisticsText(), mStatisticsUpdateTime(), mStatisticsNumFrames(0), mIsMovingUp(false), mIsMovingDown(false),
           mIsMovingRight(false), mIsMovingLeft(false), debug(false), mJump(false), countElement(false)
 {
@@ -19,7 +19,7 @@ Game::Game()
 
     std::string filename = EntityManager::MAP_PATH + "/" + "map_donkeykong";
 
-   // map = std::shared_ptr<Map>(basicMap());
+    map = std::shared_ptr<Map>(basicMap());
 
     ///MAP GENERATOR
     std::map<string, EntityGenerator::FunctionPtrCreateEntity> mapElement {
@@ -32,8 +32,9 @@ Game::Game()
             {"SCORE_TAB", &EntityGenerator::createTabScore}
     };
 
-    GenerateMap gMap(sps, mapElement);
-    map = gMap.createMap(600, 600, "map_donkeykong2");
+    //GenerateMap gMap(sps, mapElement);
+    //map = gMap.createMap(600, 600, "map_donkeykong2");
+
     /// MAP ROTARENEG
 
     mFont.loadFromFile(EntityManager::MEDIA_PATH + "/Sansation.ttf");
@@ -371,7 +372,7 @@ Map* Game::basicMap()
             }
     };
 
-
+   // Barrel::patternsBarrel = spritesPatternsBarrel;
 
 
     DonkeyKong::SpritesPatterns spritesPatternDk{
@@ -383,16 +384,16 @@ Map* Game::basicMap()
 
 
     sf::Vector2f posbarrel(32 * 15, 32);
-
-    std::shared_ptr<Entity> barrel = std::make_shared<Barrel>(spritesPatternsBarrel.at(Barrel::barrelHorizontal)[0],
-                                                              posbarrel,
-                                                              EntityType::BARREL, spritesPatternsBarrel);
-    EntityManager::entities.push_back(barrel);
-    newMap->addEntityToMatrix(barrel);
-    newMap->moovingObject.push_back(barrel);
+    sf::Vector2f posDK(32 * 10, 32*5);
+    //std::shared_ptr<Entity> barrel = std::make_shared<Barrel>(spritesPatternsBarrel.at(Barrel::barrelHorizontal)[0],
+    //                                                          posbarrel,
+    //                                                          EntityType::BARREL, spritesPatternsBarrel);
+    //EntityManager::entities.push_back(barrel);
+    //newMap->addEntityToMatrix(barrel);
+    //newMap->moovingObject.push_back(barrel);
     EntityManager::player = std::make_shared<Mario>(spritesPatterns.at(Player::movePatternLeft)[0], posmario,
                                                     EntityType::PLAYER, MARIO_SPEED, spritesPatterns);
-    std::shared_ptr<Entity> dk = std::make_shared<DonkeyKong>(spritesPatternDk.at(DonkeyKong::donkeyFace)[0],posbarrel,EntityType::DONKEYKONG,spritesPatternDk);
+    std::shared_ptr<Entity> dk = std::make_shared<DonkeyKong>(spritesPatternDk.at(DonkeyKong::donkeyFace)[0],posDK,EntityType::DONKEYKONG,spritesPatternDk,spritesPatternsBarrel);
     EntityManager::entities.push_back(dk);
 
     return newMap;
