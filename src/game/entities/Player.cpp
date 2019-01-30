@@ -147,12 +147,9 @@ void Player::update(sf::Time elapsedTime, std::shared_ptr<Map> map)
             else
             {
                 std::vector<sf::Sprite> grindAnimation;
-                printf("%d", TimeAnimation);
                 grindAnimation.push_back(spritesPtns.at(climbPatternRight)[0]);
                 grindAnimation.push_back(spritesPtns.at(climbPatternLeft)[0]);
                 changeSprite(updateAnimation(&TimeAnimation, 200, grindAnimation));
-                printf("grinding");
-
             }
             break;
         case JUMP:
