@@ -113,7 +113,7 @@ void Game::update(sf::Time elapsedTime)
                 cout<<"removed";
                 //willBeErased.push_back(entity);
 
-                //EntityManager::map->removeMoovingObject(entity);
+                EntityManager::map->removeMoovingObject(entity);
             }else{
                 entity->update(elapsedTime);
             }
@@ -121,9 +121,9 @@ void Game::update(sf::Time elapsedTime)
     }
 
     for(const auto &entity : willBeErased){
-        //removeFromEntities(entity);
+        removeFromEntities(entity);
     }
-    if(!willBeErased.empty())willBeErased.clear();
+
     if (countElement)
     {
         map->countElement();
@@ -484,6 +484,10 @@ sf::RectangleShape Game::getRectangleToDraw(sf::FloatRect rectFloat, sf::Color c
 void Game::removeFromEntities(std::shared_ptr<Entity> ent) {
     for(auto it = EntityManager::entities.begin(); it!= EntityManager::entities.end();++it){
         if(ent == *it){
+            if(EntityManager::entities.size()==1){
+                EntityManager::entities.clear();
+                return ;
+            }
             EntityManager::entities.erase(it);
         }
     }
