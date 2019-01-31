@@ -57,6 +57,10 @@ private:
 
     sf::RectangleShape getRectangleToDraw(sf::FloatRect rectFloat, sf::Color color);
 
+    void removeFromEntities(std::shared_ptr<Entity> ent);
+
+    bool checkIfEntityIsOutOfMap(std::shared_ptr<Entity> ent);
+
 private:
 
     static const float PlayerSpeed;

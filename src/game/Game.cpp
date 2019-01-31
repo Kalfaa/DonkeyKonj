@@ -102,15 +102,28 @@ void Game::update(sf::Time elapsedTime)
 {
     sf::Vector2f movement(0.f, 0.f);
     EntityManager::player->update(elapsedTime);
-
+    std::vector<std::shared_ptr<Entity>> willBeErased;
     const sf::Sprite player = EntityManager::player->getSprite();
-
+    cout <<"before";
     for (const auto &entity : EntityManager::entities)
     {
-        if (entity->type == BARREL) entity->update(elapsedTime);
-        if (entity->type == DONKEYKONG) entity->update(elapsedTime);
-        if (entity->type == BONUS_ITEM) entity->update(elapsedTime);
+        if(entity->type == BARREL || entity->type == DONKEYKONG ||entity->type == BONUS_ITEM ){
+
+            if(checkIfEntityIsOutOfMap(entity)){
+                cout<<"removed";
+                //willBeErased.push_back(entity);
+
+                //EntityManager::map->removeMoovingObject(entity);
+            }else{
+                entity->update(elapsedTime);
+            }
+        }
     }
+
+    for(const auto &entity : willBeErased){
+        //removeFromEntities(entity);
+    }
+    if(!willBeErased.empty())willBeErased.clear();
     if (countElement)
     {
         map->countElement();
@@ -467,4 +480,20 @@ sf::RectangleShape Game::getRectangleToDraw(sf::FloatRect rectFloat, sf::Color c
     rectangle.setFillColor(color);
     return rectangle;
 }
+
+void Game::removeFromEntities(std::shared_ptr<Entity> ent) {
+    for(auto it = EntityManager::entities.begin(); it!= EntityManager::entities.end();++it){
+        if(ent == *it){
+            EntityManager::entities.erase(it);
+        }
+    }
+}
+
+bool Game::checkIfEntityIsOutOfMap(std::shared_ptr<Entity> ent) {
+    if(ent->sprite.getPosition().x < 0-ent->sprite.getGlobalBounds().width || ent->sprite.getPosition().y < 0 - ent->sprite.getGlobalBounds().height ) return true ;
+    if(ent->sprite.getPosition().x > EntityManager::map->getEntity3DArray().at(0).size() *32 || ent->sprite.getPosition().y > EntityManager::map->getEntity3DArray().size() *32 ) return true ;
+    return false;
+}
+
+
 

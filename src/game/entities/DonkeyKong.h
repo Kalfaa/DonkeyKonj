@@ -49,7 +49,7 @@ public:
     int timeBarrelLaunch;
     bool invulnerable;
     int timeAnimation;
-
+    int BarrelCount ;
     SpritesPatterns patterns;
     DonkeyState state;
     Barrel::SpritesPatterns barrelPattern;

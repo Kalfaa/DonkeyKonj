@@ -16,6 +16,7 @@ DonkeyKong::DonkeyKong(const sf::Sprite &sprite, const sf::Vector2f &posPlayer, 
     timeAnimation = 0;
     state = NONE;
     timeBarrelLaunch = 0;
+    BarrelCount = 0 ;
 }
 
 void DonkeyKong::update(sf::Time elapsedTime)
@@ -50,7 +51,7 @@ void DonkeyKong::update(sf::Time elapsedTime)
         sprite.move(moveLeft * elapsedTime.asSeconds());
 
     }
-    if (state == LAUNCHBARREL)
+    if (state == LAUNCHBARREL && BarrelCount <1)
     {
         std::random_device randomGenerator;
         int rand = randomGenerator() % 3;
@@ -60,6 +61,7 @@ void DonkeyKong::update(sf::Time elapsedTime)
         {
             sf::Vector2f posbarrel(sprite.getPosition().x - 30, sprite.getPosition().y);
             createBarrel(*EntityManager::map, posbarrel);
+            BarrelCount++;
         }
 
     }

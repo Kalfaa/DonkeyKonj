@@ -19,6 +19,7 @@ Player::Player(const sf::Sprite &sprite, const sf::Vector2f &posPlayer, EntityTy
 
 void Player::update(sf::Time elapsedTime)
 {
+
     sf::Vector2f grindLadder(0.f, -playerSpeed * 2); // en attendant de trouver une maniere plus propre
     sf::Vector2f moveJump(0.f, -MARIO_JUMP_SPEED);
     sf::Vector2f moveNotJump(0.f, +MARIO_JUMP_SPEED);

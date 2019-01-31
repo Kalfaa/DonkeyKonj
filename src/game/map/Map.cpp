@@ -278,6 +278,7 @@ std::shared_ptr<CollideRes> Map::collide(sf::Sprite sprite, EntityType entityTyp
                 return std::make_shared<CollideRes>(true, i);
             }
         }
+        return std::make_shared<CollideRes>(false, shared_ptr<Entity>());
     }
 
 
@@ -490,6 +491,14 @@ Map::collide(sf::Sprite sprite, EntityType entityType, Direction direction, sf::
 void Map::addMoovingObject(std::shared_ptr<Entity> ent)
 {
     moovingObject.push_back(ent);
+}
+
+void Map::removeMoovingObject(std::shared_ptr<Entity> ent) {
+    for(auto it = moovingObject.begin(); it!= moovingObject.end();++it){
+        if(ent == *it){
+            moovingObject.erase(it);
+        }
+    }
 }
 
 

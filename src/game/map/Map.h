@@ -65,6 +65,8 @@ public:
 
     void addMoovingObject(std::shared_ptr<Entity> ent);
 
+    void removeMoovingObject(std::shared_ptr<Entity> ent);
+
     std::shared_ptr<CollideRes> collide(sf::Sprite sprite, EntityType entityType, Direction direction);
 
     std::shared_ptr<CollideRes>
