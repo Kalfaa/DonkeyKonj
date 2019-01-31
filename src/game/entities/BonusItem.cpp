@@ -27,9 +27,15 @@ void BonusItem::update(sf::Time elapsedTime)
     {
         if (!isCatch)
         {
-            EntityManager::map->removeEntityToMatrix(this);
-            //this->catchBonus(elapsedTime);
+            //EntityManager::map->removeEntityToMatrix(this);
+            this->catchBonus(elapsedTime);
         }
+    }
+    if(isCatch && sprite.getColor().a > 0)
+    {
+        sf::Color color = sprite.getColor();
+        color.a -= 1;
+        sprite.setColor(color);
     }
     //if(elapsedTime - timeValueAppear >= timeValueStay) map.removeEntityToMatrix(this);
     //else map.removeEntityToMatrix(this);
