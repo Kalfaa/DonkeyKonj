@@ -9,6 +9,6 @@ StaticEntity::StaticEntity(const sf::Sprite &sprite, const sf::Vector2f &positio
         : Entity(sprite, position, type)
 {}
 
-void StaticEntity::update(sf::Time time1, std::shared_ptr<Map> map)
+void StaticEntity::update(sf::Time time1)
 {
 }

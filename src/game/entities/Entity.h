@@ -49,7 +49,7 @@ public:
     virtual ~Entity() = default;
 
 public:
-    virtual void update(sf::Time, std::shared_ptr<Map> map) = 0;
+    virtual void update(sf::Time) = 0;
 
     void changeSprite(sf::Sprite newSprite);
 

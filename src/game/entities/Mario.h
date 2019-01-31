@@ -17,7 +17,7 @@ public:
     ~Mario() override = default;
 
 public:
-    void update(sf::Time time, std::shared_ptr<Map> map) override;
+    void update(sf::Time time) override;
 
     //void move(Direction direction);
     void render();

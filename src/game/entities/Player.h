@@ -43,7 +43,7 @@ public:
     int MARIO_HEIGHT;
     int MARIO_WIDTH;
 public:
-    void update(sf::Time, std::shared_ptr<Map> map) override;
+    void update(sf::Time) override;
 
     void move(Direction elapsedTime);
 

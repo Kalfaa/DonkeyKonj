@@ -21,13 +21,13 @@ unsigned int BonusItem::catchBonus(sf::Time elapsedTime)
     return value;
 }
 
-void BonusItem::update(sf::Time elapsedTime, std::shared_ptr<Map> map)
+void BonusItem::update(sf::Time elapsedTime)
 {
-    if (map->collide(sprite, EntityType::PLAYER, RIGHT)->collide)
+    if (EntityManager::map->collide(sprite, EntityType::PLAYER, RIGHT)->collide)
     {
         if (!isCatch)
         {
-            map->removeEntityToMatrix(this);
+            EntityManager::map->removeEntityToMatrix(this);
             //this->catchBonus(elapsedTime);
         }
     }

@@ -42,7 +42,7 @@ public:
 public:
     sf::FloatRect getHitboxLadder();
 
-    void update(sf::Time elapsedTime, std::shared_ptr<Map> map) override;
+    void update(sf::Time elapsedTime) override;
 
 public:
     SpritesPatterns patterns;

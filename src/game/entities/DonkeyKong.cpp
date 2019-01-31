@@ -18,7 +18,7 @@ DonkeyKong::DonkeyKong(const sf::Sprite &sprite, const sf::Vector2f &posPlayer, 
     timeBarrelLaunch = 0;
 }
 
-void DonkeyKong::update(sf::Time elapsedTime, std::shared_ptr<Map> map)
+void DonkeyKong::update(sf::Time elapsedTime)
 {
     sf::Vector2f grindLadder(0.f, -DK_SPEED * 2); // en attendant de trouver une maniere plus propre
     sf::Vector2f moveJump(0.f, -DK_SPEED);
@@ -33,7 +33,7 @@ void DonkeyKong::update(sf::Time elapsedTime, std::shared_ptr<Map> map)
     timeAnimation += elapsedTime.asMilliseconds();
     timeBarrelLaunch += elapsedTime.asMilliseconds();
     sprite.move(moveDown * elapsedTime.asSeconds());
-    if (!map->collide(sprite, EntityType::PLATFORM, DOWN)->collide)
+    if (!EntityManager::map->collide(sprite, EntityType::PLATFORM, DOWN)->collide)
     {
     }
     else
@@ -59,7 +59,7 @@ void DonkeyKong::update(sf::Time elapsedTime, std::shared_ptr<Map> map)
         if (timeAnimation == 0)
         {
             sf::Vector2f posbarrel(sprite.getPosition().x - 30, sprite.getPosition().y);
-            createBarrel(*map, posbarrel);
+            createBarrel(*EntityManager::map, posbarrel);
         }
 
     }
@@ -77,4 +77,6 @@ void DonkeyKong::createBarrel(Map map, sf::Vector2f pos)
                                                               EntityType::BARREL, barrelPattern);
     EntityManager::entities.push_back(barrel);
     //newMap->addEntityToMatrix(barrel);
+    EntityManager::map->addMoovingObject(barrel);
+
 }

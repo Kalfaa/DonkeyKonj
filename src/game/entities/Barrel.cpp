@@ -17,7 +17,7 @@ Barrel::Barrel(const sf::Sprite &sprite, const sf::Vector2f &posPlayer, EntityTy
 }
 
 
-void Barrel::update(sf::Time elapsedTime, std::shared_ptr<Map> map)
+void Barrel::update(sf::Time elapsedTime)
 {
     sf::Vector2f grindLadder(0.f, -BARREL_SPEED * 2); // en attendant de trouver une maniere plus propre
     sf::Vector2f moveJump(0.f, -BARREL_SPEED);
@@ -31,7 +31,7 @@ void Barrel::update(sf::Time elapsedTime, std::shared_ptr<Map> map)
     timeAnimation += elapsedTime.asMilliseconds();
 
     sprite.move(moveDown * elapsedTime.asSeconds());
-    if (!map->collide(sprite, EntityType::PLATFORM, DOWN)->collide || barrelState == GRINDING)
+    if (!EntityManager::map->collide(sprite, EntityType::PLATFORM, DOWN)->collide || barrelState == GRINDING)
     {
     }
     else
@@ -47,7 +47,7 @@ void Barrel::update(sf::Time elapsedTime, std::shared_ptr<Map> map)
         barrelState = LEFT;
     }
 
-    if (map->collide(sprite, LADDER, DOWN, getHitboxLadder())->collide)
+    if (EntityManager::map->collide(sprite, LADDER, DOWN, getHitboxLadder())->collide)
     {
         countBeforeGrind++;
 

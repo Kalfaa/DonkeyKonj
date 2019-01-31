@@ -50,6 +50,7 @@ Game::Game()
     }
     else std::cerr << "Error when load " + EntityManager::TEXTURES_PATH + "/icon.png" << std::endl;
     //map.printElement();
+    EntityManager::map = map;
 }
 
 void Game::run()
@@ -100,15 +101,15 @@ void Game::processEvents()
 void Game::update(sf::Time elapsedTime)
 {
     sf::Vector2f movement(0.f, 0.f);
-    EntityManager::player->update(elapsedTime, map);
+    EntityManager::player->update(elapsedTime);
 
     const sf::Sprite player = EntityManager::player->getSprite();
 
     for (const auto &entity : EntityManager::entities)
     {
-        if (entity->type == BARREL) entity->update(elapsedTime, map);
-        if (entity->type == DONKEYKONG) entity->update(elapsedTime, map);
-        if (entity->type == BONUS_ITEM) entity->update(elapsedTime, map);
+        if (entity->type == BARREL) entity->update(elapsedTime);
+        if (entity->type == DONKEYKONG) entity->update(elapsedTime);
+        if (entity->type == BONUS_ITEM) entity->update(elapsedTime);
     }
     if (countElement)
     {

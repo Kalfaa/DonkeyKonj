@@ -27,7 +27,7 @@ public:
     static std::vector<std::shared_ptr<Entity>> entities;
     static std::shared_ptr<Player> player;
     //static std::shared_ptr<Player> scorePane;
-
+    static std::shared_ptr<Map> map ;
     static const std::string MEDIA_PATH;
     static const std::string TEXTURES_PATH;
     static const std::string MAP_PATH;

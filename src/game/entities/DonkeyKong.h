@@ -55,7 +55,7 @@ public:
     Barrel::SpritesPatterns barrelPattern;
 
 public:
-    void update(sf::Time elapsedTime, std::shared_ptr<Map> map) override;
+    void update(sf::Time elapsedTime) override;
 
     void createBarrel(Map map, sf::Vector2f pos);
 };

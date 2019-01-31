@@ -17,7 +17,7 @@ Player::Player(const sf::Sprite &sprite, const sf::Vector2f &posPlayer, EntityTy
     hitboxUseForCollision = sprite;
 }
 
-void Player::update(sf::Time elapsedTime, std::shared_ptr<Map> map)
+void Player::update(sf::Time elapsedTime)
 {
     sf::Vector2f grindLadder(0.f, -playerSpeed * 2); // en attendant de trouver une maniere plus propre
     sf::Vector2f moveJump(0.f, -MARIO_JUMP_SPEED);
@@ -27,14 +27,14 @@ void Player::update(sf::Time elapsedTime, std::shared_ptr<Map> map)
     sf::Vector2f moveUp(0.f, -playerSpeed);
     sf::Vector2f moveRight(playerSpeed, 0.f);
     sf::Vector2f moveLeft(-playerSpeed, 0.f);
-    if (collide(*map, EntityType::BARREL, DOWN))
+    if (collide(*EntityManager::map, EntityType::BARREL, DOWN))
     {
-        sprite.setPosition(map->startpoint);
+        sprite.setPosition(EntityManager::map->startpoint);
     }
     if (playerState != JUMP && playerState != STARTJUMP && playerState != GRINDING)
     {
         sprite.move(moveDown * elapsedTime.asSeconds());
-        if (!collide(*map, EntityType::PLATFORM, DOWN))
+        if (!collide(*EntityManager::map, EntityType::PLATFORM, DOWN))
         {
             playerState = FALLING;
             //printf("gravity");
@@ -58,7 +58,7 @@ void Player::update(sf::Time elapsedTime, std::shared_ptr<Map> map)
     switch (direction)
     {
         case UP:
-            if (collide(*map, EntityType::LADDER, DOWN, getUpHitboxLadder()))
+            if (collide(*EntityManager::map, EntityType::LADDER, DOWN, getUpHitboxLadder()))
             {
                 if (playerState == IDLE)TimeAnimation = 0;
                 sprite.move(moveUp * elapsedTime.asSeconds());
@@ -70,7 +70,7 @@ void Player::update(sf::Time elapsedTime, std::shared_ptr<Map> map)
             if (playerState == IDLE || playerState == GRINDING)
             {
 
-                if (collide(*map, EntityType::LADDER, DOWN, getHitboxLadder()))
+                if (collide(*EntityManager::map, EntityType::LADDER, DOWN, getHitboxLadder()))
                 {
                     sprite.move(moveDown * elapsedTime.asSeconds());
                     if (playerState == IDLE)TimeAnimation = 0;
@@ -92,7 +92,7 @@ void Player::update(sf::Time elapsedTime, std::shared_ptr<Map> map)
 
             //printf("%d |",elapsedTime.asMilliseconds());
             sprite.move(moveLeft * elapsedTime.asSeconds());
-            if (collide(*map, EntityType::PLATFORM, RIGHT))
+            if (collide(*EntityManager::map, EntityType::PLATFORM, RIGHT))
                 sprite.move(moveRight * elapsedTime.asSeconds());
 
             lastDirection = LEFT;
@@ -118,7 +118,7 @@ void Player::update(sf::Time elapsedTime, std::shared_ptr<Map> map)
                 changeSprite(spritesPtns.at(movePatternRight)[0]);
             }
             sprite.move(moveRight * elapsedTime.asSeconds());
-            if (collide(*map, EntityType::PLATFORM, RIGHT))
+            if (collide(*EntityManager::map, EntityType::PLATFORM, RIGHT))
                 sprite.move(moveLeft * elapsedTime.asSeconds());
             lastDirection = RIGHT;
             break;
@@ -139,7 +139,7 @@ void Player::update(sf::Time elapsedTime, std::shared_ptr<Map> map)
     switch (playerState)
     {
         case GRINDING:
-            if (!collide(*map, EntityType::LADDER, DOWN, getUpHitboxLadder()))
+            if (!collide(*EntityManager::map, EntityType::LADDER, DOWN, getUpHitboxLadder()))
             {
                 playerState = IDLE;
 
@@ -154,7 +154,7 @@ void Player::update(sf::Time elapsedTime, std::shared_ptr<Map> map)
             break;
         case JUMP:
             sprite.move(moveJump * elapsedTime.asSeconds());
-            if (!collide(*map, EntityType::PLATFORM, RIGHT))
+            if (!collide(*EntityManager::map, EntityType::PLATFORM, RIGHT))
             {
                 if (lastDirection == LEFT) changeSprite(spritesPtns.at(jumpPatternLeft)[0]);
                 else changeSprite(spritesPtns.at(jumpPatternRight)[0]);

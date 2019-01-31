@@ -21,3 +21,4 @@ void EntityManager::removeFromEntities(std::shared_ptr<Entity> entity)
 
 std::vector<std::shared_ptr<Entity>> EntityManager::entities;
 std::shared_ptr<Player> EntityManager::player;
+std::shared_ptr<Map> EntityManager::map;
