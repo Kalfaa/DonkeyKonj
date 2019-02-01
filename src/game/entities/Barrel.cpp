@@ -90,7 +90,7 @@ sf::FloatRect Barrel::getHitboxLadder()
     sf::RectangleShape rectangle(sf::Vector2f(sprite.getGlobalBounds().width - 20,
                                               sprite.getGlobalBounds().height - 30));
     sf::Vector2f pos = sprite.getPosition();
-    pos.y = pos.y + sprite.getGlobalBounds().height + 2;
+    pos.y = pos.y + sprite.getGlobalBounds().height + 6;
     pos.x = 3 + pos.x + sprite.getGlobalBounds().width * 0.25;
     rectangle.setPosition(pos);
     return rectangle.getGlobalBounds();

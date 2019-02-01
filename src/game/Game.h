@@ -92,14 +92,6 @@ private:
     bool countElement;
 
     GameState gameState;
-    sf::Texture textureLadder;
-    sf::Sprite ladder[LADDER_COUNT];
-    sf::Texture texturePlatform;
-    sf::Sprite block[BLOCK_COUNT_X][BLOCK_COUNT_Y];
-    sf::Texture textureWeapon;
-    sf::Sprite weapon;
-    sf::Vector2u sizeBlock;
-    sf::Vector2u sizeMario;
 };
 
 #endif

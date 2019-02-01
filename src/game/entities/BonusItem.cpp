@@ -36,6 +36,8 @@ void BonusItem::update(sf::Time elapsedTime)
         sf::Color color = sprite.getColor();
         color.a -= 1;
         sprite.setColor(color);
+        sprite.move({0,-0.2f});
+
     }
     //if(elapsedTime - timeValueAppear >= timeValueStay) map.removeEntityToMatrix(this);
     //else map.removeEntityToMatrix(this);
