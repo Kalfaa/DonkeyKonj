@@ -37,11 +37,13 @@ Game::Game()
 //    map = gMap.createMap(600, 600, "map_donkeykong2");
     /// MAP ROTARENEG
 
-    mFont.loadFromFile(EntityManager::MEDIA_PATH + "/Sansation.ttf");
+    mFont.loadFromFile(EntityManager::MEDIA_PATH + "/emulogic.ttf");
     mStatisticsText.setString("Welcome to Donkey Kong 1981");
     mStatisticsText.setFont(mFont);
     mStatisticsText.setPosition(5.f, 5.f);
-    mStatisticsText.setCharacterSize(10);
+    mStatisticsText.setCharacterSize(6);
+
+
 
     sf::Image icon;
     if (icon.loadFromFile(EntityManager::TEXTURES_PATH + "/icon.png"))
@@ -178,10 +180,14 @@ void Game::draw()
 
         }
     }
-
+    sf::Text marioLife = sf::Text();
+    marioLife.setFont(mFont);
+    marioLife.setPosition({800,60});
+    marioLife.setString("x"+std::to_string(EntityManager::player->life));
+    marioLife.setCharacterSize(15);
     mWindow.draw(EntityManager::player->getSprite());
     mWindow.draw(mStatisticsText);
-
+    mWindow.draw(marioLife);
     if (debug)
     {
         mWindow.draw(

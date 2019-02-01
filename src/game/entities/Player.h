@@ -56,7 +56,7 @@ public:
     sf::FloatRect getUpHitboxLadder();
 
     PlayerState playerState = IDLE;
-
+    int life;
 protected:
     //bool collide(Map map, EntityType entityType, Direction direction);
     bool collide(Map map, EntityType entityType, Direction direction);
@@ -67,7 +67,6 @@ protected:
     sf::Vector2f moveDown();
     sf::Vector2f moveLeft();
     sf::Vector2f moveRight();
-
     void applyGravity(sf::Time elapsedTime);
     void move(sf::Time elapsedTime);
 protected:

@@ -15,22 +15,20 @@ Player::Player(const sf::Sprite &sprite, const sf::Vector2f &posPlayer, EntityTy
     MARIO_HEIGHT = static_cast<int>(sprite.getGlobalBounds().height);
     TimeAnimation = 0;
     hitboxUseForCollision = sprite;
+    life = 9;
 }
 
 void Player::update(sf::Time elapsedTime)
 {
-
-    sf::Vector2f grindLadder(0.f, -playerSpeed * 2); // en attendant de trouver une maniere plus propre
     sf::Vector2f moveJump(0.f, -MARIO_JUMP_SPEED);
     sf::Vector2f moveNotJump(0.f, +MARIO_JUMP_SPEED);
-    sf::Vector2f movement(0.f, 0.f);
-
     if(playerState == DYING){
         TimeAnimation += elapsedTime.asMilliseconds();
         changeSprite(updateAnimation(&TimeAnimation, 300, spritesPtns.at(deadPatternRight)));
         if(TimeAnimation == 0){
             sprite.setPosition(EntityManager::map->startpoint);
             playerState =IDLE;
+            life--;
         }
         return ;
     }
