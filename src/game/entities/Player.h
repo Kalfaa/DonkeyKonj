@@ -63,6 +63,13 @@ protected:
 
     bool collide(Map map, EntityType entityType, Direction direction, sf::FloatRect rect);
 
+    sf::Vector2f moveUp();
+    sf::Vector2f moveDown();
+    sf::Vector2f moveLeft();
+    sf::Vector2f moveRight();
+
+    void applyGravity(sf::Time elapsedTime);
+    void move(sf::Time elapsedTime);
 protected:
     float playerSpeed;
     Direction direction;

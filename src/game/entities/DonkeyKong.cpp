@@ -51,15 +51,21 @@ void DonkeyKong::update(sf::Time elapsedTime)
         sprite.move(moveLeft * elapsedTime.asSeconds());
 
     }
-    if (state == LAUNCHBARREL && BarrelCount <1)
+    if (state == LAUNCHBARREL && BarrelCount <4)
     {
         std::random_device randomGenerator;
-        int rand = randomGenerator() % 3;
-
+        int rand = randomGenerator() % 2;
+        std::cout<< rand;
+        sf::Vector2f posbarrel;
+        if(rand ==1){
+             posbarrel = {sprite.getPosition().x - 30, sprite.getPosition().y};
+        }else{
+             posbarrel = {sprite.getPosition().x , sprite.getPosition().y+100};
+        }
         changeSprite(updateAnimation(&timeAnimation, 400, patterns.at(donkeyFace)));
         if (timeAnimation == 0)
         {
-            sf::Vector2f posbarrel(sprite.getPosition().x - 30, sprite.getPosition().y);
+
             createBarrel(*EntityManager::map, posbarrel);
             BarrelCount++;
         }

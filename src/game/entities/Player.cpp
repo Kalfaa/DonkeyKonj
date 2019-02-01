@@ -24,10 +24,7 @@ void Player::update(sf::Time elapsedTime)
     sf::Vector2f moveJump(0.f, -MARIO_JUMP_SPEED);
     sf::Vector2f moveNotJump(0.f, +MARIO_JUMP_SPEED);
     sf::Vector2f movement(0.f, 0.f);
-    sf::Vector2f moveDown(0.f, playerSpeed);
-    sf::Vector2f moveUp(0.f, -playerSpeed);
-    sf::Vector2f moveRight(playerSpeed, 0.f);
-    sf::Vector2f moveLeft(-playerSpeed, 0.f);
+
     if(playerState == DYING){
         TimeAnimation += elapsedTime.asMilliseconds();
         changeSprite(updateAnimation(&TimeAnimation, 300, spritesPtns.at(deadPatternRight)));
@@ -46,116 +43,23 @@ void Player::update(sf::Time elapsedTime)
 
     if (playerState != JUMP && playerState != STARTJUMP && playerState != GRINDING)
     {
-        sprite.move(moveDown * elapsedTime.asSeconds());
-        if (!collide(*EntityManager::map, EntityType::PLATFORM, DOWN))
-        {
-            playerState = FALLING;
-            //printf("gravity");
-        }
-        else
-        {
-            sprite.move(moveUp * elapsedTime.asSeconds());
-            playerState = IDLE;
-        }
+       applyGravity(elapsedTime);
     }
-    else
+
+    if (playerState == STARTJUMP)
     {
-        //sprite.move(0.f,-playerSpeed);
-        if (playerState == STARTJUMP)
-        {
-            playerState = JUMP;
-            jumpValue = MARIO_JUMP_MAX;
-        }
+        playerState = JUMP;
+        jumpValue = MARIO_JUMP_MAX;
     }
 
-    switch (direction)
-    {
-        case UP:
-            if (collide(*EntityManager::map, EntityType::LADDER, DOWN, getUpHitboxLadder()))
-            {
-                if (playerState == IDLE)TimeAnimation = 0;
-                sprite.move(moveUp * elapsedTime.asSeconds());
-                playerState = GRINDING;
-                TimeAnimation += elapsedTime.asMilliseconds();
-            }
-            break;
-        case DOWN:
-            if (playerState == IDLE || playerState == GRINDING)
-            {
+    move(elapsedTime);
 
-                if (collide(*EntityManager::map, EntityType::LADDER, DOWN, getHitboxLadder()))
-                {
-                    sprite.move(moveDown * elapsedTime.asSeconds());
-                    if (playerState == IDLE)TimeAnimation = 0;
-                    playerState = GRINDING;
-                    TimeAnimation += elapsedTime.asMilliseconds();
-
-                }
-
-            }
-            break;
-        case LEFT:
-        {
-            if (lastDirection != LEFT) TimeAnimation = 0;
-            else TimeAnimation += elapsedTime.asMilliseconds();
-
-            if (playerState != FALLING)
-                changeSprite(updateAnimation(&TimeAnimation, 100, spritesPtns.at(movePatternLeft)));
-            else changeSprite(spritesPtns.at(movePatternLeft)[0]);
-
-            //printf("%d |",elapsedTime.asMilliseconds());
-            sprite.move(moveLeft * elapsedTime.asSeconds());
-            if (collide(*EntityManager::map, EntityType::PLATFORM, RIGHT))
-                sprite.move(moveRight * elapsedTime.asSeconds());
-
-            lastDirection = LEFT;
-            break;
-        }
-        case RIGHT:
-            if (lastDirection != RIGHT)
-            {
-                TimeAnimation = 0;
-            }
-            else
-            {
-                TimeAnimation += elapsedTime.asMilliseconds();
-            }
-            //printf("%d |",elapsedTime.asMilliseconds());
-            if (playerState != FALLING)
-            {
-
-                changeSprite(updateAnimation(&TimeAnimation, 100, spritesPtns.at(movePatternRight)));
-            }
-            else
-            {
-                changeSprite(spritesPtns.at(movePatternRight)[0]);
-            }
-            sprite.move(moveRight * elapsedTime.asSeconds());
-            if (collide(*EntityManager::map, EntityType::PLATFORM, RIGHT))
-                sprite.move(moveLeft * elapsedTime.asSeconds());
-            lastDirection = RIGHT;
-            break;
-        default:
-            if (playerState != JUMP && playerState != STARTJUMP && playerState != FALLING)
-            {
-                if (lastDirection == LEFT)
-                {
-                    changeSprite(spritesPtns.at(movePatternLeft)[0]);
-                }
-                else
-                {
-                    changeSprite(spritesPtns.at(movePatternRight)[0]);
-                }
-                //lastDirection = NONE;
-            }
-    }
     switch (playerState)
     {
         case GRINDING:
             if (!collide(*EntityManager::map, EntityType::LADDER, DOWN, getUpHitboxLadder()))
             {
                 playerState = IDLE;
-
             }
             else
             {
@@ -251,6 +155,127 @@ sf::FloatRect Player::getUpHitboxLadder()
     pos.x = 3 + pos.x + hitboxUseForCollision.getGlobalBounds().width * 0.25;
     rectangle.setPosition(pos);
     return rectangle.getGlobalBounds();
+}
+
+void Player::applyGravity(sf::Time elapsedTime) {
+    sprite.move(moveDown() * elapsedTime.asSeconds());
+    if (!collide(*EntityManager::map, EntityType::PLATFORM, DOWN))
+    {
+        playerState = FALLING;
+        //printf("gravity");
+    }
+    else
+    {
+        sprite.move(moveUp() * elapsedTime.asSeconds());
+        playerState = IDLE;
+    }
+}
+
+sf::Vector2f Player::moveUp() {
+    sf::Vector2f vec(0.f, -playerSpeed);
+   return  vec;
+}
+
+sf::Vector2f Player::moveDown() {
+    sf::Vector2f vec(0.f, playerSpeed);
+    return vec;
+}
+
+sf::Vector2f Player::moveLeft() {
+    sf::Vector2f vec(-playerSpeed, 0.f);
+    return vec;
+}
+
+sf::Vector2f Player::moveRight() {
+    sf::Vector2f vec(playerSpeed, 0.f);
+    return vec;
+}
+
+void Player::move(sf::Time elapsedTime) {
+
+    switch (direction)
+    {
+        case UP:
+            if (collide(*EntityManager::map, EntityType::LADDER, DOWN, getUpHitboxLadder()))
+            {
+                if (playerState == IDLE)TimeAnimation = 0;
+                sprite.move(moveUp() * elapsedTime.asSeconds());
+                playerState = GRINDING;
+                TimeAnimation += elapsedTime.asMilliseconds();
+            }
+            break;
+        case DOWN:
+            if (playerState == IDLE || playerState == GRINDING)
+            {
+
+                if (collide(*EntityManager::map, EntityType::LADDER, DOWN, getHitboxLadder()))
+                {
+                    sprite.move(moveDown() * elapsedTime.asSeconds());
+                    if (playerState == IDLE)TimeAnimation = 0;
+                    playerState = GRINDING;
+                    TimeAnimation += elapsedTime.asMilliseconds();
+
+                }
+
+            }
+            break;
+        case LEFT:
+        {
+            if (lastDirection != LEFT) TimeAnimation = 0;
+            else TimeAnimation += elapsedTime.asMilliseconds();
+
+            if (playerState != FALLING)
+                changeSprite(updateAnimation(&TimeAnimation, 100, spritesPtns.at(movePatternLeft)));
+            else changeSprite(spritesPtns.at(movePatternLeft)[0]);
+
+            //printf("%d |",elapsedTime.asMilliseconds());
+            sprite.move(moveLeft() * elapsedTime.asSeconds());
+            if (collide(*EntityManager::map, EntityType::PLATFORM, RIGHT))
+                sprite.move(moveRight() * elapsedTime.asSeconds());
+
+            lastDirection = LEFT;
+            break;
+        }
+        case RIGHT:
+            if (lastDirection != RIGHT)
+            {
+                TimeAnimation = 0;
+            }
+            else
+            {
+                TimeAnimation += elapsedTime.asMilliseconds();
+            }
+            //printf("%d |",elapsedTime.asMilliseconds());
+            if (playerState != FALLING)
+            {
+
+                changeSprite(updateAnimation(&TimeAnimation, 100, spritesPtns.at(movePatternRight)));
+            }
+            else
+            {
+                changeSprite(spritesPtns.at(movePatternRight)[0]);
+            }
+            sprite.move(moveRight() * elapsedTime.asSeconds());
+            if (collide(*EntityManager::map, EntityType::PLATFORM, RIGHT))
+                sprite.move(moveLeft() * elapsedTime.asSeconds());
+            lastDirection = RIGHT;
+            break;
+        default:
+            if (playerState != JUMP && playerState != STARTJUMP && playerState != FALLING)
+            {
+                if (lastDirection == LEFT)
+                {
+                    changeSprite(spritesPtns.at(movePatternLeft)[0]);
+                }
+                else
+                {
+                    changeSprite(spritesPtns.at(movePatternRight)[0]);
+                }
+                //lastDirection = NONE;
+            }
+    }
+
+
 }
 
 

@@ -488,7 +488,6 @@ void Game::removeFromEntities(std::shared_ptr<Entity> ent) {
 }
 
 bool Game::checkIfEntityIsOutOfMap(std::shared_ptr<Entity> ent) {
-    cout<<"check";
     if(ent->sprite.getPosition().x < 0-ent->sprite.getGlobalBounds().width || ent->sprite.getPosition().y < 0 - ent->sprite.getGlobalBounds().height ) return true ;
     if(ent->sprite.getPosition().x > EntityManager::map->getEntity3DArray().at(0).size() *32 || ent->sprite.getPosition().y > EntityManager::map->getEntity3DArray().size() *32 ) return true ;
     return false;

@@ -269,7 +269,6 @@ std::shared_ptr<CollideRes> Map::collide(sf::Sprite sprite, EntityType entityTyp
 
     if (entityType == BARREL)
     {
-       cout << moovingObject.size() << endl;
         for (const auto &i : moovingObject)
         {
 
