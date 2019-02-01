@@ -57,6 +57,7 @@ public:
 
     PlayerState playerState = IDLE;
     int life;
+    void kill();
 protected:
     //bool collide(Map map, EntityType entityType, Direction direction);
     bool collide(Map map, EntityType entityType, Direction direction);

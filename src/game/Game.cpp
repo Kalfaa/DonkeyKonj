@@ -1,3 +1,4 @@
+#include <entities/Peach.h>
 #include "DonkeyKong.h"
 #include "Game.h"
 
@@ -104,6 +105,13 @@ void Game::update(sf::Time elapsedTime)
 {
     sf::Vector2f movement(0.f, 0.f);
     EntityManager::player->update(elapsedTime);
+
+   if(checkIfEntityIsOutOfMap(EntityManager::player))
+   {
+       EntityManager::player->kill();
+   }
+
+
     std::vector<std::shared_ptr<Entity>> willBeErased;
     const sf::Sprite player = EntityManager::player->getSprite();
     for (const auto &entity : EntityManager::entities)
@@ -111,7 +119,7 @@ void Game::update(sf::Time elapsedTime)
         if(entity->type == BARREL || entity->type == DONKEYKONG ||entity->type == BONUS_ITEM ){
 
             if(checkIfEntityIsOutOfMap(entity)){
-                willBeErased.push_back(entity);
+                    willBeErased.push_back(entity);
             }else{
                 entity->update(elapsedTime);
             }
@@ -345,14 +353,13 @@ Map *Game::createMap(std::ifstream mapFile)
 
 Map *Game::basicMap()
 {
-    Map *newMap = new Map(100, 100);
+    Map *newMap = new Map(100, 20);
 
     addBlockLine(*newMap, 30, 50, 250);
     addBlockLine(*newMap, 30, 50, 350);
     addBlockLine(*newMap, 30, 50, 450);
     addLadder(*newMap, 4, 50, 410);
     addLadder(*newMap, 4, 90, 310);
-    //string bonusTab[3] = {"UmbrellaBonus", "HandbagBonus", "HatBonus"};
 
     int bonusX[3] = {50, 140, 180};
     int bonusY[3] = {static_cast<int>(250 - sps.getSpriteSize("UmbrellaBonus")[0]),
@@ -362,7 +369,7 @@ Map *Game::basicMap()
 
     addScoreTab(*newMap, static_cast<int>(mWindow.getSize().x - sps.getSpriteSize("BonusPanel0")[1]), 0);
 
-    sf::Vector2f posmario(5 * 32, 3 * 32);
+    sf::Vector2f posmario(10 * 32, 12 * 32);
     newMap->startpoint.x = posmario.x;
     newMap->startpoint.y = posmario.y;
 
@@ -386,7 +393,8 @@ Map *Game::basicMap()
     Barrel::SpritesPatterns spritesPatternsBarrel
             {
                     {Barrel::barrel,           std::vector<sf::Sprite>(1, sps.getSprite("Barrel"))},
-                    {Barrel::barrelHorizontal, sps.getPattern("BarrelHorizontal")},
+                    {Barrel::barrelHorizontalRight, sps.getPattern("BarrelHorizontal")},
+                    {Barrel::barrelHorizontalLeft, sps.getOppositePattern("BarrelHorizontal")},
                     {Barrel::barrelVertical,   sps.getPattern("BarrelVertical")}
             };
 
@@ -395,9 +403,21 @@ Map *Game::basicMap()
                     {DonkeyKong::donkeyFace, sps.getPattern("DonkeyKongFace")}
             };
 
+    Peach::SpritesPatterns patternsPeach {
+            {Peach::peach , sps.getPattern("Peach")},
+            {Peach::peachHelp , sps.getPattern("PeachHelp")}
+    };
 
     sf::Vector2f posbarrel(32 * 15, 32);
     sf::Vector2f posDK(32 * 10, 32 * 5);
+    sf::Vector2f posPeach(32 *10 ,32*9);
+
+
+    std::shared_ptr<Entity> peach = std::make_shared<Peach>(patternsPeach.at(Peach::peach)[0], posPeach,
+                                                              EntityType::PEACH,patternsPeach );
+
+    EntityManager::entities.push_back(peach);
+    newMap->addEntityToMatrix(peach);
     //std::shared_ptr<Entity> barrel = std::make_shared<Barrel>(spritesPatternsBarrel.at(Barrel::barrelHorizontal)[0],
     //                                                          posbarrel,
     //                                                          EntityType::BARREL, spritesPatternsBarrel);

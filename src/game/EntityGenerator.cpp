@@ -158,7 +158,8 @@ EntityGenerator::createDonkeyKong(SpritesSheet &sps, const sf::Vector2f &pos, co
     Barrel::SpritesPatterns spritesPatternsBarrel
             {
                     {Barrel::barrel,           std::vector<sf::Sprite>(1, sps.getSprite("Barrel"))},
-                    {Barrel::barrelHorizontal, sps.getPattern("BarrelHorizontal")},
+                    {Barrel::barrelHorizontalLeft, sps.getOppositePattern("BarrelHorizontal")},
+                    {Barrel::barrelHorizontalRight, sps.getPattern("BarrelHorizontal")},
                     {Barrel::barrelVertical,   sps.getPattern("BarrelVertical")}
             };
 

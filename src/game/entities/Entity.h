@@ -28,6 +28,7 @@ enum PlayerState
 enum EntityType
 {
     PLAYER,
+    PEACH,
     PLATFORM,
     LADDER,
     BONUS_ITEM,

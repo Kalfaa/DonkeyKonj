@@ -20,7 +20,8 @@ public:
     {
         barrel,
         barrelVertical,
-        barrelHorizontal,
+        barrelHorizontalRight,
+        barrelHorizontalLeft,
 
     };
     typedef std::map<Barrel::PatternType, std::vector<sf::Sprite>> SpritesPatterns;

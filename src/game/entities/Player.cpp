@@ -26,9 +26,7 @@ void Player::update(sf::Time elapsedTime)
         TimeAnimation += elapsedTime.asMilliseconds();
         changeSprite(updateAnimation(&TimeAnimation, 300, spritesPtns.at(deadPatternRight)));
         if(TimeAnimation == 0){
-            sprite.setPosition(EntityManager::map->startpoint);
-            playerState =IDLE;
-            life--;
+            kill();
         }
         return ;
     }
@@ -274,6 +272,12 @@ void Player::move(sf::Time elapsedTime) {
     }
 
 
+}
+
+void Player::kill() {
+    sprite.setPosition(EntityManager::map->startpoint);
+    playerState =IDLE;
+    life--;
 }
 
 

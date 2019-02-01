@@ -10,3 +10,7 @@ Peach::Peach(const sf::Sprite &sprite, const sf::Vector2f &posPlayer, EntityType
 {
 
 }
+
+void Peach::update(sf::Time elapsedTime) {
+
+}

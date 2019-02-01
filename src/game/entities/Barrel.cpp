@@ -61,7 +61,7 @@ void Barrel::update(sf::Time elapsedTime)
             if (barrelState == LEFT)
             {
                 sprite.move(moveLeft * elapsedTime.asSeconds());
-                changeSprite(updateAnimation(&timeAnimation, 200, patterns.at(barrelHorizontal)));
+                changeSprite(updateAnimation(&timeAnimation, 200, patterns.at(barrelHorizontalLeft)));
             }
             if (barrelState == RIGHT)
             {
@@ -76,7 +76,7 @@ void Barrel::update(sf::Time elapsedTime)
         {
 
             sprite.move(moveLeft * elapsedTime.asSeconds());
-            changeSprite(updateAnimation(&timeAnimation, 200, patterns.at(barrelHorizontal)));
+            changeSprite(updateAnimation(&timeAnimation, 200, patterns.at(barrelHorizontalLeft)));
         }
         if (barrelState == RIGHT)
         {

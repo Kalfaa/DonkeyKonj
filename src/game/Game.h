@@ -31,6 +31,12 @@ public:
     void run();
 
 
+    enum GameState
+    {
+        INGAME
+    };
+
+
 private:
 
     Map *createMap(std::ifstream mapFile);
@@ -85,6 +91,7 @@ private:
     bool mJump;
     bool countElement;
 
+    GameState gameState;
     sf::Texture textureLadder;
     sf::Sprite ladder[LADDER_COUNT];
     sf::Texture texturePlatform;
