@@ -20,22 +20,23 @@ Game::Game()
 
     std::string filename = EntityManager::MAP_PATH + "/" + "map_donkeykong";
 
-    map = std::shared_ptr<Map>(basicMap());
+    //map = std::shared_ptr<Map>(basicMap());
 
     ///MAP GENERATOR
-//    std::map<string, EntityGenerator::FunctionPtrCreateEntity> mapElement {
-//            {"PLATFORM", &EntityGenerator::createPlatform},
-//            {"LADDER", &EntityGenerator::createLadder},
-//            {"MARIO", &EntityGenerator::createMario},
-//            {"BONUS_UMBRELLA", &EntityGenerator::createUmbrellaBonus},
-//            {"BONUS_HANDBAG", &EntityGenerator::createHandbagBonus},
-//            {"BONUS_HAT", &EntityGenerator::createHatBonus},
-//            {"SCORE_TAB", &EntityGenerator::createTabScore},
-//            {"DONKEY_KONG", &EntityGenerator::createDonkeyKong}
-//    };
-//
-//    GenerateMap gMap(sps, mapElement);
-//    map = gMap.createMap(600, 600, "map_donkeykong2");
+    std::map<string, EntityGenerator::FunctionPtrCreateEntity> mapElement {
+            {"PLATFORM", &EntityGenerator::createPlatform},
+            {"LADDER", &EntityGenerator::createLadder},
+            {"MARIO", &EntityGenerator::createMario},
+            {"BONUS_UMBRELLA", &EntityGenerator::createUmbrellaBonus},
+            {"BONUS_HANDBAG", &EntityGenerator::createHandbagBonus},
+            {"BONUS_HAT", &EntityGenerator::createHatBonus},
+            {"SCORE_TAB", &EntityGenerator::createTabScore},
+            {"DONKEY_KONG", &EntityGenerator::createDonkeyKong},
+            {"PEACH", &EntityGenerator::createPeach}
+    };
+
+    GenerateMap gMap(sps, mapElement);
+    map = gMap.createMap(860, 600, "map_donkeykong2");
     /// MAP ROTARENEG
 
     mFont.loadFromFile(EntityManager::MEDIA_PATH + "/emulogic.ttf");
@@ -358,8 +359,10 @@ Map *Game::basicMap()
             };
 
     Peach::SpritesPatterns patternsPeach {
-            {Peach::peach , sps.getPattern("Peach")},
-            {Peach::peachHelp , sps.getPattern("PeachHelp")}
+            {Peach::peachRight , sps.getPattern("PeachRight")},
+            {Peach::peachLeft , sps.getOppositePattern("PeachRight")},
+            {Peach::peachHelpRight , sps.getPattern("PeachHelpRight")},
+            {Peach::peachHelpLeft , sps.getOppositePattern("PeachHelpRight")}
     };
 
     sf::Vector2f posbarrel(32 * 15, 32);
@@ -367,7 +370,7 @@ Map *Game::basicMap()
     sf::Vector2f posPeach(32 *10 ,32*9);
 
 
-    std::shared_ptr<Entity> peach = std::make_shared<Peach>(patternsPeach.at(Peach::peach)[0], posPeach,
+    std::shared_ptr<Entity> peach = std::make_shared<Peach>(patternsPeach.at(Peach::peachRight)[0], posPeach,
                                                               EntityType::PEACH,patternsPeach );
 
     EntityManager::entities.push_back(peach);

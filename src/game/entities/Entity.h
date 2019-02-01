@@ -33,9 +33,9 @@ enum EntityType
     LADDER,
     BONUS_ITEM,
     SCORE_TAB,
-    UNKNOWN,
     BARREL,
-    DONKEYKONG
+    DONKEYKONG,
+    UNKNOWN
 };
 
 class Entity

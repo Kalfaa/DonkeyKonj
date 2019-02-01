@@ -85,8 +85,9 @@ EntityGenerator::createMario(SpritesSheet &spritesSheet, const sf::Vector2f &pos
 
 
     EntityManager::player = mario;
-    return mario;
 
+    /// If the entity must be store in the matrix, else return UNKNOWN
+    return std::shared_ptr<Entity>();
 }
 
 std::shared_ptr<Entity>
@@ -173,7 +174,25 @@ EntityGenerator::createDonkeyKong(SpritesSheet &sps, const sf::Vector2f &pos, co
                                                               EntityType::DONKEYKONG,
                                                               spritesPatternDk,
                                                               spritesPatternsBarrel);
-
     EntityManager::entities.push_back(dk);
-    return dk;
+
+    /// If the entity must be store in the matrix, else return UNKNOWN
+    return std::shared_ptr<Entity>();
+}
+
+std::shared_ptr<Entity> EntityGenerator::createPeach(SpritesSheet & sps, const sf::Vector2f &pos, const sf::Vector2f &size)
+{
+    Peach::SpritesPatterns patternsPeach
+    {
+            {Peach::peachRight , sps.getPattern("PeachRight")},
+            {Peach::peachLeft , sps.getOppositePattern("PeachRight")},
+            {Peach::peachHelpRight , sps.getPattern("PeachHelpRight")},
+            {Peach::peachHelpLeft , sps.getOppositePattern("PeachHelpRight")}
+    };
+    std::shared_ptr<Entity> peach = std::make_shared<Peach>(patternsPeach.at(Peach::peachLeft)[0], pos,
+                                                            EntityType::PEACH,patternsPeach );
+
+    EntityManager::entities.push_back(peach);
+
+    return peach;
 }

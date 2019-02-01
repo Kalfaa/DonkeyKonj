@@ -1,11 +1,11 @@
 DonkeyKongStolePeach0 1 13 38 36
 DonkeyKongStolePeach1 44 17 43 32
 
-Peach0 92 28 15 21
-Peach1 112 28 15 21
+PeachRight0 92 28 15 21
+PeachRight1 112 28 15 21
 
-PeachHelp0 132 19 24 8
-PeachHelp1 132 28 24 8
+PeachHelpRight0 132 19 24 8
+PeachHelpRight1 132 28 24 8
 
 Hearth0 161 28 15 13
 Hearth1 181 28 16 13

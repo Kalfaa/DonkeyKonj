@@ -12,10 +12,10 @@ class Peach : public Entity {
 public:
     enum PatternType
     {
-        peach,
-        peachHelp,
-        barrelHorizontal,
-
+        peachRight,
+        peachLeft,
+        peachHelpRight,
+        peachHelpLeft
     };
     typedef std::map<Peach::PatternType, std::vector<sf::Sprite>> SpritesPatterns;
 

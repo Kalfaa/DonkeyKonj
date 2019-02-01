@@ -94,7 +94,7 @@ GenerateMap::addSprite(unsigned int posX, unsigned int posY, EntityGenerator::Fu
     shared_ptr<Entity> entityPtr = generateEntity(spritesSheet, sf::Vector2f(posX, posY), sf::Vector2f(-1, -1));
 
     //EntityManager::entities.push_back(entityPtr);
-    map->addEntityToMatrix(entityPtr);
+    if(entityPtr && entityPtr->type != UNKNOWN) map->addEntityToMatrix(entityPtr);
 }
 
 void GenerateMap::addResizedSprite(long pos[4], EntityGenerator::FunctionPtrCreateEntity generateEntity,
