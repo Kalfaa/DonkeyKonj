@@ -358,7 +358,7 @@ Map *Game::basicMap()
     addBlockLine(*newMap, 30, 50, 250);
     addBlockLine(*newMap, 30, 50, 350);
     addBlockLine(*newMap, 30, 50, 450);
-    addLadder(*newMap, 4, 50, 410);
+    addLadder(*newMap, 4, 150, 410);
     addLadder(*newMap, 4, 90, 310);
 
     int bonusX[3] = {50, 140, 180};

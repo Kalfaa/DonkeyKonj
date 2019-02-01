@@ -23,8 +23,6 @@ public:
     enum PatternType
     {
         donkeyFace,
-        barrelVertical,
-        barrelHorizontal,
 
     };
 
