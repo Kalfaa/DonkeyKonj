@@ -28,10 +28,22 @@ void Player::update(sf::Time elapsedTime)
     sf::Vector2f moveUp(0.f, -playerSpeed);
     sf::Vector2f moveRight(playerSpeed, 0.f);
     sf::Vector2f moveLeft(-playerSpeed, 0.f);
-    if (collide(*EntityManager::map, EntityType::BARREL, DOWN))
-    {
-        sprite.setPosition(EntityManager::map->startpoint);
+    if(playerState == DYING){
+        TimeAnimation += elapsedTime.asMilliseconds();
+        changeSprite(updateAnimation(&TimeAnimation, 300, spritesPtns.at(deadPatternRight)));
+        if(TimeAnimation == 0){
+            sprite.setPosition(EntityManager::map->startpoint);
+            playerState =IDLE;
+        }
+        return ;
     }
+    if (collide(*EntityManager::map, EntityType::BARREL, DOWN) && playerState != DYING)
+    {
+        playerState = DYING;
+        TimeAnimation = 0;
+        return ;
+    }
+
     if (playerState != JUMP && playerState != STARTJUMP && playerState != GRINDING)
     {
         sprite.move(moveDown * elapsedTime.asSeconds());

@@ -21,7 +21,8 @@ enum PlayerState
     MOOVING,
     STARTJUMP,
     FALLING,
-    GRINDING
+    GRINDING,
+    DYING,
 };
 
 enum EntityType
