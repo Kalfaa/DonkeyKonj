@@ -17,6 +17,7 @@ DonkeyKong::DonkeyKong(const sf::Sprite &sprite, const sf::Vector2f &posPlayer, 
     state = NONE;
     timeBarrelLaunch = 0;
     BarrelCount = 0 ;
+    barrelFrequency = 0;
 }
 
 void DonkeyKong::update(sf::Time elapsedTime)
@@ -53,24 +54,27 @@ void DonkeyKong::update(sf::Time elapsedTime)
     }
     if (state == LAUNCHBARREL && BarrelCount <4)
     {
-        std::random_device randomGenerator;
-        int rand = randomGenerator() % 2;
-        sf::Vector2f posbarrel;
-        if(rand ==1){
-             posbarrel = {sprite.getPosition().x - 30, sprite.getPosition().y};
-        }else{
-             posbarrel = {sprite.getPosition().x , sprite.getPosition().y+100};
-        }
-        changeSprite(updateAnimation(&timeAnimation, 600, patterns.at(donkeyFace)));
-        if (timeAnimation == 0)
-        {
-
-            createBarrel(*EntityManager::map, posbarrel);
-            BarrelCount++;
+        barrelFrequency += elapsedTime.asMilliseconds();
+        if(barrelFrequency > BARREL_FREQUENCY){
+            std::random_device randomGenerator;
+            int rand = randomGenerator() % 2;
+            sf::Vector2f posbarrel;
+            if(rand ==1){
+                 posbarrel = {sprite.getPosition().x - 30, sprite.getPosition().y};
+            }else{
+                 posbarrel = {sprite.getPosition().x , sprite.getPosition().y+100};
+            }
+            changeSprite(updateAnimation(&timeAnimation, 200, patterns.at(donkeyFace)));
+            if (timeAnimation == 0)
+            {
+                createBarrel(*EntityManager::map, posbarrel);
+                BarrelCount++;
+                barrelFrequency = 0;
+            }
         }
 
     }
-    else if (timeBarrelLaunch > 3000)
+    else if (timeBarrelLaunch > BARREL_WAVE_FREQUENCY)
     {
         state = LAUNCHBARREL;
         if(BarrelCount==4){
