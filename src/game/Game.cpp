@@ -103,57 +103,11 @@ void Game::processEvents()
 
 void Game::update(sf::Time elapsedTime)
 {
-    sf::Vector2f movement(0.f, 0.f);
-    EntityManager::player->update(elapsedTime);
 
-   if(checkIfEntityIsOutOfMap(EntityManager::player))
-   {
-       EntityManager::player->kill();
-   }
+    gameUpdate(elapsedTime);
 
 
-    std::vector<std::shared_ptr<Entity>> willBeErased;
-    const sf::Sprite player = EntityManager::player->getSprite();
-    for (const auto &entity : EntityManager::entities)
-    {
-        if(entity->type == BARREL || entity->type == DONKEYKONG ||entity->type == BONUS_ITEM ){
 
-            if(checkIfEntityIsOutOfMap(entity)){
-                    willBeErased.push_back(entity);
-            }else{
-                entity->update(elapsedTime);
-            }
-        }
-    }
-
-    for(const auto &entity : willBeErased){
-        removeFromEntities(entity);
-        EntityManager::map->removeMoovingObject(entity);
-    }
-    if(!willBeErased.empty())willBeErased.clear();
-    if (countElement)
-    {
-        map->countElement();
-        countElement = false;
-    }
-    if (mIsMovingUp)EntityManager::player->move(UP);
-    if (mIsMovingRight)EntityManager::player->move(RIGHT);
-    if (mJump)
-    {
-        EntityManager::player->jump();
-        mJump = false;
-    }
-    if (mIsMovingDown) EntityManager::player->move(DOWN);
-    if (mIsMovingLeft) EntityManager::player->move(LEFT);
-    for (const std::shared_ptr<Entity> &entity : EntityManager::entities)
-    {
-        if (!entity->enabled || entity->type != EntityType::PLAYER)
-        {
-            continue;
-        }
-
-        entity->sprite.move(movement * elapsedTime.asSeconds());
-    }
 }
 
 void Game::draw()
@@ -518,6 +472,70 @@ bool Game::checkIfEntityIsOutOfMap(std::shared_ptr<Entity> ent) {
     if(ent->sprite.getPosition().x > EntityManager::map->getEntity3DArray().at(0).size() *32 || ent->sprite.getPosition().y > EntityManager::map->getEntity3DArray().size() *32 ) return true ;
     return false;
 }
+
+void Game::mainMenuUpdate(sf::Time elapsedTime) {
+
+}
+
+void Game::gameUpdate(sf::Time elapsedTime) {
+    sf::Vector2f movement(0.f, 0.f);
+    EntityManager::player->update(elapsedTime);
+
+    if(checkIfEntityIsOutOfMap(EntityManager::player))
+    {
+        EntityManager::player->kill();
+    }
+
+    if(EntityManager::player->life <0){
+        //changement de phase
+    }
+
+    std::vector<std::shared_ptr<Entity>> willBeErased;
+    const sf::Sprite player = EntityManager::player->getSprite();
+    for (const auto &entity : EntityManager::entities)
+    {
+        if(entity->type == BARREL || entity->type == DONKEYKONG ||entity->type == BONUS_ITEM ){
+
+            if(checkIfEntityIsOutOfMap(entity)){
+                willBeErased.push_back(entity);
+            }else{
+                entity->update(elapsedTime);
+            }
+        }
+    }
+
+    for(const auto &entity : willBeErased){
+        removeFromEntities(entity);
+        EntityManager::map->removeMoovingObject(entity);
+    }
+    if(!willBeErased.empty())willBeErased.clear();
+    if (countElement)
+    {
+        map->countElement();
+        countElement = false;
+    }
+    if (mIsMovingUp)EntityManager::player->move(UP);
+    if (mIsMovingRight)EntityManager::player->move(RIGHT);
+    if (mJump)
+    {
+        EntityManager::player->jump();
+        mJump = false;
+    }
+    if (mIsMovingDown) EntityManager::player->move(DOWN);
+    if (mIsMovingLeft) EntityManager::player->move(LEFT);
+    for (const std::shared_ptr<Entity> &entity : EntityManager::entities)
+    {
+        if (!entity->enabled || entity->type != EntityType::PLAYER)
+        {
+            continue;
+        }
+    }
+}
+
+void Game::gameOverUpdate(sf::Time elapsedTime) {
+
+}
+
 
 
 

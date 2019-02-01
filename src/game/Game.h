@@ -33,12 +33,17 @@ public:
 
     enum GameState
     {
-        INGAME
+        MAINMENU,
+        INGAME,
+        GAMEOVER,
     };
 
 
 private:
 
+    void mainMenuUpdate(sf::Time elapsedTime);
+    void gameUpdate(sf::Time elapsedTime);
+    void gameOverUpdate(sf::Time elapsedTime);
     Map *createMap(std::ifstream mapFile);
 
     void processEvents();
