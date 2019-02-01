@@ -58,7 +58,7 @@ public:
 public:
     void update(sf::Time elapsedTime) override;
 
-    void createBarrel(Map map, sf::Vector2f pos);
+    void createBarrel(Map map, sf::Vector2f pos , Barrel::BarrelState state);
 };
 
 

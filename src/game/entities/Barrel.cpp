@@ -20,9 +20,6 @@ Barrel::Barrel(const sf::Sprite &sprite, const sf::Vector2f &posPlayer, EntityTy
 void Barrel::update(sf::Time elapsedTime)
 {
     sf::Vector2f grindLadder(0.f, -BARREL_SPEED * 2); // en attendant de trouver une maniere plus propre
-    sf::Vector2f moveJump(0.f, -BARREL_SPEED);
-    sf::Vector2f moveNotJump(0.f, +BARREL_SPEED);
-    sf::Vector2f movement(0.f, 0.f);
     sf::Vector2f moveDown(0.f, BARREL_SPEED);
     sf::Vector2f moveUp(0.f, -BARREL_SPEED);
     sf::Vector2f moveRight(BARREL_SPEED, 0.f);
@@ -31,7 +28,7 @@ void Barrel::update(sf::Time elapsedTime)
     timeAnimation += elapsedTime.asMilliseconds();
 
     sprite.move(moveDown * elapsedTime.asSeconds());
-    if (!EntityManager::map->collide(sprite, EntityType::PLATFORM, DOWN)->collide || barrelState == GRINDING)
+    if (!EntityManager::map->collide(sprite, EntityType::PLATFORM, DOWN)->collide)
     {
     }
     else
@@ -44,7 +41,14 @@ void Barrel::update(sf::Time elapsedTime)
     }
     if (barrelState == NONE)
     {
-        barrelState = LEFT;
+        std::random_device randomGenerator;
+        int rand = randomGenerator() % 2;
+        if(rand== 1){
+            barrelState = LEFT;
+        }else{
+            barrelState = RIGHT;
+        }
+
     }
 
     if (EntityManager::map->collide(sprite, LADDER, DOWN, getHitboxLadder())->collide)
@@ -55,6 +59,7 @@ void Barrel::update(sf::Time elapsedTime)
         {
             sprite.move(-grindLadder * elapsedTime.asSeconds());
             changeSprite(updateAnimation(&timeAnimation, 200, patterns.at(barrelVertical)));
+            barrelState = GRINDING;
         }
         else
         {
@@ -66,12 +71,22 @@ void Barrel::update(sf::Time elapsedTime)
             if (barrelState == RIGHT)
             {
                 sprite.move(moveRight * elapsedTime.asSeconds());
+                changeSprite(updateAnimation(&timeAnimation, 200, patterns.at(barrelHorizontalRight)));
             }
         }
     }
     else
     {
         countBeforeGrind = 0;
+        if(barrelState == GRINDING){
+            std::random_device randomGenerator;
+            int rand = randomGenerator() % 2;
+            if(rand== 1){
+                barrelState = LEFT;
+            }else{
+                barrelState = RIGHT;
+            }
+        }
         if (barrelState == LEFT)
         {
 
@@ -81,6 +96,8 @@ void Barrel::update(sf::Time elapsedTime)
         if (barrelState == RIGHT)
         {
             sprite.move(moveRight * elapsedTime.asSeconds());
+            changeSprite(updateAnimation(&timeAnimation, 200, patterns.at(barrelHorizontalRight)));
+
         }
     }
 }
