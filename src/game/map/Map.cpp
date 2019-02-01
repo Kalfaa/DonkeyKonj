@@ -497,6 +497,7 @@ void Map::removeMoovingObject(std::shared_ptr<Entity> ent) {
     for(auto it = moovingObject.begin(); it!= moovingObject.end();++it){
         if(ent == *it){
             moovingObject.erase(it);
+            return ;
         }
     }
 }
