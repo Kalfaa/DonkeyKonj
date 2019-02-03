@@ -1,3 +1,4 @@
+#include <entities/Peach.h>
 #include "DonkeyKong.h"
 #include "Game.h"
 
@@ -19,29 +20,32 @@ Game::Game()
 
     std::string filename = EntityManager::MAP_PATH + "/" + "map_donkeykong";
 
-    map = std::shared_ptr<Map>(basicMap());
+    //map = std::shared_ptr<Map>(basicMap());
 
     ///MAP GENERATOR
-//    std::map<string, EntityGenerator::FunctionPtrCreateEntity> mapElement {
-//            {"PLATFORM", &EntityGenerator::createPlatform},
-//            {"LADDER", &EntityGenerator::createLadder},
-//            {"MARIO", &EntityGenerator::createMario},
-//            {"BONUS_UMBRELLA", &EntityGenerator::createUmbrellaBonus},
-//            {"BONUS_HANDBAG", &EntityGenerator::createHandbagBonus},
-//            {"BONUS_HAT", &EntityGenerator::createHatBonus},
-//            {"SCORE_TAB", &EntityGenerator::createTabScore},
-//            {"DONKEY_KONG", &EntityGenerator::createDonkeyKong}
-//    };
-//
-//    GenerateMap gMap(sps, mapElement);
-//    map = gMap.createMap(600, 600, "map_donkeykong2");
+    std::map<string, EntityGenerator::FunctionPtrCreateEntity> mapElement {
+            {"PLATFORM", &EntityGenerator::createPlatform},
+            {"LADDER", &EntityGenerator::createLadder},
+            {"MARIO", &EntityGenerator::createMario},
+            {"BONUS_UMBRELLA", &EntityGenerator::createUmbrellaBonus},
+            {"BONUS_HANDBAG", &EntityGenerator::createHandbagBonus},
+            {"BONUS_HAT", &EntityGenerator::createHatBonus},
+            {"SCORE_TAB", &EntityGenerator::createTabScore},
+            {"DONKEY_KONG", &EntityGenerator::createDonkeyKong},
+            {"PEACH", &EntityGenerator::createPeach}
+    };
+
+    GenerateMap gMap(sps, mapElement);
+    map = gMap.createMap(860, 600, "map_donkeykong2");
     /// MAP ROTARENEG
 
-    mFont.loadFromFile(EntityManager::MEDIA_PATH + "/Sansation.ttf");
+    mFont.loadFromFile(EntityManager::MEDIA_PATH + "/emulogic.ttf");
     mStatisticsText.setString("Welcome to Donkey Kong 1981");
     mStatisticsText.setFont(mFont);
     mStatisticsText.setPosition(5.f, 5.f);
-    mStatisticsText.setCharacterSize(10);
+    mStatisticsText.setCharacterSize(6);
+
+
 
     sf::Image icon;
     if (icon.loadFromFile(EntityManager::TEXTURES_PATH + "/icon.png"))
@@ -100,53 +104,7 @@ void Game::processEvents()
 
 void Game::update(sf::Time elapsedTime)
 {
-    sf::Vector2f movement(0.f, 0.f);
-    EntityManager::player->update(elapsedTime);
-    std::vector<std::shared_ptr<Entity>> willBeErased;
-    const sf::Sprite player = EntityManager::player->getSprite();
-    cout <<"before";
-    for (const auto &entity : EntityManager::entities)
-    {
-        if(entity->type == BARREL || entity->type == DONKEYKONG ||entity->type == BONUS_ITEM ){
-
-            if(checkIfEntityIsOutOfMap(entity)){
-                cout<<"removed";
-                //willBeErased.push_back(entity);
-
-                EntityManager::map->removeMoovingObject(entity);
-            }else{
-                entity->update(elapsedTime);
-            }
-        }
-    }
-
-    for(const auto &entity : willBeErased){
-        removeFromEntities(entity);
-    }
-
-    if (countElement)
-    {
-        map->countElement();
-        countElement = false;
-    }
-    if (mIsMovingUp)EntityManager::player->move(UP);
-    if (mIsMovingRight)EntityManager::player->move(RIGHT);
-    if (mJump)
-    {
-        EntityManager::player->jump();
-        mJump = false;
-    }
-    if (mIsMovingDown) EntityManager::player->move(DOWN);
-    if (mIsMovingLeft) EntityManager::player->move(LEFT);
-    for (const std::shared_ptr<Entity> &entity : EntityManager::entities)
-    {
-        if (!entity->enabled || entity->type != EntityType::PLAYER)
-        {
-            continue;
-        }
-
-        entity->sprite.move(movement * elapsedTime.asSeconds());
-    }
+    gameUpdate(elapsedTime);
 }
 
 void Game::draw()
@@ -181,10 +139,14 @@ void Game::draw()
 
         }
     }
-
+    sf::Text marioLife = sf::Text();
+    marioLife.setFont(mFont);
+    marioLife.setPosition({800,60});
+    marioLife.setString("x"+std::to_string(EntityManager::player->life));
+    marioLife.setCharacterSize(15);
     mWindow.draw(EntityManager::player->getSprite());
     mWindow.draw(mStatisticsText);
-
+    mWindow.draw(marioLife);
     if (debug)
     {
         mWindow.draw(
@@ -342,14 +304,13 @@ Map *Game::createMap(std::ifstream mapFile)
 
 Map *Game::basicMap()
 {
-    Map *newMap = new Map(100, 100);
+    Map *newMap = new Map(100, 20);
 
     addBlockLine(*newMap, 30, 50, 250);
     addBlockLine(*newMap, 30, 50, 350);
     addBlockLine(*newMap, 30, 50, 450);
-    addLadder(*newMap, 4, 50, 410);
+    addLadder(*newMap, 4, 150, 410);
     addLadder(*newMap, 4, 90, 310);
-    //string bonusTab[3] = {"UmbrellaBonus", "HandbagBonus", "HatBonus"};
 
     int bonusX[3] = {50, 140, 180};
     int bonusY[3] = {static_cast<int>(250 - sps.getSpriteSize("UmbrellaBonus")[0]),
@@ -359,7 +320,7 @@ Map *Game::basicMap()
 
     addScoreTab(*newMap, static_cast<int>(mWindow.getSize().x - sps.getSpriteSize("BonusPanel0")[1]), 0);
 
-    sf::Vector2f posmario(5 * 32, 3 * 32);
+    sf::Vector2f posmario(10 * 32, 12 * 32);
     newMap->startpoint.x = posmario.x;
     newMap->startpoint.y = posmario.y;
 
@@ -383,7 +344,8 @@ Map *Game::basicMap()
     Barrel::SpritesPatterns spritesPatternsBarrel
             {
                     {Barrel::barrel,           std::vector<sf::Sprite>(1, sps.getSprite("Barrel"))},
-                    {Barrel::barrelHorizontal, sps.getPattern("BarrelHorizontal")},
+                    {Barrel::barrelHorizontalRight, sps.getPattern("BarrelHorizontal")},
+                    {Barrel::barrelHorizontalLeft, sps.getOppositePattern("BarrelHorizontal")},
                     {Barrel::barrelVertical,   sps.getPattern("BarrelVertical")}
             };
 
@@ -392,9 +354,23 @@ Map *Game::basicMap()
                     {DonkeyKong::donkeyFace, sps.getPattern("DonkeyKongFace")}
             };
 
+    Peach::SpritesPatterns patternsPeach {
+            {Peach::peachRight , sps.getPattern("PeachRight")},
+            {Peach::peachLeft , sps.getOppositePattern("PeachRight")},
+            {Peach::peachHelpRight , sps.getPattern("PeachHelpRight")},
+            {Peach::peachHelpLeft , sps.getOppositePattern("PeachHelpRight")}
+    };
 
     sf::Vector2f posbarrel(32 * 15, 32);
     sf::Vector2f posDK(32 * 10, 32 * 5);
+    sf::Vector2f posPeach(32 *10 ,32*9);
+
+
+    std::shared_ptr<Entity> peach = std::make_shared<Peach>(patternsPeach.at(Peach::peachRight)[0], posPeach,
+                                                              EntityType::PEACH,patternsPeach );
+
+    EntityManager::entities.push_back(peach);
+    newMap->addEntityToMatrix(peach);
     //std::shared_ptr<Entity> barrel = std::make_shared<Barrel>(spritesPatternsBarrel.at(Barrel::barrelHorizontal)[0],
     //                                                          posbarrel,
     //                                                          EntityType::BARREL, spritesPatternsBarrel);
@@ -484,11 +460,8 @@ sf::RectangleShape Game::getRectangleToDraw(sf::FloatRect rectFloat, sf::Color c
 void Game::removeFromEntities(std::shared_ptr<Entity> ent) {
     for(auto it = EntityManager::entities.begin(); it!= EntityManager::entities.end();++it){
         if(ent == *it){
-            if(EntityManager::entities.size()==1){
-                EntityManager::entities.clear();
-                return ;
-            }
             EntityManager::entities.erase(it);
+            return ;
         }
     }
 }
@@ -498,6 +471,70 @@ bool Game::checkIfEntityIsOutOfMap(std::shared_ptr<Entity> ent) {
     if(ent->sprite.getPosition().x > EntityManager::map->getEntity3DArray().at(0).size() *32 || ent->sprite.getPosition().y > EntityManager::map->getEntity3DArray().size() *32 ) return true ;
     return false;
 }
+
+void Game::mainMenuUpdate(sf::Time elapsedTime) {
+
+}
+
+void Game::gameUpdate(sf::Time elapsedTime) {
+    sf::Vector2f movement(0.f, 0.f);
+    EntityManager::player->update(elapsedTime);
+
+    if(checkIfEntityIsOutOfMap(EntityManager::player))
+    {
+        EntityManager::player->kill();
+    }
+
+    if(EntityManager::player->life <0){
+        //changement de phase
+    }
+
+    std::vector<std::shared_ptr<Entity>> willBeErased;
+    const sf::Sprite player = EntityManager::player->getSprite();
+    for (const auto &entity : EntityManager::entities)
+    {
+        if(entity->type == BARREL || entity->type == DONKEYKONG ||entity->type == BONUS_ITEM ){
+
+            if(checkIfEntityIsOutOfMap(entity)){
+                willBeErased.push_back(entity);
+            }else{
+                entity->update(elapsedTime);
+            }
+        }
+    }
+
+    for(const auto &entity : willBeErased){
+        removeFromEntities(entity);
+        EntityManager::map->removeMoovingObject(entity);
+    }
+    if(!willBeErased.empty())willBeErased.clear();
+    if (countElement)
+    {
+        map->countElement();
+        countElement = false;
+    }
+    if (mIsMovingUp)EntityManager::player->move(UP);
+    if (mIsMovingRight)EntityManager::player->move(RIGHT);
+    if (mJump)
+    {
+        EntityManager::player->jump();
+        mJump = false;
+    }
+    if (mIsMovingDown) EntityManager::player->move(DOWN);
+    if (mIsMovingLeft) EntityManager::player->move(LEFT);
+    for (const std::shared_ptr<Entity> &entity : EntityManager::entities)
+    {
+        if (!entity->enabled || entity->type != EntityType::PLAYER)
+        {
+            continue;
+        }
+    }
+}
+
+void Game::gameOverUpdate(sf::Time elapsedTime) {
+
+}
+
 
 
 

@@ -31,8 +31,19 @@ public:
     void run();
 
 
+    enum GameState
+    {
+        MAINMENU,
+        INGAME,
+        GAMEOVER,
+    };
+
+
 private:
 
+    void mainMenuUpdate(sf::Time elapsedTime);
+    void gameUpdate(sf::Time elapsedTime);
+    void gameOverUpdate(sf::Time elapsedTime);
     Map *createMap(std::ifstream mapFile);
 
     void processEvents();
@@ -85,14 +96,7 @@ private:
     bool mJump;
     bool countElement;
 
-    sf::Texture textureLadder;
-    sf::Sprite ladder[LADDER_COUNT];
-    sf::Texture texturePlatform;
-    sf::Sprite block[BLOCK_COUNT_X][BLOCK_COUNT_Y];
-    sf::Texture textureWeapon;
-    sf::Sprite weapon;
-    sf::Vector2u sizeBlock;
-    sf::Vector2u sizeMario;
+    GameState gameState;
 };
 
 #endif

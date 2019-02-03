@@ -12,7 +12,8 @@
 
 
 #define DK_SPEED 65
-
+#define BARREL_FREQUENCY 2000
+#define BARREL_WAVE_FREQUENCY 3000
 class Map;
 
 class DonkeyKong : public Entity
@@ -22,8 +23,6 @@ public:
     enum PatternType
     {
         donkeyFace,
-        barrelVertical,
-        barrelHorizontal,
 
     };
 
@@ -53,11 +52,11 @@ public:
     SpritesPatterns patterns;
     DonkeyState state;
     Barrel::SpritesPatterns barrelPattern;
-
+    int barrelFrequency ;
 public:
     void update(sf::Time elapsedTime) override;
 
-    void createBarrel(Map map, sf::Vector2f pos);
+    void createBarrel(Map map, sf::Vector2f pos , Barrel::BarrelState state);
 };
 
 

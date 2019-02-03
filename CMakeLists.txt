@@ -58,7 +58,7 @@ include(${CMAKE_CURRENT_SOURCE_DIR}/src/CMakeLists.txt)
 
 # Add executable to build.
 add_executable(${PROJECT_NAME}
-        ${SOURCES} src/game/entities/DonkeyKong.cpp src/game/entities/DonkeyKong.h)
+        ${SOURCES} src/game/entities/DonkeyKong.cpp src/game/entities/DonkeyKong.h src/game/entities/Peach.cpp src/game/entities/Peach.h)
 
 # Include directory 
 target_include_directories(${PROJECT_NAME} PRIVATE ${INCLUDE_DIR})

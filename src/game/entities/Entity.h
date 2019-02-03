@@ -21,19 +21,21 @@ enum PlayerState
     MOOVING,
     STARTJUMP,
     FALLING,
-    GRINDING
+    GRINDING,
+    DYING,
 };
 
 enum EntityType
 {
     PLAYER,
+    PEACH,
     PLATFORM,
     LADDER,
     BONUS_ITEM,
     SCORE_TAB,
-    UNKNOWN,
     BARREL,
-    DONKEYKONG
+    DONKEYKONG,
+    UNKNOWN
 };
 
 class Entity
@@ -56,6 +58,8 @@ public:
     const sf::Sprite &getSprite() const;
 
     sf::Sprite updateAnimation(int *now, int frequency, std::vector<sf::Sprite> sprite);
+
+
 
 public:
     sf::Vector2u size;
