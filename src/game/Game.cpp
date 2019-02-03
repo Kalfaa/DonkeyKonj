@@ -36,7 +36,7 @@ Game::Game()
     };
 
     GenerateMap gMap(sps, mapElement);
-    map = gMap.createMap(860, 600, "map_donkeykong2");
+    map = gMap.createMap(860, 600, "map_donkeykong");
     /// MAP ROTARENEG
 
     mFont.loadFromFile(EntityManager::MEDIA_PATH + "/emulogic.ttf");
