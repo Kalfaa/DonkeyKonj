@@ -104,11 +104,7 @@ void Game::processEvents()
 
 void Game::update(sf::Time elapsedTime)
 {
-
     gameUpdate(elapsedTime);
-
-
-
 }
 
 void Game::draw()
