@@ -111,7 +111,6 @@ void Game::update(sf::Time elapsedTime)
 
 void Game::draw()
 {
-    cerr << "draw"<<endl;
     mWindow.clear();
 
     for (const std::shared_ptr<Entity> &entity : EntityManager::entities)
@@ -481,7 +480,6 @@ void Game::mainMenuUpdate(sf::Time elapsedTime) {
 }
 
 void Game::gameUpdate(sf::Time elapsedTime) {
-    cerr<< "update"<<endl;
     sf::Vector2f movement(0.f, 0.f);
     EntityManager::player->update(elapsedTime);
     int countb = 0 ;
@@ -497,10 +495,8 @@ void Game::gameUpdate(sf::Time elapsedTime) {
     const sf::Sprite player = EntityManager::player->getSprite();
     for (const auto &entity : EntityManager::entities)
     {
-        cerr<<"barrel" << endl;
         if(entity->type == BARREL ||entity->type == DONKEYKONG ||entity->type == BONUS_ITEM ){
             if(checkIfEntityIsOutOfMap(entity)){
-                cerr<<"erase"<<endl;
                 willBeErased.push_back(entity);
             }else{
                int size1 = EntityManager::entities.size();
@@ -509,8 +505,6 @@ void Game::gameUpdate(sf::Time elapsedTime) {
             }
         }
     }
-
-    cerr<<"out";
     for(const auto &entity : willBeErased){
         removeFromEntities(entity);
         EntityManager::map->removeMoovingObject(entity);
