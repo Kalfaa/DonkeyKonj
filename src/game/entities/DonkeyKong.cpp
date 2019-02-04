@@ -56,6 +56,7 @@ void DonkeyKong::update(sf::Time elapsedTime)
     {
         barrelFrequency += elapsedTime.asMilliseconds();
         if(barrelFrequency > BARREL_FREQUENCY){
+
             std::random_device randomGenerator;
             int rand = randomGenerator() % 2;
 
@@ -69,6 +70,7 @@ void DonkeyKong::update(sf::Time elapsedTime)
                     posbarrel = {sprite.getPosition().x , sprite.getPosition().y+100};
                 }
                 createBarrel(*EntityManager::map, posbarrel,Barrel::BarrelState::LEFT);
+
                 BarrelCount++;
                 barrelFrequency = 0;
             }

@@ -37,6 +37,7 @@ Game::Game()
 
     GenerateMap gMap(sps, mapElement);
     map = gMap.createMap(860, 600, "map_donkeykong");
+    map->startpoint = EntityManager::player->getSprite().getPosition();
     /// MAP ROTARENEG
 
     mFont.loadFromFile(EntityManager::MEDIA_PATH + "/emulogic.ttf");
@@ -104,11 +105,13 @@ void Game::processEvents()
 
 void Game::update(sf::Time elapsedTime)
 {
+
     gameUpdate(elapsedTime);
 }
 
 void Game::draw()
 {
+    cerr << "draw"<<endl;
     mWindow.clear();
 
     for (const std::shared_ptr<Entity> &entity : EntityManager::entities)
@@ -216,6 +219,7 @@ void Game::handlePlayerInput(sf::Keyboard::Key key, bool isPressed)
 
 Map *Game::createMap(std::ifstream mapFile)
 {
+
 
     std::string str((std::istreambuf_iterator<char>(mapFile)),
                     std::istreambuf_iterator<char>());
@@ -477,9 +481,10 @@ void Game::mainMenuUpdate(sf::Time elapsedTime) {
 }
 
 void Game::gameUpdate(sf::Time elapsedTime) {
+    cerr<< "update"<<endl;
     sf::Vector2f movement(0.f, 0.f);
     EntityManager::player->update(elapsedTime);
-
+    int countb = 0 ;
     if(checkIfEntityIsOutOfMap(EntityManager::player))
     {
         EntityManager::player->kill();
@@ -488,21 +493,24 @@ void Game::gameUpdate(sf::Time elapsedTime) {
     if(EntityManager::player->life <0){
         //changement de phase
     }
-
     std::vector<std::shared_ptr<Entity>> willBeErased;
     const sf::Sprite player = EntityManager::player->getSprite();
     for (const auto &entity : EntityManager::entities)
     {
-        if(entity->type == BARREL || entity->type == DONKEYKONG ||entity->type == BONUS_ITEM ){
-
+        cerr<<"barrel" << endl;
+        if(entity->type == BARREL ||entity->type == DONKEYKONG ||entity->type == BONUS_ITEM ){
             if(checkIfEntityIsOutOfMap(entity)){
+                cerr<<"erase"<<endl;
                 willBeErased.push_back(entity);
             }else{
+               int size1 = EntityManager::entities.size();
                 entity->update(elapsedTime);
+               if(size1 !=  EntityManager::entities.size()) break;
             }
         }
     }
 
+    cerr<<"out";
     for(const auto &entity : willBeErased){
         removeFromEntities(entity);
         EntityManager::map->removeMoovingObject(entity);

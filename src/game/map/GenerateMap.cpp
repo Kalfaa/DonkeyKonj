@@ -19,7 +19,7 @@ shared_ptr<Map> GenerateMap::createMap(unsigned int sizeX, unsigned int sizeY, s
     ifstream mapF(fileName.c_str(), std::ifstream::binary);
     if (!mapF) throw std::runtime_error("Could not open file");
 
-    shared_ptr<Map> map = make_shared<Map>();
+    shared_ptr<Map> map = make_shared<Map>(40,40);
 
     string entityName;
     //Entity entity;
@@ -95,6 +95,7 @@ GenerateMap::addSprite(unsigned int posX, unsigned int posY, EntityGenerator::Fu
 
     //EntityManager::entities.push_back(entityPtr);
     if(entityPtr && entityPtr->type != UNKNOWN) map->addEntityToMatrix(entityPtr);
+
 }
 
 void GenerateMap::addResizedSprite(long pos[4], EntityGenerator::FunctionPtrCreateEntity generateEntity,
