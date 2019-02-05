@@ -12,10 +12,15 @@
 class GameData
 {
 public:
-    GameData(unsigned int timeBeginMs, unsigned int lifeCount, unsigned int scoreValue);
+    GameData(unsigned int timeBeginMs, unsigned int lifeCount, unsigned int scoreValue, const std::string& fontPath);
 
     static GameData INSTANCE;
-    inline static GameData &GetInstance(){ return INSTANCE; };
+    inline static GameData &GetInstance(){ return INSTANCE; }
+
+public:
+    void setGameTimer(const sf::Time &gameTimer);
+    void setLifeNumber(unsigned int lifeNumber);
+    void setScoreValue(unsigned int scoreValue);
 
 private:
     sf::Time gameTimer;
@@ -25,6 +30,8 @@ private:
 
     sf::Text score;
     unsigned int scoreValue;
+
+    sf::Font font;
 };
 
 

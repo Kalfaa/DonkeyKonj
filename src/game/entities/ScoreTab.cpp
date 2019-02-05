@@ -12,7 +12,7 @@ ScoreTab::ScoreTab(const sf::Sprite &sprite, const sf::Vector2f &position, Entit
 {
 }
 
-void ScoreTab::update(sf::Time time1)
+void ScoreTab::update(sf::Time time)
 {
-    StaticEntity::update(time1);
+    StaticEntity::update(time);
 }
