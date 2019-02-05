@@ -103,7 +103,7 @@ void Player::move(Direction direction)
 
 void Player::jump()
 {
-    if (FALLING != playerState && playerState ==DYING)playerState = STARTJUMP;
+    if (FALLING != playerState && playerState !=DYING)playerState = STARTJUMP;
 }
 
 bool Player::collide(Map map, EntityType entityType, Direction direction)
