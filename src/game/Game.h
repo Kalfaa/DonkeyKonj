@@ -36,6 +36,7 @@ public:
         MAINMENU,
         INGAME,
         GAMEOVER,
+        MAPTRANSITION,
     };
 
 
@@ -71,15 +72,20 @@ private:
     void removeFromEntities(std::shared_ptr<Entity> ent);
 
     bool checkIfEntityIsOutOfMap(std::shared_ptr<Entity> ent);
+    void drawGame();
+    void drawTransition();
+    void updateGameTransition(sf::Time elapsedTime);
 
 private:
-
+    int timeAnimation;
+    int score =0 ;
+    int time = 300;
     static const float PlayerSpeed;
     static const sf::Time timePerFrame;
-
+    int lvlcount ;
     std::shared_ptr<Map> map;
     SpritesSheet sps;
-
+    std::vector<std::string> lvlList;
     sf::RenderWindow mWindow;
     sf::Texture mTexture;
     sf::Sprite mPlayer;
