@@ -23,7 +23,7 @@ Game::Game()
     std::string filename = EntityManager::MAP_PATH + "/" + "map_donkeykong";
 
     //map = std::shared_ptr<Map>(basicMap());
-    map = initMap("map_donkeykong");
+    map = initMap("map_donkeykong2");
     ///MAP GENERATOR
     /// MAP ROTARENEG
 
@@ -500,7 +500,9 @@ void Game::gameUpdate(sf::Time elapsedTime) {
         }
         if(entity->type ==PEACH){
             if(map->collide(entity->sprite,EntityType::PLAYER,DOWN)->collide){
-                map = initMap("map_donkeykong2");
+                EntityManager::entities.clear();
+                EntityManager::map = initMap("map_donkeykong");
+                return;
             }
         }
     }
