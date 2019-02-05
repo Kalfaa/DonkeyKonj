@@ -40,7 +40,7 @@ public:
 
 
 private:
-
+    std::shared_ptr<Map> initMap(std::string mapname);
     void mainMenuUpdate(sf::Time elapsedTime);
     void gameUpdate(sf::Time elapsedTime);
     void gameOverUpdate(sf::Time elapsedTime);

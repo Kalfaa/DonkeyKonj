@@ -1,3 +1,5 @@
+#include <utility>
+
 #include <entities/Peach.h>
 #include "DonkeyKong.h"
 #include "Game.h"
@@ -21,23 +23,8 @@ Game::Game()
     std::string filename = EntityManager::MAP_PATH + "/" + "map_donkeykong";
 
     //map = std::shared_ptr<Map>(basicMap());
-
+    map = initMap("map_donkeykong");
     ///MAP GENERATOR
-    std::map<string, EntityGenerator::FunctionPtrCreateEntity> mapElement {
-            {"PLATFORM", &EntityGenerator::createPlatform},
-            {"LADDER", &EntityGenerator::createLadder},
-            {"MARIO", &EntityGenerator::createMario},
-            {"BONUS_UMBRELLA", &EntityGenerator::createUmbrellaBonus},
-            {"BONUS_HANDBAG", &EntityGenerator::createHandbagBonus},
-            {"BONUS_HAT", &EntityGenerator::createHatBonus},
-            {"SCORE_TAB", &EntityGenerator::createTabScore},
-            {"DONKEY_KONG", &EntityGenerator::createDonkeyKong},
-            {"PEACH", &EntityGenerator::createPeach}
-    };
-
-    GenerateMap gMap(sps, mapElement);
-    map = gMap.createMap(860, 600, "map_donkeykong");
-    map->startpoint = EntityManager::player->getSprite().getPosition();
     /// MAP ROTARENEG
 
     mFont.loadFromFile(EntityManager::MEDIA_PATH + "/emulogic.ttf");
@@ -56,6 +43,7 @@ Game::Game()
     else std::cerr << "Error when load " + EntityManager::TEXTURES_PATH + "/icon.png" << std::endl;
     //map.printElement();
     EntityManager::map = map;
+    gameState = INGAME;
 }
 
 void Game::run()
@@ -105,8 +93,14 @@ void Game::processEvents()
 
 void Game::update(sf::Time elapsedTime)
 {
+    switch (gameState){
+        case INGAME:
+            gameUpdate(elapsedTime);
+            break;
+        default:;
+    }
 
-    gameUpdate(elapsedTime);
+
 }
 
 void Game::draw()
@@ -504,6 +498,11 @@ void Game::gameUpdate(sf::Time elapsedTime) {
                if(size1 !=  EntityManager::entities.size()) break;
             }
         }
+        if(entity->type ==PEACH){
+            if(map->collide(entity->sprite,EntityType::PLAYER,DOWN)->collide){
+                map = initMap("map_donkeykong2");
+            }
+        }
     }
     for(const auto &entity : willBeErased){
         removeFromEntities(entity);
@@ -535,6 +534,27 @@ void Game::gameUpdate(sf::Time elapsedTime) {
 
 void Game::gameOverUpdate(sf::Time elapsedTime) {
 
+}
+
+shared_ptr<Map> Game::initMap(string mapname) {
+
+    shared_ptr<Map> result ;
+    std::map<string, EntityGenerator::FunctionPtrCreateEntity> mapElement {
+            {"PLATFORM", &EntityGenerator::createPlatform},
+            {"LADDER", &EntityGenerator::createLadder},
+            {"MARIO", &EntityGenerator::createMario},
+            {"BONUS_UMBRELLA", &EntityGenerator::createUmbrellaBonus},
+            {"BONUS_HANDBAG", &EntityGenerator::createHandbagBonus},
+            {"BONUS_HAT", &EntityGenerator::createHatBonus},
+            {"SCORE_TAB", &EntityGenerator::createTabScore},
+            {"DONKEY_KONG", &EntityGenerator::createDonkeyKong},
+            {"PEACH", &EntityGenerator::createPeach}
+    };
+
+    GenerateMap gMap(sps, mapElement);
+    result = gMap.createMap(860, 600, std::move(mapname));
+    result->startpoint = EntityManager::player->getSprite().getPosition();
+    return result ;
 }
 
 
