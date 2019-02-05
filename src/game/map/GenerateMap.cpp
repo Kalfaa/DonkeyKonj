@@ -19,7 +19,7 @@ shared_ptr<Map> GenerateMap::createMap(unsigned int sizeX, unsigned int sizeY, s
     ifstream mapF(fileName.c_str(), std::ifstream::binary);
     if (!mapF) throw std::runtime_error("Could not open file");
 
-    shared_ptr<Map> map = make_shared<Map>(40,40);
+    shared_ptr<Map> map = make_shared<Map>(40,20);
 
     string entityName;
     //Entity entity;

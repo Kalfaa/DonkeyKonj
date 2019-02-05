@@ -1,3 +1,5 @@
+#include <utility>
+
 #include <entities/Peach.h>
 #include "DonkeyKong.h"
 #include "Game.h"
@@ -13,31 +15,16 @@ Game::Game()
           mIsMovingRight(false), mIsMovingLeft(false), debug(false), mJump(false), countElement(false)
 {
     mWindow.setFramerateLimit(160);
-
+    lvlcount = 0;
     // Load sprites
     sps = SpritesSheet::GetInstance();
     sps.loadSprites(EntityManager::TEXTURES_PATH + "/DonkeyKong_SpritesSheet.png", SCALE_SPRITES);
 
     std::string filename = EntityManager::MAP_PATH + "/" + "map_donkeykong";
-
+    lvlList = {"map_donkeykong", "map_donkeykong2"};
     //map = std::shared_ptr<Map>(basicMap());
-
+    map = initMap(lvlList.at(0));
     ///MAP GENERATOR
-    std::map<string, EntityGenerator::FunctionPtrCreateEntity> mapElement {
-            {"PLATFORM", &EntityGenerator::createPlatform},
-            {"LADDER", &EntityGenerator::createLadder},
-            {"MARIO", &EntityGenerator::createMario},
-            {"BONUS_UMBRELLA", &EntityGenerator::createUmbrellaBonus},
-            {"BONUS_HANDBAG", &EntityGenerator::createHandbagBonus},
-            {"BONUS_HAT", &EntityGenerator::createHatBonus},
-            {"SCORE_TAB", &EntityGenerator::createTabScore},
-            {"DONKEY_KONG", &EntityGenerator::createDonkeyKong},
-            {"PEACH", &EntityGenerator::createPeach}
-    };
-
-    GenerateMap gMap(sps, mapElement);
-    map = gMap.createMap(860, 600, "map_donkeykong");
-    map->startpoint = EntityManager::player->getSprite().getPosition();
     /// MAP ROTARENEG
 
     mFont.loadFromFile(EntityManager::MEDIA_PATH + "/emulogic.ttf");
@@ -56,6 +43,8 @@ Game::Game()
     else std::cerr << "Error when load " + EntityManager::TEXTURES_PATH + "/icon.png" << std::endl;
     //map.printElement();
     EntityManager::map = map;
+    gameState = INGAME;
+    timeAnimation = 0;
 }
 
 void Game::run()
@@ -105,59 +94,32 @@ void Game::processEvents()
 
 void Game::update(sf::Time elapsedTime)
 {
+    switch (gameState){
+        case INGAME:
+            gameUpdate(elapsedTime);
+            break;
+        case MAPTRANSITION:
+            updateGameTransition(elapsedTime);
+            break;
+        default:;
+    }
 
-    gameUpdate(elapsedTime);
+
 }
 
 void Game::draw()
 {
     mWindow.clear();
 
-    for (const std::shared_ptr<Entity> &entity : EntityManager::entities)
-    {
-        if (!entity->enabled)
-        {
-            continue;
-        }
-
-        mWindow.draw(entity->sprite);
-        if (debug)
-        {
-
-            sf::RectangleShape rectangle(sf::Vector2f(entity->getSprite().getGlobalBounds().width,
-                                                      entity->getSprite().getGlobalBounds().height));
-            rectangle.setPosition(entity->getSprite().getPosition());
-            rectangle.setFillColor(sf::Color(100, 250, 50));
-            mWindow.draw(rectangle);
-        }
-
+    switch (gameState){
+        case INGAME:
+            drawGame();
+            break;
+        case MAPTRANSITION:
+                drawTransition();
+            break;
+        default:;
     }
-    for (const std::shared_ptr<Entity> &entity : EntityManager::entities)
-    {
-        if (entity->type == EntityType::PLAYER)
-        {
-
-            mWindow.draw(entity->getSprite());
-
-        }
-    }
-    sf::Text marioLife = sf::Text();
-    marioLife.setFont(mFont);
-    marioLife.setPosition({800,60});
-    marioLife.setString("x"+std::to_string(EntityManager::player->life));
-    marioLife.setCharacterSize(15);
-    mWindow.draw(EntityManager::player->getSprite());
-    mWindow.draw(mStatisticsText);
-    mWindow.draw(marioLife);
-    if (debug)
-    {
-        mWindow.draw(
-                getRectangleToDraw(EntityManager::player->getSprite().getGlobalBounds(), sf::Color(250, 150, 100)));
-        mWindow.draw(getRectangleToDraw(EntityManager::player->hitboxUseForCollision.getGlobalBounds(),
-                                        sf::Color(100, 250, 50)));
-        mWindow.draw(getRectangleToDraw(EntityManager::player->getUpHitboxLadder(), sf::Color::Red));
-    }
-
     mWindow.display();
 }
 
@@ -504,6 +466,14 @@ void Game::gameUpdate(sf::Time elapsedTime) {
                if(size1 !=  EntityManager::entities.size()) break;
             }
         }
+        if(entity->type ==PEACH){
+            if(map->collide(entity->sprite,EntityType::PLAYER,DOWN)->collide){
+                EntityManager::entities.clear();
+                gameState = MAPTRANSITION;
+                lvlcount++;
+                return;
+            }
+        }
     }
     for(const auto &entity : willBeErased){
         removeFromEntities(entity);
@@ -535,6 +505,124 @@ void Game::gameUpdate(sf::Time elapsedTime) {
 
 void Game::gameOverUpdate(sf::Time elapsedTime) {
 
+}
+
+shared_ptr<Map> Game::initMap(string mapname) {
+
+    shared_ptr<Map> result ;
+    std::map<string, EntityGenerator::FunctionPtrCreateEntity> mapElement {
+            {"PLATFORM", &EntityGenerator::createPlatform},
+            {"LADDER", &EntityGenerator::createLadder},
+            {"MARIO", &EntityGenerator::createMario},
+            {"BONUS_UMBRELLA", &EntityGenerator::createUmbrellaBonus},
+            {"BONUS_HANDBAG", &EntityGenerator::createHandbagBonus},
+            {"BONUS_HAT", &EntityGenerator::createHatBonus},
+            {"SCORE_TAB", &EntityGenerator::createTabScore},
+            {"DONKEY_KONG", &EntityGenerator::createDonkeyKong},
+            {"PEACH", &EntityGenerator::createPeach}
+    };
+
+    GenerateMap gMap(sps, mapElement);
+    result = gMap.createMap(860, 600, std::move(mapname));
+    result->startpoint = EntityManager::player->getSprite().getPosition();
+    return result ;
+}
+
+void Game::updateGameTransition(sf::Time elapsedTime) {
+
+    if(time>0){
+        score++;
+        time--;
+    }else{
+        timeAnimation += elapsedTime.asMilliseconds();
+        if(timeAnimation>500){
+            cout<<lvlcount;
+            if(lvlcount<lvlList.size()){
+                EntityManager::map = initMap(lvlList.at(lvlcount));
+                gameState = INGAME ;
+            }
+        }
+    }
+}
+
+void Game::drawGame() {
+    for (const std::shared_ptr<Entity> &entity : EntityManager::entities)
+    {
+        if (!entity->enabled)
+        {
+            continue;
+        }
+
+        mWindow.draw(entity->sprite);
+        if (debug)
+        {
+
+            sf::RectangleShape rectangle(sf::Vector2f(entity->getSprite().getGlobalBounds().width,
+                                                      entity->getSprite().getGlobalBounds().height));
+            rectangle.setPosition(entity->getSprite().getPosition());
+            rectangle.setFillColor(sf::Color(100, 250, 50));
+            mWindow.draw(rectangle);
+        }
+
+    }
+    for (const std::shared_ptr<Entity> &entity : EntityManager::entities)
+    {
+        if (entity->type == EntityType::PLAYER)
+        {
+
+            mWindow.draw(entity->getSprite());
+
+        }
+    }
+    sf::Text marioLife = sf::Text();
+    marioLife.setFont(mFont);
+    marioLife.setPosition({800,60});
+    marioLife.setString("x"+std::to_string(EntityManager::player->life));
+    marioLife.setCharacterSize(15);
+    mWindow.draw(EntityManager::player->getSprite());
+    mWindow.draw(mStatisticsText);
+    mWindow.draw(marioLife);
+    if (debug)
+    {
+        mWindow.draw(
+                getRectangleToDraw(EntityManager::player->getSprite().getGlobalBounds(), sf::Color(250, 150, 100)));
+        mWindow.draw(getRectangleToDraw(EntityManager::player->hitboxUseForCollision.getGlobalBounds(),
+                                        sf::Color(100, 250, 50)));
+        mWindow.draw(getRectangleToDraw(EntityManager::player->getUpHitboxLadder(), sf::Color::Red));
+    }
+}
+
+void Game::drawTransition() {
+    sf::Text scoreDisplay = sf::Text();
+    scoreDisplay.setFont(mFont);
+    scoreDisplay.setPosition({100,200});
+    scoreDisplay.setString("Score");
+    scoreDisplay.setCharacterSize(35);
+    mWindow.draw(scoreDisplay);
+
+
+    sf::Text timeDisplay = sf::Text();
+    timeDisplay.setFont(mFont);
+    timeDisplay.setPosition({400,200});
+    timeDisplay.setString("Time");
+    timeDisplay.setCharacterSize(35);
+    mWindow.draw(timeDisplay);
+
+    sf::Text scoreValue = sf::Text();
+    scoreValue.setFont(mFont);
+    scoreValue.setPosition({200,300});
+    scoreValue.setString(std::to_string(score));
+    scoreValue.setCharacterSize(35);
+    mWindow.draw(scoreValue);
+
+
+
+    sf::Text timeValue = sf::Text();
+    timeValue.setFont(mFont);
+    timeValue.setPosition({400,300});
+    timeValue.setString(std::to_string(time));
+    timeValue.setCharacterSize(35);
+    mWindow.draw(timeValue);
 }
 
 
