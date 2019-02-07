@@ -5,6 +5,7 @@
 #include "StringHelpers.h"
 #include "EntityManager.h"
 #include "SpritesSheet.h"
+#include "GameData.h"
 
 #include "Platform.h"
 #include "Ladder.h"
@@ -45,27 +46,13 @@ private:
     void mainMenuUpdate(sf::Time elapsedTime);
     void gameUpdate(sf::Time elapsedTime);
     void gameOverUpdate(sf::Time elapsedTime);
-    Map *createMap(std::ifstream mapFile);
 
     void processEvents();
-
     void update(sf::Time elapsedTime);
-
     void draw();
 
     void updateStatistics(sf::Time elapsedTime);
-
     void handlePlayerInput(sf::Keyboard::Key key, bool isPressed);
-
-    Map *basicMap();
-
-    void addBlockLine(Map &map, int number, int posx, int posy);
-
-    void addLadder(Map &map, int height, int posx, int posy);
-
-    void addBonus(Map &map, int posx[3], int posy[3]);
-
-    void addScoreTab(Map &map, int posx, int posy);
 
     sf::RectangleShape getRectangleToDraw(sf::FloatRect rectFloat, sf::Color color);
 
@@ -76,13 +63,14 @@ private:
     void drawTransition();
     void updateGameTransition(sf::Time elapsedTime);
 
+    void initGameData();
+
 private:
     int timeAnimation;
-    int score =0 ;
-    int time = 300;
     static const float PlayerSpeed;
     static const sf::Time timePerFrame;
     int lvlcount ;
+
     std::shared_ptr<Map> map;
     SpritesSheet sps;
     std::vector<std::string> lvlList;
@@ -103,6 +91,7 @@ private:
     bool countElement;
 
     GameState gameState;
+    std::unique_ptr<GameData> gameData;
 };
 
 #endif

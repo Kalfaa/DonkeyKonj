@@ -7,22 +7,35 @@
 
 #include "pch.h"
 
-#define LIFE_PLAYER 3
-
-class GameData
+class GameData : public sf::Drawable
 {
-public:
-    GameData(unsigned int timeBeginMs, unsigned int lifeCount, unsigned int scoreValue, const std::string& fontPath);
-
-    static GameData INSTANCE;
-    inline static GameData &GetInstance(){ return INSTANCE; }
+protected:
+    virtual void draw(sf::RenderTarget &target, sf::RenderStates states) const override;
 
 public:
-    void setGameTimer(const sf::Time &gameTimer);
+    GameData(unsigned int timeBegin,
+            sf::Text timer,
+            unsigned int lifeCount,
+            sf::Text playerLife,
+            unsigned int scoreValue,
+            sf::Text score,
+            const std::string& fontPath);
+    ~GameData() = default;
+
+public:
+    void setGameTimer(sf::Int32 gameTimer);
     void setLifeNumber(unsigned int lifeNumber);
     void setScoreValue(unsigned int scoreValue);
+    const sf::Int32 getGameTimer() const;
+    unsigned int getLifeNumber() const;
+    unsigned int getScoreValue() const;
+
+    void updateTimer(sf::Int32 gameTimer);
+    void updateLife(unsigned int lifePlayer);
+    void updateScore(unsigned int score);
 
 private:
+    sf::Text timer;
     sf::Time gameTimer;
 
     sf::Text playerLife;
