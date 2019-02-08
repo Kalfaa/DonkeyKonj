@@ -43,9 +43,12 @@ void Barrel::update(sf::Time elapsedTime)
     {
         std::random_device randomGenerator;
         int rand = randomGenerator() % 2;
-        if(rand== 1){
+        if (rand == 1)
+        {
             barrelState = LEFT;
-        }else{
+        }
+        else
+        {
             barrelState = RIGHT;
         }
 
@@ -78,12 +81,16 @@ void Barrel::update(sf::Time elapsedTime)
     else
     {
         countBeforeGrind = 0;
-        if(barrelState == GRINDING){
+        if (barrelState == GRINDING)
+        {
             std::random_device randomGenerator;
             int rand = randomGenerator() % 2;
-            if(rand== 1){
+            if (rand == 1)
+            {
                 barrelState = LEFT;
-            }else{
+            }
+            else
+            {
                 barrelState = RIGHT;
             }
         }

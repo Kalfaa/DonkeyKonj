@@ -8,7 +8,8 @@
 
 #include "Entity.h"
 
-class Peach : public Entity {
+class Peach : public Entity
+{
 public:
     enum PatternType
     {
@@ -19,8 +20,11 @@ public:
     };
     typedef std::map<Peach::PatternType, std::vector<sf::Sprite>> SpritesPatterns;
 
-    Peach(const sf::Sprite &sprite, const sf::Vector2f &posPlayer, EntityType type, const SpritesPatterns &spritesPatterns);
-        SpritesPatterns patterns;
+    Peach(const sf::Sprite &sprite, const sf::Vector2f &posPlayer, EntityType type,
+          const SpritesPatterns &spritesPatterns);
+
+    SpritesPatterns patterns;
+
     void update(sf::Time elapsedTime) override;
 };
 

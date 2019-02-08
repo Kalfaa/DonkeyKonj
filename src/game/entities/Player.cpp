@@ -15,31 +15,33 @@ Player::Player(const sf::Sprite &sprite, const sf::Vector2f &posPlayer, EntityTy
     MARIO_HEIGHT = static_cast<int>(sprite.getGlobalBounds().height);
     TimeAnimation = 0;
     hitboxUseForCollision = sprite;
-    life = 9;
+    life = 3;
 }
 
 void Player::update(sf::Time elapsedTime)
 {
     sf::Vector2f moveJump(0.f, -MARIO_JUMP_SPEED);
     sf::Vector2f moveNotJump(0.f, +MARIO_JUMP_SPEED);
-    if(playerState == DYING){
+    if (playerState == DYING)
+    {
         TimeAnimation += elapsedTime.asMilliseconds();
         changeSprite(updateAnimation(&TimeAnimation, 300, spritesPtns.at(deadPatternRight)));
-        if(TimeAnimation == 0){
+        if (TimeAnimation == 0)
+        {
             kill();
         }
-        return ;
+        return;
     }
     if (collide(*EntityManager::map, EntityType::BARREL, DOWN) && playerState != DYING)
     {
         playerState = DYING;
         TimeAnimation = 0;
-        return ;
+        return;
     }
 
     if (playerState != JUMP && playerState != STARTJUMP && playerState != GRINDING)
     {
-       applyGravity(elapsedTime);
+        applyGravity(elapsedTime);
     }
 
     if (playerState == STARTJUMP)
@@ -103,7 +105,7 @@ void Player::move(Direction direction)
 
 void Player::jump()
 {
-    if (FALLING != playerState && playerState !=DYING)playerState = STARTJUMP;
+    if (FALLING != playerState && playerState != DYING)playerState = STARTJUMP;
 }
 
 bool Player::collide(Map map, EntityType entityType, Direction direction)
@@ -153,7 +155,8 @@ sf::FloatRect Player::getUpHitboxLadder()
     return rectangle.getGlobalBounds();
 }
 
-void Player::applyGravity(sf::Time elapsedTime) {
+void Player::applyGravity(sf::Time elapsedTime)
+{
     sprite.move(moveDown() * elapsedTime.asSeconds());
     if (!collide(*EntityManager::map, EntityType::PLATFORM, DOWN))
     {
@@ -167,27 +170,32 @@ void Player::applyGravity(sf::Time elapsedTime) {
     }
 }
 
-sf::Vector2f Player::moveUp() {
+sf::Vector2f Player::moveUp()
+{
     sf::Vector2f vec(0.f, -playerSpeed);
-   return  vec;
+    return vec;
 }
 
-sf::Vector2f Player::moveDown() {
+sf::Vector2f Player::moveDown()
+{
     sf::Vector2f vec(0.f, playerSpeed);
     return vec;
 }
 
-sf::Vector2f Player::moveLeft() {
+sf::Vector2f Player::moveLeft()
+{
     sf::Vector2f vec(-playerSpeed, 0.f);
     return vec;
 }
 
-sf::Vector2f Player::moveRight() {
+sf::Vector2f Player::moveRight()
+{
     sf::Vector2f vec(playerSpeed, 0.f);
     return vec;
 }
 
-void Player::move(sf::Time elapsedTime) {
+void Player::move(sf::Time elapsedTime)
+{
 
     switch (direction)
     {
@@ -274,9 +282,10 @@ void Player::move(sf::Time elapsedTime) {
 
 }
 
-void Player::kill() {
+void Player::kill()
+{
     sprite.setPosition(EntityManager::map->startpoint);
-    playerState =IDLE;
+    playerState = IDLE;
     life--;
 }
 

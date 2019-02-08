@@ -158,10 +158,10 @@ EntityGenerator::createDonkeyKong(SpritesSheet &sps, const sf::Vector2f &pos, co
 {
     Barrel::SpritesPatterns spritesPatternsBarrel
             {
-                    {Barrel::barrel,           std::vector<sf::Sprite>(1, sps.getSprite("Barrel"))},
-                    {Barrel::barrelHorizontalLeft, sps.getOppositePattern("BarrelHorizontal")},
+                    {Barrel::barrel,                std::vector<sf::Sprite>(1, sps.getSprite("Barrel"))},
+                    {Barrel::barrelHorizontalLeft,  sps.getOppositePattern("BarrelHorizontal")},
                     {Barrel::barrelHorizontalRight, sps.getPattern("BarrelHorizontal")},
-                    {Barrel::barrelVertical,   sps.getPattern("BarrelVertical")}
+                    {Barrel::barrelVertical,        sps.getPattern("BarrelVertical")}
             };
 
     DonkeyKong::SpritesPatterns spritesPatternDk
@@ -180,17 +180,18 @@ EntityGenerator::createDonkeyKong(SpritesSheet &sps, const sf::Vector2f &pos, co
     return std::shared_ptr<Entity>();
 }
 
-std::shared_ptr<Entity> EntityGenerator::createPeach(SpritesSheet & sps, const sf::Vector2f &pos, const sf::Vector2f &size)
+std::shared_ptr<Entity>
+EntityGenerator::createPeach(SpritesSheet &sps, const sf::Vector2f &pos, const sf::Vector2f &size)
 {
     Peach::SpritesPatterns patternsPeach
-    {
-            {Peach::peachRight , sps.getPattern("PeachRight")},
-            {Peach::peachLeft , sps.getOppositePattern("PeachRight")},
-            {Peach::peachHelpRight , sps.getPattern("PeachHelpRight")},
-            {Peach::peachHelpLeft , sps.getOppositePattern("PeachHelpRight")}
-    };
+            {
+                    {Peach::peachRight,     sps.getPattern("PeachRight")},
+                    {Peach::peachLeft,      sps.getOppositePattern("PeachRight")},
+                    {Peach::peachHelpRight, sps.getPattern("PeachHelpRight")},
+                    {Peach::peachHelpLeft,  sps.getOppositePattern("PeachHelpRight")}
+            };
     std::shared_ptr<Entity> peach = std::make_shared<Peach>(patternsPeach.at(Peach::peachLeft)[0], pos,
-                                                            EntityType::PEACH,patternsPeach );
+                                                            EntityType::PEACH, patternsPeach);
 
     EntityManager::entities.push_back(peach);
 

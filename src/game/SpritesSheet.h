@@ -26,7 +26,8 @@ private:
 class SpritesSheet
 {
 public:
-    inline static SpritesSheet &GetInstance(){ return INSTANCE; };
+    inline static SpritesSheet &GetInstance()
+    { return INSTANCE; };
 
 public:
     friend std::ostream &operator<<(std::ostream &os, const SpritesSheet &sheet);

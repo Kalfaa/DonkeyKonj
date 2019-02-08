@@ -43,15 +43,21 @@ public:
 
 private:
     std::shared_ptr<Map> initMap(std::string mapname);
+
     void mainMenuUpdate(sf::Time elapsedTime);
+
     void gameUpdate(sf::Time elapsedTime);
+
     void gameOverUpdate(sf::Time elapsedTime);
 
     void processEvents();
+
     void update(sf::Time elapsedTime);
+
     void draw();
 
     void updateStatistics(sf::Time elapsedTime);
+
     void handlePlayerInput(sf::Keyboard::Key key, bool isPressed);
 
     sf::RectangleShape getRectangleToDraw(sf::FloatRect rectFloat, sf::Color color);
@@ -59,8 +65,11 @@ private:
     void removeFromEntities(std::shared_ptr<Entity> ent);
 
     bool checkIfEntityIsOutOfMap(std::shared_ptr<Entity> ent);
+
     void drawGame();
+
     void drawTransition();
+
     void updateGameTransition(sf::Time elapsedTime);
 
     void initGameData();
@@ -69,7 +78,7 @@ private:
     int timeAnimation;
     static const float PlayerSpeed;
     static const sf::Time timePerFrame;
-    int lvlcount ;
+    int lvlcount;
 
     std::shared_ptr<Map> map;
     SpritesSheet sps;

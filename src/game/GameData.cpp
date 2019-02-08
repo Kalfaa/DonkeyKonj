@@ -5,29 +5,36 @@
 #include "GameData.h"
 #include "EntityManager.h"
 
-GameData::GameData(unsigned int timeBegin, sf::Text timer, unsigned int lifeCount, sf::Text playerLife,
-                   unsigned int scoreValue, sf::Text score, const std::string &fontPath)
-        : lifeNumber(lifeCount), scoreValue(scoreValue), timer(timer), playerLife(playerLife), score(score)
+GameData::GameData(unsigned int timeBegin, sf::Text &timer, unsigned int lifeCount, sf::Text &playerLife,
+                   unsigned int scoreValue, sf::Text &score, const sf::Font &font)
+        : lifeNumber(lifeCount), scoreValue(scoreValue), timerValue(timer), playerLife(playerLife), score(score)
 {
-    font.loadFromFile(fontPath);
-    gameTimer = sf::seconds(timeBegin);
+    timerName.setFont(font);
+    timerName.setString("Timer: ");
+    timerName.setPosition(timerValue.getPosition().x - (timerName.getGlobalBounds().width / 2),
+                          timerValue.getPosition().y);
+    timerName.setCharacterSize(15);
 
-    timer.setFont(font);
-    playerLife.setFont(font);
-    score.setFont(font);
+    lifeName.setFont(font);
+    lifeName.setString("Life X");
+    lifeName.setPosition(playerLife.getPosition().x - (lifeName.getGlobalBounds().width / 2),
+                         playerLife.getPosition().y);
+    lifeName.setCharacterSize(15);
+
+    gameTimer = sf::seconds(timeBegin);
 }
 
 
 void GameData::setGameTimer(sf::Int32 gameTimer)
 {
     this->gameTimer = sf::seconds(gameTimer);
-    timer.setString(std::to_string(gameTimer));
+    timerValue.setString(std::to_string(gameTimer));
 }
 
 void GameData::setLifeNumber(unsigned int lifeNumber)
 {
     this->lifeNumber = lifeNumber;
-    this->playerLife.setString("X " + std::to_string(lifeNumber));
+    this->playerLife.setString(std::to_string(lifeNumber));
 }
 
 void GameData::setScoreValue(unsigned int scoreValue)
@@ -53,22 +60,24 @@ unsigned int GameData::getScoreValue() const
 
 void GameData::updateTimer(sf::Int32 gameTimer)
 {
-    if(gameTimer != this->gameTimer.asSeconds()) setGameTimer(gameTimer);
+    if (gameTimer != this->gameTimer.asSeconds()) setGameTimer(gameTimer);
 }
 
 void GameData::updateLife(unsigned int lifePlayer)
 {
-    if(lifePlayer != lifeNumber) setLifeNumber(lifePlayer);
+    if (lifePlayer != lifeNumber) setLifeNumber(lifePlayer);
 }
 
 void GameData::updateScore(unsigned int score)
 {
-    if(score != scoreValue) setScoreValue(score);
+    if (score != scoreValue) setScoreValue(score);
 }
 
 void GameData::draw(sf::RenderTarget &target, sf::RenderStates states) const
 {
-    target.draw(timer, states);
+    target.draw(timerName);
+    target.draw(timerValue, states);
+    target.draw(lifeName);
     target.draw(playerLife, states);
     target.draw(score, states);
 }

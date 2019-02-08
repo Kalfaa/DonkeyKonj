@@ -492,15 +492,19 @@ void Map::addMoovingObject(std::shared_ptr<Entity> ent)
     moovingObject.push_back(ent);
 }
 
-void Map::removeMoovingObject(std::shared_ptr<Entity> ent) {
-    for(auto it = moovingObject.begin(); it!= moovingObject.end();++it){
-        if(ent == *it){
-            if(moovingObject.size()==1){
+void Map::removeMoovingObject(std::shared_ptr<Entity> ent)
+{
+    for (auto it = moovingObject.begin(); it != moovingObject.end(); ++it)
+    {
+        if (ent == *it)
+        {
+            if (moovingObject.size() == 1)
+            {
                 moovingObject.clear();
-                return ;
+                return;
             }
             moovingObject.erase(it);
-            return ;
+            return;
         }
     }
 }

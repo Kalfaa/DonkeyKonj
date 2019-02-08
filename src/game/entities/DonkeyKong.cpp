@@ -16,7 +16,7 @@ DonkeyKong::DonkeyKong(const sf::Sprite &sprite, const sf::Vector2f &posPlayer, 
     timeAnimation = 0;
     state = NONE;
     timeBarrelLaunch = 0;
-    BarrelCount = 0 ;
+    BarrelCount = 0;
     barrelFrequency = 0;
 }
 
@@ -52,10 +52,11 @@ void DonkeyKong::update(sf::Time elapsedTime)
         sprite.move(moveLeft * elapsedTime.asSeconds());
 
     }
-    if (state == LAUNCHBARREL && BarrelCount <4)
+    if (state == LAUNCHBARREL && BarrelCount < 4)
     {
         barrelFrequency += elapsedTime.asMilliseconds();
-        if(barrelFrequency > BARREL_FREQUENCY){
+        if (barrelFrequency > BARREL_FREQUENCY)
+        {
 
             std::random_device randomGenerator;
             int rand = randomGenerator() % 2;
@@ -64,12 +65,15 @@ void DonkeyKong::update(sf::Time elapsedTime)
             if (timeAnimation == 0)
             {
                 sf::Vector2f posbarrel;
-                if(rand ==1){
+                if (rand == 1)
+                {
                     posbarrel = {sprite.getPosition().x - 30, sprite.getPosition().y};
-                }else{
-                    posbarrel = {sprite.getPosition().x , sprite.getPosition().y+100};
                 }
-                createBarrel(*EntityManager::map, posbarrel,Barrel::BarrelState::LEFT);
+                else
+                {
+                    posbarrel = {sprite.getPosition().x, sprite.getPosition().y + 100};
+                }
+                createBarrel(*EntityManager::map, posbarrel, Barrel::BarrelState::LEFT);
 
                 BarrelCount++;
                 barrelFrequency = 0;
@@ -80,20 +84,19 @@ void DonkeyKong::update(sf::Time elapsedTime)
     else if (timeBarrelLaunch > BARREL_WAVE_FREQUENCY)
     {
         state = LAUNCHBARREL;
-        if(BarrelCount==4){
-            std::cout <<"wait" ;
+        if (BarrelCount == 4)
+        {
+            std::cout << "wait";
             state = NONE;
             timeBarrelLaunch = 0;
-            BarrelCount =0;
+            BarrelCount = 0;
         }
     }
 
 
-
-
 }
 
-void DonkeyKong::createBarrel(Map map, sf::Vector2f pos , Barrel::BarrelState state)
+void DonkeyKong::createBarrel(Map map, sf::Vector2f pos, Barrel::BarrelState state)
 {
     std::shared_ptr<Barrel> barrel = std::make_shared<Barrel>(barrelPattern.at(Barrel::barrelHorizontalLeft)[0],
                                                               pos,

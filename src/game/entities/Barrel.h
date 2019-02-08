@@ -38,6 +38,7 @@ public:
 
 public:
     Barrel(const sf::Sprite &, const sf::Vector2f &posPlayer, EntityType, const SpritesPatterns &);
+
     ~Barrel() override = default;
 
 public:
