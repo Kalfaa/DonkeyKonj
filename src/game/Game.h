@@ -18,8 +18,6 @@
 //#include "Map.h"
 #include "GenerateMap.h"
 
-#define MARIO_SPEED 100.f
-
 class Map;
 
 class Game
@@ -67,10 +65,11 @@ private:
     bool checkIfEntityIsOutOfMap(std::shared_ptr<Entity> ent);
 
     void drawGame();
-
     void drawTransition();
+    void drawGameOver();
 
     void updateGameTransition(sf::Time elapsedTime);
+
 
     void initGameData();
 
@@ -79,6 +78,8 @@ private:
     static const float PlayerSpeed;
     static const sf::Time timePerFrame;
     int lvlcount;
+    unsigned int globalTimeLevel;
+    sf::Uint32 secondCount;
 
     std::shared_ptr<Map> map;
     SpritesSheet sps;

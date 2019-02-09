@@ -21,6 +21,12 @@ unsigned int BonusItem::catchBonus(sf::Time elapsedTime)
     return value;
 }
 
+unsigned int BonusItem::consume()
+{
+    consumed = true;
+    return value;
+}
+
 void BonusItem::update(sf::Time elapsedTime)
 {
     if (EntityManager::map->collide(sprite, EntityType::PLAYER, RIGHT)->collide)

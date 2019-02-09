@@ -38,10 +38,11 @@ Game::Game()
         mWindow.setIcon(281, 210, icon.getPixelsPtr());
     }
     else std::cerr << "Error when load " + EntityManager::TEXTURES_PATH + "/icon.png" << std::endl;
-    //map.printElement();
+
     EntityManager::map = map;
     gameState = INGAME;
     timeAnimation = 0;
+    secondCount = 0;
 
     initGameData();
 }
@@ -50,6 +51,7 @@ void Game::run()
 {
     sf::Clock clock;
     sf::Time timeSinceLastUpdate = sf::Time::Zero;
+
     while (mWindow.isOpen())
     {
         sf::Time elapsedTime = clock.restart();
@@ -116,8 +118,13 @@ void Game::draw()
         case INGAME:
             drawGame();
             break;
+
         case MAPTRANSITION:
             drawTransition();
+            break;
+
+        case GAMEOVER:
+            drawGameOver();
             break;
         default:;
     }
@@ -137,15 +144,6 @@ void Game::updateStatistics(sf::Time elapsedTime)
 
         mStatisticsUpdateTime -= sf::seconds(1.0f);
         mStatisticsNumFrames = 0;
-    }
-
-    //
-    // Handle collision
-    //
-
-    if (mStatisticsUpdateTime >= sf::seconds(0.050f))
-    {
-        // Handle collision weapon enemies
     }
 }
 
@@ -226,9 +224,10 @@ void Game::gameUpdate(sf::Time elapsedTime)
         EntityManager::player->kill();
     }
 
-    if (EntityManager::player->life < 0)
+    if (gameData->getLifeNumber() == 0 || gameData->getGameTimer() == 0)
     {
-        //changement de phase
+        gameState = GAMEOVER;
+        return;
     }
     std::vector<std::shared_ptr<Entity>> willBeErased;
     const sf::Sprite player = EntityManager::player->getSprite();
@@ -245,6 +244,11 @@ void Game::gameUpdate(sf::Time elapsedTime)
                 int size1 = static_cast<int>(EntityManager::entities.size());
                 entity->update(elapsedTime);
                 if (size1 != EntityManager::entities.size()) break;
+            }
+            if(entity->type == BONUS_ITEM)
+            {
+                auto* bi = dynamic_cast<BonusItem*>(entity.get());
+                if(bi->isCatch && !bi->consumed) gameData->updateScore(gameData->getScoreValue() + bi->consume());
             }
         }
         if (entity->type == PEACH)
@@ -287,6 +291,12 @@ void Game::gameUpdate(sf::Time elapsedTime)
     }
 
     gameData->updateLife(static_cast<unsigned int>(EntityManager::player->life));
+    if(secondCount / 1000 >= 1 && gameData->getGameTimer() > 0)
+    {
+        gameData->updateTimer(gameData->getGameTimer() - (secondCount / 1000));
+        secondCount = 0;
+    }
+    else secondCount += elapsedTime.asMilliseconds();
 }
 
 void Game::gameOverUpdate(sf::Time elapsedTime)
@@ -342,8 +352,8 @@ void Game::initGameData()
     sf::Text score = sf::Text();
     score.setFont(mFont);
     score.setString(std::to_string(scoreV));
-    score.setPosition({450 + score.getGlobalBounds().width, 20 + score.getGlobalBounds().height});
     score.setOrigin(score.getGlobalBounds().width, score.getGlobalBounds().height);
+    score.setPosition({480, 46});
     score.setCharacterSize(15);
 
     gameData = std::unique_ptr<GameData>(new GameData(timeV, time,
@@ -351,6 +361,7 @@ void Game::initGameData()
                                                       scoreV, score, mFont));
 
     mWindow.draw(*(gameData.get()));
+    globalTimeLevel = timeV;
 }
 
 void Game::updateGameTransition(sf::Time elapsedTime)
@@ -358,7 +369,7 @@ void Game::updateGameTransition(sf::Time elapsedTime)
 
     if (gameData->getGameTimer() > 0)
     {
-        gameData->updateScore(gameData->getScoreValue() + 1);
+        gameData->updateScore(gameData->getScoreValue() + 2);
         gameData->updateTimer(gameData->getGameTimer() - 1);
     }
     else
@@ -366,11 +377,14 @@ void Game::updateGameTransition(sf::Time elapsedTime)
         timeAnimation += elapsedTime.asMilliseconds();
         if (timeAnimation > 500)
         {
-            cout << lvlcount;
             if (lvlcount < lvlList.size())
             {
                 EntityManager::map = initMap(lvlList.at(static_cast<unsigned long long int>(lvlcount)));
                 gameState = INGAME;
+                cerr << "TIME UPDATE !!!!!!!!!!!" << endl;
+                gameData->updateTimer(globalTimeLevel);
+                cerr << "TIME UPDATE !!!!!!!!!!! " << gameData->getGameTimer() << endl;
+                secondCount = 0;
             }
         }
     }
@@ -423,16 +437,20 @@ void Game::drawGame()
 
 void Game::drawTransition()
 {
+    sf::Sprite dk = sps.getSprite("DonkeyKongOrange");
+    dk.setPosition(370, 75);
+    mWindow.draw(dk);
+
     sf::Text scoreDisplay = sf::Text();
     scoreDisplay.setFont(mFont);
-    scoreDisplay.setPosition({100, 200});
+    scoreDisplay.setPosition({200, 200});
     scoreDisplay.setString("Score");
     scoreDisplay.setCharacterSize(35);
     mWindow.draw(scoreDisplay);
 
     sf::Text timeDisplay = sf::Text();
     timeDisplay.setFont(mFont);
-    timeDisplay.setPosition({400, 200});
+    timeDisplay.setPosition({500, 200});
     timeDisplay.setString("Time");
     timeDisplay.setCharacterSize(35);
     mWindow.draw(timeDisplay);
@@ -446,12 +464,53 @@ void Game::drawTransition()
 
     sf::Text timeValue = sf::Text();
     timeValue.setFont(mFont);
-    timeValue.setPosition({400, 300});
+    timeValue.setPosition({500, 300});
     timeValue.setString(std::to_string(gameData->getGameTimer()));
     timeValue.setCharacterSize(35);
     mWindow.draw(timeValue);
 }
 
+void Game::drawGameOver()
+{
+    sf::Text gameOver = sf::Text();
+    gameOver.setFont(mFont);
+    gameOver.setString("GAME OVER");
+    gameOver.setPosition({65, 120});
+    gameOver.setCharacterSize(80);
+    mWindow.draw(gameOver);
+
+    sf::Sprite dk = sps.getSprite("DonkeyKongFaceDanceLeft");
+    dk.setPosition(370, 250);
+    mWindow.draw(dk);
+
+    sf::Text scoreDisplay = sf::Text();
+    scoreDisplay.setFont(mFont);
+    scoreDisplay.setPosition({200, 400});
+    scoreDisplay.setString("Score");
+    scoreDisplay.setCharacterSize(35);
+    mWindow.draw(scoreDisplay);
+
+    sf::Text timeDisplay = sf::Text();
+    timeDisplay.setFont(mFont);
+    timeDisplay.setPosition({500, 400});
+    timeDisplay.setString("Time");
+    timeDisplay.setCharacterSize(35);
+    mWindow.draw(timeDisplay);
+
+    sf::Text scoreValue = sf::Text();
+    scoreValue.setFont(mFont);
+    scoreValue.setPosition({200, 500});
+    scoreValue.setString(std::to_string(gameData->getScoreValue()));
+    scoreValue.setCharacterSize(35);
+    mWindow.draw(scoreValue);
+
+    sf::Text timeValue = sf::Text();
+    timeValue.setFont(mFont);
+    timeValue.setPosition({500, 500});
+    timeValue.setString(std::to_string(gameData->getGameTimer()));
+    timeValue.setCharacterSize(35);
+    mWindow.draw(timeValue);
+}
 
 
 

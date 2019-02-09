@@ -19,17 +19,19 @@ public:
 
 public:
     unsigned int catchBonus(sf::Time elapsedTime);
+    unsigned int consume();
 
     void update(sf::Time time1) override;
 
 public:
     unsigned int value;
+    bool isCatch = false;
+    bool consumed = false;
 
 private:
     sf::Sprite valueSprite;
     //sf::Time timeValueStay;
     //sf::Time timeValueAppear;
-    bool isCatch = false;
 };
 
 

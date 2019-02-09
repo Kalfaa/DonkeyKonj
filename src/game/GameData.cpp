@@ -68,9 +68,14 @@ void GameData::updateLife(unsigned int lifePlayer)
     if (lifePlayer != lifeNumber) setLifeNumber(lifePlayer);
 }
 
-void GameData::updateScore(unsigned int score)
+void GameData::updateScore(unsigned int scoreV)
 {
-    if (score != scoreValue) setScoreValue(score);
+    if (scoreV != scoreValue)
+    {
+        setScoreValue(scoreV);
+        score.setOrigin(score.getGlobalBounds().width, score.getGlobalBounds().height);
+        score.setPosition({468, 34});
+    }
 }
 
 void GameData::draw(sf::RenderTarget &target, sf::RenderStates states) const

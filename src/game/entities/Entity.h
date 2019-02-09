@@ -68,10 +68,6 @@ public:
 
     EntityType type = EntityType::UNKNOWN;
     bool enabled = true;
-
-    // Enemy only
-    bool bLeftToRight = true;
-    int times = 0;
 };
 
 #endif // DONKEYKONG_ENTITY
