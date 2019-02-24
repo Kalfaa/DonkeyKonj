@@ -204,7 +204,7 @@ bool Game::checkIfEntityIsOutOfMap(std::shared_ptr<Entity> ent)
     if (ent->sprite.getPosition().x < 0 - ent->sprite.getGlobalBounds().width ||
         ent->sprite.getPosition().y < 0 - ent->sprite.getGlobalBounds().height)
         return true;
-    return ent->sprite.getPosition().x > EntityManager::map->getEntity3DArray().at(0).size() * 32 ||
+    return ent->sprite.getPosition().x+ ent->sprite.getGlobalBounds().width > EntityManager::map->getEntity3DArray().at(0).size() * 32 ||
            ent->sprite.getPosition().y > EntityManager::map->getEntity3DArray().size() * 32;
 }
 

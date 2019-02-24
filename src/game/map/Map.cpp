@@ -280,12 +280,13 @@ std::shared_ptr<CollideRes> Map::collide(sf::Sprite sprite, EntityType entityTyp
         return std::make_shared<CollideRes>(false, shared_ptr<Entity>());
     }
 
-
     std::vector<std::shared_ptr<Entity>> list_entity;
     auto left = static_cast<unsigned int>(sprite.getPosition().x / CASE_AREA);
     auto right = static_cast<unsigned int>((sprite.getPosition().x + sprite.getGlobalBounds().width) / CASE_AREA);
     auto bottom = static_cast<unsigned int>((sprite.getPosition().y + sprite.getGlobalBounds().height) / CASE_AREA);
     auto top = static_cast<unsigned int>(sprite.getPosition().y / CASE_AREA);
+
+    //bot = 20
     unsigned y1 = 0;
     unsigned x1 = 0;
     unsigned y2 = 0;
@@ -318,23 +319,16 @@ std::shared_ptr<CollideRes> Map::collide(sf::Sprite sprite, EntityType entityTyp
             break;
         default:;
     }
-    if (y1 >= 0 && x1 >= 0 && y1 < entity3DArray.size() && x1 < entity3DArray.at(y2).size())
+    if (y1 >= 0 && x1 >= 0 && y1 < entity3DArray.size() && x1 < entity3DArray.at(y1).size())
     {
         for (const auto &i : entity3DArray.at(y1).at(x1))
         {
             if (i->type == entityType)list_entity.push_back(i);
         }
     }
-    if (y2 >= 0 && x2 >= 0 && y2 < entity3DArray.size() && x2 < entity3DArray.at(y2).size())
+    if (y2 >= 0 && x2 >= 0 && y2 < entity3DArray.size() && x2 < entity3DArray.at(y1).size())
     {
         for (const auto &i : entity3DArray.at(y2).at(x2))
-        {
-            if (i->type == entityType)list_entity.push_back(i);
-        }
-    }
-    if (y2 - 1 >= 0 && x2 >= 0 && y2 - 1 < entity3DArray.size() && x2 < entity3DArray.at(y2 - 1).size())
-    {
-        for (const auto &i : entity3DArray.at(y2 - 1).at(x2))
         {
             if (i->type == entityType)list_entity.push_back(i);
         }
@@ -470,13 +464,6 @@ Map::collide(sf::Sprite sprite, EntityType entityType, Direction direction, sf::
         }
     }
 
-    if (y2 - 1 >= 0 && x2 >= 0 && y2 - 1 < entity3DArray.size() && x2 < entity3DArray.at(y2 - 1).size())
-    {
-        for (const auto &i : entity3DArray.at(y2 - 1).at(x2))
-        {
-            if (i->type == entityType)list_entity.push_back(i);
-        }
-    }
     for (auto &entity : list_entity)
     {
         if (entity->sprite.getGlobalBounds().intersects(rect))

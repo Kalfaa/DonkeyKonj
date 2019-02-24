@@ -51,7 +51,6 @@ void Player::update(sf::Time elapsedTime)
     }
 
     move(elapsedTime);
-
     switch (playerState)
     {
         case GRINDING:
@@ -95,6 +94,7 @@ void Player::update(sf::Time elapsedTime)
 
     }
     direction = NONE;
+
 }
 
 
