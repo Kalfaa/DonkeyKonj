@@ -58,8 +58,8 @@ void DonkeyKong::update(sf::Time elapsedTime)
         if (barrelFrequency > BARREL_FREQUENCY)
         {
 
-            std::random_device randomGenerator;
-            int rand = randomGenerator() % 2;
+            //std::random_device randomGenerator;
+            int rand = std::rand() % 2;
 
             changeSprite(updateAnimation(&timeAnimation, 200, patterns.at(donkeyFace)));
             if (timeAnimation == 0)
