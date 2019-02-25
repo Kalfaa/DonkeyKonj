@@ -215,9 +215,7 @@ void Game::mainMenuUpdate(sf::Time elapsedTime)
 
 void Game::gameUpdate(sf::Time elapsedTime)
 {
-    sf::Vector2f movement(0.f, 0.f);
     EntityManager::player->update(elapsedTime);
-    int countb = 0;
 
     if (checkIfEntityIsOutOfMap(EntityManager::player))
     {
